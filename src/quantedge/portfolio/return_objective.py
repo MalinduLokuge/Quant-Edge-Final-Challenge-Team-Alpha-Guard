@@ -44,3 +44,19 @@ def feasibility(expected: pd.DataFrame, required_gross: float) -> pd.DataFrame:
     out["gap"] = required_gross - out["expected_geometric"]
     out["meets_requirement"] = out["gap"] <= 0
     return out
+
+
+def required_return_as_of(rates: pd.DataFrame, as_of, mandate: dict) -> dict:
+    """Required return using the inflation expectation known on `as_of` (T4.23).
+
+    Spending, real growth and costs are the approved D12 policy values (they are client policy, not market
+    data); only expected inflation is taken from the market on that date. Train set: as_of = D5 train end.
+    """
+    r = rates.loc[:pd.Timestamp(as_of), mandate["inflation_series"]].dropna()
+    if r.empty:
+        raise ValueError(f"No inflation data on or before {pd.Timestamp(as_of).date()}")
+    inflation = float(r.iloc[-1]) / 100
+    s, g, c = (mandate[k]["base"] for k in ("spending_rate", "real_growth", "extra_costs"))
+    return {"as_of": r.index[-1], "inflation": inflation,
+            "required_gross": required_return(inflation, s, g, c),
+            "required_minimum": required_return(inflation, s, 0.0, c)}

@@ -73,3 +73,18 @@ def test_daily_covariance_is_default_and_annualised():
     assert cma.annual_covariance(r).loc["A", "A"] == pytest.approx(r["A"].var() * 252)
     with pytest.raises(ValueError):
         cma.annual_covariance(r, "weekly")
+
+
+MANDATE = {"inflation_series": "breakeven_10y_pct", "spending_rate": {"base": 0.04},
+           "real_growth": {"base": 0.005}, "extra_costs": {"base": 0.002}}
+
+
+def test_required_return_as_of_uses_inflation_known_on_that_date():
+    idx = pd.bdate_range("2014-12-29", "2015-01-06")
+    rates = pd.DataFrame({"breakeven_10y_pct": [1.6, 1.65, 1.68, 9.9, 9.9, 9.9, 9.9]}, index=idx)  # 29, 30, 31 Dec, then 2015
+    h = ro.required_return_as_of(rates, "2014-12-31", MANDATE)
+    assert h["inflation"] == pytest.approx(0.0168)                  # later 9.9% values never used
+    assert h["required_gross"] == pytest.approx(ro.required_return(0.0168, 0.04, 0.005, 0.002))
+    assert h["required_minimum"] == pytest.approx(ro.required_return(0.0168, 0.04, 0.0, 0.002))
+    with pytest.raises(ValueError):
+        ro.required_return_as_of(rates, "2010-01-01", MANDATE)

@@ -68,3 +68,15 @@ def test_split_matches_approved_d5(stage):
     summ = split.summary(split.split_labels(log.index, s["split"]["train_end"], s["split"]["validation_end"]))
     assert summ["observations"].tolist() == [2546, 1258, 1708]  # D5 (research doc §5b)
     assert str(summ.loc["train", "start"]) == "2004-11-19" and str(summ.loc["test", "end"]) == "2026-10-19"
+
+
+def test_train_and_full_hurdles_match_d12():
+    from quantedge.portfolio import return_objective as ro
+    import pandas as pd
+
+    s = config.load_settings()
+    rates = pd.read_csv(config.DATA_PROCESSED / "rates_daily.csv", index_col=0, parse_dates=True)
+    full = ro.required_return_as_of(rates, rates.index[-1], s["mandate"])
+    train = ro.required_return_as_of(rates, s["split"]["train_end"], s["mandate"])
+    assert round(full["required_gross"], 4) == 0.0719 and round(full["required_minimum"], 4) == 0.0666  # D12
+    assert train["inflation"] == 0.0168 and round(train["required_gross"], 4) == 0.0649

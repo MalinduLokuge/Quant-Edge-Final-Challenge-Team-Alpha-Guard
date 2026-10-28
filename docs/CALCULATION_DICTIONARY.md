@@ -36,6 +36,7 @@ Conventions: decision D17. Status ✅ = implemented and tested, ⏳ = planned.
 | Portfolio expected compound return | wᵀE[R] − ½·wᵀΣw − Σwᵢ·yieldᵢ·WHTᵢ (WHT per ETF, sensitivity) | fraction p.a. | `cma.portfolio_expected` | test_return_objective | ✅ |
 | Expected return used (D25) | CAPM for equity ETFs and GLD; AGG = its TTM distribution yield on the as-of date | fraction p.a. | `cma.expected_returns` | test_cma_as_of | ✅ |
 | CMA as of a date | betas, covariance, rf and yields from data ≤ as-of only; train set = D5 train end, full set = last date; ERP = approved assumption | — | `cma.estimate_as_of` | test_cma_as_of | ✅ |
+| Required return as of a date | same formula; inflation = breakeven on the as-of date, S/G/C = D12 policy; minimum uses G = 0 | fraction p.a. | `return_objective.required_return_as_of` | test_return_objective | ✅ |
 | Return gap | required − expected compound (> 0 = shortfall) | fraction p.a. | `return_objective.feasibility` | test_return_objective | ✅ |
 | Sustainable spending | S* = (1+E)/((1+I)(1+G)(1+C)) − 1 | fraction p.a. | `return_objective.sustainable_spending` | test_return_objective | ✅ |
 

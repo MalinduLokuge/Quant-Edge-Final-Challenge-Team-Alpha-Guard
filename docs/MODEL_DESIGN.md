@@ -33,7 +33,7 @@ Mandate & client rules → data stage: clean data, FRED, quality flags, chronolo
 | Stage | Inputs | Outputs | Tests |
 |---|---|---|---|
 | data ✅ | `data/raw/` snapshot, `data/external/` FRED snapshots, config | `data/processed/`: prices_aligned, log_returns, simple_returns, outlier_flags_zscore, data_quality_flags, rates_daily, cpi_monthly. `outputs/tables/`: adf_results, data_quality_* , structural_breaks_inclan_tiao | test_data_clean, test_data_fred, test_data_quality, test_data_stage_reference |
-| portfolio 🟡 | processed data, config (D3 benchmarks, D6 constraints, D7 limits, D12 mandate) | Done: cma_assets, erp_estimate, required_return_grid, required_vs_expected, return_objective_summary. To do: P1-train (training-window CMA), P1-final, KPI table, frontier | test_return_objective |
+| portfolio 🟡 | processed data, config (D3 benchmarks, D6 constraints, D7 limits, D12 mandate) | Done: cma_assets, erp_estimate, required_return_grid, required_vs_expected, return_objective_summary. Done: cma_train / cma_full with matching hurdles (train 6.49% target / 5.96% minimum; full 7.19% / 6.66%). To do: P1-train, P1-final, KPI table, frontier | test_return_objective |
 | risk ⏳ | P1 weights, returns | P2: VaR/ES/EVT per candidate & confidence, component risk, diagnostics | — |
 | validation ⏳ | P1, P2 models, held-out returns | backtest exceptions & tests, stress P&L | — |
 | decision ⏳ | all outputs, client limits | P3 decision, memo / tear-sheet tables | — |

@@ -78,11 +78,14 @@ def run() -> dict:
     cma_sets = {}
     for label, as_of_date in (("train", s["split"]["train_end"]), ("full", as_of)):
         est = cma.estimate_as_of(simple, rates, yields, as_of_date, c["market"], c["erp_base"], bond_assets=bonds)
+        est["hurdle"] = return_objective.required_return_as_of(rates, as_of_date, m)  # T4.23: same-date inflation
         est["assets"].to_csv(out / f"cma_{label}.csv")
         est["cov"].to_csv(out / f"cma_{label}_cov.csv")
         cma_sets[label] = est
     pd.DataFrame({k: {"as_of": v["as_of"].date(), "rf": v["rf"], "erp_assumed": v["erp"],
-                      "erp_own_data_window": v["erp_own_data"], "observations": v["observations"]}
+                      "erp_own_data_window": v["erp_own_data"], "observations": v["observations"],
+                      "inflation_breakeven": v["hurdle"]["inflation"], "required_target": v["hurdle"]["required_gross"],
+                      "required_minimum": v["hurdle"]["required_minimum"]}
                   for k, v in cma_sets.items()}).to_csv(out / "cma_sets_summary.csv")
     pd.Series(erp | {"rf_now": rf_now, "inflation_breakeven_10y": inflation, "as_of": as_of.date()}).to_csv(
         out / "erp_estimate.csv", header=["value"])
