@@ -221,5 +221,46 @@ Reproduce: `python scripts/research_d3_d7.py --d6b` → `research_d6_allocation_
 
 **Judge-facing summary:** "Our caps come from the client's two risks. Equity is bounded by the purchasing-power minimum (20%) and the drawdown tolerance (≈ 40–45%). Every ETF is capped at twice its strategic weight to prevent error-maximising concentration. Sector funds are small tilts. Position risk is then budgeted by component ES."
 
+## 7. Gold assessed outside CAPM (warning 2, 2026-10-28) [E]
+Reproduce: `python scripts/research_d3_d7.py --gold` → `research_gold_assessment.csv` (daily-rebalanced weights).
+
+| Test | GLD | SPY | AGG |
+|---|---|---|---|
+| GFC 2007-10-09 → 2009-03-09 | **+24.9%** | −54.8% | +7.2% |
+| COVID 2020-02-19 → 2020-03-23 | −3.1% | −33.4% | −1.4% |
+| 2022 rate shock | **−8.8%** | −24.1% | −15.0% |
+| Average month when SPY < −5% (24 months) | **+1.6%** | −7.9% | −0.2% |
+| Average month when CPI YoY > 4% (41 months) | +0.1% | −0.7% | −0.2% |
+| Policy 40/50/10 vs the same with gold → AGG: GFC / 2022 / COVID | −20.9% vs −22.6% · −18.3% vs −18.9% · −14.9% vs −14.8% | | |
+
+**Reading:**
+- Gold was the best hedge in equity crashes and the 2022 rate shock, which is exactly what CAPM's β ≈ 0 (4.6% expected) doesn't capture.
+- But gold has its own long drawdowns (−45%, 2011–15), which is why sweep B shows full-history drawdown rising when gold *replaces* bonds in large amounts.
+- **Conclusion:** the evidence supports a **5–15% strategic role** (benchmark 10%, D6 cap 20%), not a large allocation. Its expected return stays at the CAPM value, and its hedge value is shown through stress tests, not by inflating its expected return.
+
+## 8. Revision 2026-10-28b: model warnings fixed (supersedes figures in §4, §5b, §5c)
+| Warning | Fix in code | Effect |
+|---|---|---|
+| 5 Daily vs monthly volatility | `cma.annual_covariance` now uses **daily** returns (monthly reported separately, `volatility_monthly`) | Variance drag larger → expected returns −0.1 to −0.5 pp |
+| 4 Withholding tax | Rate **per ETF** on each fund's own yield; cases: AGG interest exempt (30% on equity ETFs) and 30% on all | Drag 0.09–0.37 pp (AGG exempt), 0.55–0.87 pp (upper bound); base case stays tax-exempt |
+| 3 Risk-free rate | Scenarios: today's T-bill 4.10% (base), 3.0%, 2.5% | Every expected return falls one-for-one; at 2.5% the 60/40 earns 4.99% |
+| 2 Gold vs CAPM | Separate assessment (§7) | Supports a 5–15% hedge role |
+| 1 ERP | Already handled: base 5%, sensitivity 3–6% | — |
+
+**Updated headline numbers (ERP 5%, today's T-bill, tax-exempt):**
+
+| Item | Before | After |
+|---|---|---|
+| 60/40 / 40/60 / Defensive expected return | 6.80 / 6.07 / 5.63% | **6.59 / 5.99 / 5.58%** |
+| Best within D7 + D6 v2 | 6.28% (~3.1% spending) | **6.16% (~3.0% spending)** |
+| Best within D7, draft caps | 6.00% | 5.90% |
+| Risk needed for the 6.66% minimum | DD ≈ 31%, ES ≈ 2.8% | **DD ≈ 33%, ES ≈ 3.2% without caps; infeasible with any caps** |
+| Risk needed for the 7.19% target | DD ≈ 37% | **DD ≈ 45% without caps** |
+| Equity 40% (sweep A): expected / P(DD > 25%) / P(below inflation) | 6.03% / 5.3% / 14.0% | 5.94% / 5.3% / 14.0% (probabilities unchanged: bootstrap uses daily data already) |
+
+**Rate-scenario stress on the decision:** if the T-bill averages 2.5% over the 5 years, the best D7-compliant portfolio earns about 4.6%, which supports only ~1.4% spending.
+
+**Conclusion:** D5, D6 v2 and D7 choices are unchanged; only levels moved. The conflict with D12 is **sharper**: a conservative portfolio supports about **3.0% spending in the base case and 1.4–2.0% if rates fall**, against the 4% assumed. The memo should present spending as a range tied to the rate outlook.
+
 ## 6. Next actions (added to the tracker)
 T3.17 approve D3 structure · T3.18 approve D7 provisional limits · T6.12 forward-looking drawdown probabilities (G1) · T8.13 ERP-sensitivity feasibility (G7) · T11.11 longer-history proxy crises (G2, optional) · T9.06 component-ES limit (G4) · T10.12 out-of-sample check of the limits (G8) · T20.06 drawdown/spending trade-off table in the memo.

@@ -39,6 +39,8 @@ def run() -> dict:
 
     assets = cma.historical_stats(simple).join(betas)
     assets["ttm_yield"] = yld
+    assets["volatility_monthly"] = cma.annual_covariance(simple, "monthly").pipe(lambda m_: pd.Series(
+        m_.values.diagonal() ** 0.5, index=m_.index))  # reported only; models use daily (warning 5)
     erps = {f"{e:.0%}": e for e in c["erp_range"]} | {"own data": erp["erp_arithmetic"]}
     for label, e in erps.items():
         assets[f"capm_E[R] erp {label}"] = cma.capm_expected(rf_now, betas, e)
@@ -48,13 +50,17 @@ def run() -> dict:
     req_base = return_objective.required_return(
         inflation, m["spending_rate"]["base"], m["real_growth"]["base"], m["extra_costs"]["base"])
 
+    rf_scen = {k: (rf_now if v == "as_of" else float(v)) for k, v in c["rf_scenarios"].items()}
+    tax_cases = {"tax-exempt (base)": 0.0} | {k: pd.Series(v) for k, v in m["withholding_tax"]["cases"].items()}
     rows = []
     for name, w in c["reference_portfolios"].items():
         w = cv.validate_weights(pd.Series(w), s["universe"])
-        for label, e in erps.items():
-            for wht in (0.0, m["withholding_tax_rate"]):
-                exp = cma.portfolio_expected(w, cma.capm_expected(rf_now, betas, e), cov, yld, wht)
-                rows.append({"portfolio": name, "erp": label, "withholding_tax": wht, **exp})
+        for rf_label, rf in rf_scen.items():
+            for label, e in erps.items():
+                for tax_label, tax in tax_cases.items():
+                    exp = cma.portfolio_expected(w, cma.capm_expected(rf, betas, e), cov, yld, tax)
+                    rows.append({"portfolio": name, "rf_scenario": rf_label, "rf": rf, "erp": label,
+                                 "tax_case": tax_label, **exp})
     vs = return_objective.feasibility(pd.DataFrame(rows), req_base)
     vs["sustainable_spending"] = vs["expected_geometric"].apply(
         lambda e: return_objective.sustainable_spending(e, inflation, m["real_growth"]["base"], m["extra_costs"]["base"]))

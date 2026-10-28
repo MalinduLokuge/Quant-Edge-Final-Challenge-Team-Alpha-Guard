@@ -68,7 +68,8 @@ Stage: mandate · Owner: Sujan · Priority: Core · Target: Week 1
 | T3.17 | Research and approve D3 benchmark structure | Research doc §1; D3 APPROVED | Critical | All members | T3.11 | Done | Research 2026-10-28 (analysis done, approval pending) |
 | T3.18 | Research and approve D7 provisional risk limits | Research doc §2/§4; D7 APPROVED | Critical | All members | T3.17 | Done | Research 2026-10-28 (analysis done, approval pending) |
 | T3.19 | Committee choice on the drawdown ↔ spending trade-off (20% → 2.1%, 25% → 2.8%) | Recorded in D7/D12 | Critical | All members | T3.18 | Done | Research §4 |
-| T3.14 | Tax assumption: tax-exempt base case, dividend withholding as sensitivity (check interest-related dividend exemption for AGG) | Note in IPS + limitations | Medium | Sujan | T3.11 | Not started | DEC D12 |
+| T3.20 | Fix model warnings: daily covariance, per-ETF withholding, risk-free scenarios, separate gold assessment | Research doc §7–§8; cma.py; 2 tests | Critical | Sujan | T3.11 | Done | Team warnings 2026-10-28 |
+| T3.14 | Tax assumption: tax-exempt base case, dividend withholding as sensitivity (check interest-related dividend exemption for AGG) | Note in IPS + limitations | Medium | Sujan | T3.11 | Done | DEC D12 |
 
 ## T4 — Portfolio construction & selection
 Stage: portfolio · Owner: Dewmini · Priority: Core · Target: Weeks 1–2

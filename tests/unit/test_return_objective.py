@@ -56,3 +56,20 @@ def test_sustainable_spending_inverts_required_return():
     assert ro.required_return(i, s_star, g, c) == pytest.approx(0.06)
     assert ro.sustainable_spending(ro.required_return(i, 0.04, g, c), i, g, c) == pytest.approx(0.04)
     assert ro.sustainable_spending(0.01, i, g, c) < 0  # cannot even cover inflation
+
+
+def test_withholding_per_etf_rates():
+    betas = pd.Series({"A": 1.0, "B": 0.0})
+    e = cma.capm_expected(0.04, betas, 0.05)
+    cov = pd.DataFrame(0.0, index=["A", "B"], columns=["A", "B"])
+    w, y = pd.Series({"A": 0.5, "B": 0.5}), pd.Series({"A": 0.02, "B": 0.04})
+    out = cma.portfolio_expected(w, e, cov, y, pd.Series({"A": 0.30, "B": 0.0}))  # B (bond) interest exempt
+    assert out["withholding_drag"] == pytest.approx(0.5 * 0.02 * 0.30)
+
+
+def test_daily_covariance_is_default_and_annualised():
+    idx = pd.bdate_range("2020-01-01", periods=504)
+    r = pd.DataFrame({"A": np.random.default_rng(4).normal(0, 0.01, 504)}, index=idx)
+    assert cma.annual_covariance(r).loc["A", "A"] == pytest.approx(r["A"].var() * 252)
+    with pytest.raises(ValueError):
+        cma.annual_covariance(r, "weekly")

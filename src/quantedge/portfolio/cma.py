@@ -46,10 +46,15 @@ def historical_stats(simple_returns: pd.DataFrame) -> pd.DataFrame:
     })
 
 
-def annual_covariance(simple_returns: pd.DataFrame) -> pd.DataFrame:
-    """Annualised covariance from monthly returns (consistent with the monthly betas)."""
-    monthly = (1 + simple_returns).resample(cv.MONTH_END).prod() - 1
-    return monthly.cov() * 12
+def annual_covariance(simple_returns: pd.DataFrame, frequency: str = "daily") -> pd.DataFrame:
+    """Annualised covariance. Daily (default) is consistent with the VaR/ES/backtest framework; monthly is
+    reported separately. For a 60/40 mix daily gives 11.5% volatility vs 9.4% monthly (autocorrelation,
+    volatility clustering), so the monthly figure would understate the variance drag on compound returns."""
+    if frequency == "daily":
+        return simple_returns.cov() * cv.TRADING_DAYS
+    if frequency == "monthly":
+        return ((1 + simple_returns).resample(cv.MONTH_END).prod() - 1).cov() * 12
+    raise ValueError(f"frequency must be 'daily' or 'monthly', got {frequency!r}")
 
 
 def capm_expected(rf_annual: float, betas: pd.Series, erp: float) -> pd.Series:
@@ -57,15 +62,17 @@ def capm_expected(rf_annual: float, betas: pd.Series, erp: float) -> pd.Series:
 
 
 def portfolio_expected(weights: pd.Series, exp_arith: pd.Series, cov: pd.DataFrame,
-                       yields: pd.Series, withholding_rate: float = 0.0) -> dict:
+                       yields: pd.Series, withholding: float | pd.Series = 0.0) -> dict:
     """Portfolio arithmetic and compound expected return, volatility and income yield.
 
-    Withholding drag = Σ wᵢ · yieldᵢ · rate (sensitivity for a non-US investor; GLD pays nothing).
+    Withholding drag = Σ wᵢ · yieldᵢ · rateᵢ, with a rate per ETF (a scalar applies the same rate to all).
+    It is a sensitivity for a non-US investor; GLD pays no distributions.
     """
     w = weights.reindex(exp_arith.index, fill_value=0.0)
     arith = float(w @ exp_arith)
     var = float(w @ cov.loc[w.index, w.index] @ w)
-    drag = float((w * yields.reindex(w.index, fill_value=0.0)).sum() * withholding_rate)
+    rates = withholding.reindex(w.index, fill_value=0.0) if isinstance(withholding, pd.Series) else withholding
+    drag = float((w * yields.reindex(w.index, fill_value=0.0) * rates).sum())
     return {"expected_arithmetic": arith, "volatility": np.sqrt(var),
             "expected_geometric": arith - var / 2 - drag, "withholding_drag": drag,
             "income_yield": float((w * yields.reindex(w.index, fill_value=0.0)).sum())}

@@ -321,8 +321,44 @@ def allocation_sweeps(n_paths: int = 4_000, years: int = 5, block: int = 63, see
     print("allocation sweeps written")
 
 
+def gold_assessment() -> None:
+    """Warning 2: judge gold on what CAPM ignores (crisis behaviour, inflation, stock-bond regimes)."""
+    simple = pd.read_csv(config.DATA_PROCESSED / "simple_returns.csv", index_col=0, parse_dates=True)
+    cpi = pd.read_csv(config.DATA_PROCESSED / "cpi_monthly.csv", index_col=0, parse_dates=True)
+    m = (1 + simple).resample(cv.MONTH_END).prod() - 1
+    infl = cpi["inflation_yoy"].shift(1)  # 1-month release lag
+    infl.index = infl.index + pd.offsets.MonthEnd(0)
+    infl = infl.reindex(m.index)
+    rows = []
+    for c, (a, b) in CRISES.items():
+        rows.append({"test": f"Crisis: {c}", "GLD": (1 + simple.GLD.loc[a:b]).prod() - 1,
+                     "SPY": (1 + simple.SPY.loc[a:b]).prod() - 1, "AGG": (1 + simple.AGG.loc[a:b]).prod() - 1})
+    down = m.SPY < -0.05
+    rows.append({"test": f"Avg month when SPY < -5% ({int(down.sum())} months)", "GLD": m.GLD[down].mean(),
+                 "SPY": m.SPY[down].mean(), "AGG": m.AGG[down].mean()})
+    rows.append({"test": "Correlation with SPY: all months / SPY < -5% months",
+                 "GLD": f"{m.GLD.corr(m.SPY):.2f} / {m.GLD[down].corr(m.SPY[down]):.2f}",
+                 "SPY": None, "AGG": f"{m.AGG.corr(m.SPY):.2f} / {m.AGG[down].corr(m.SPY[down]):.2f}"})
+    for label, mask in (("CPI YoY > 4%", infl > 0.04), ("CPI YoY <= 2.5%", infl <= 0.025)):
+        rows.append({"test": f"Avg month, {label} ({int(mask.sum())} months)", "GLD": m.GLD[mask].mean(),
+                     "SPY": m.SPY[mask].mean(), "AGG": m.AGG[mask].mean()})
+    sb = m.SPY.rolling(12).corr(m.AGG) > 0  # stocks and bonds moving together (2022-type regime)
+    rows.append({"test": f"Avg month, stock-bond corr > 0 ({int(sb.sum())} months)", "GLD": m.GLD[sb].mean(),
+                 "SPY": m.SPY[sb].mean(), "AGG": m.AGG[sb].mean()})
+    policy = {"SPY": .25, "EFA": .10, "EEM": .05, "AGG": .50, "GLD": .10}
+    no_gold = policy | {"AGG": .60, "GLD": 0.0}
+    for c, (a, b) in CRISES.items():
+        pr = lambda w: (1 + (simple.loc[a:b, list(w)] * pd.Series(w)).sum(axis=1)).prod() - 1  # noqa: E731
+        rows.append({"test": f"Policy 40/50/10 vs gold→AGG: {c}", "GLD": f"{pr(policy):.1%} vs {pr(no_gold):.1%}",
+                     "SPY": None, "AGG": None})
+    pd.DataFrame(rows).to_csv(config.OUTPUT_TABLES / "research_gold_assessment.csv", index=False)
+    print("gold assessment written")
+
+
 if __name__ == "__main__":
-    if "--g1" in sys.argv:
+    if "--gold" in sys.argv:
+        gold_assessment()
+    elif "--g1" in sys.argv:
         forward_drawdowns()
     elif "--d6" in sys.argv:
         cap_designs()

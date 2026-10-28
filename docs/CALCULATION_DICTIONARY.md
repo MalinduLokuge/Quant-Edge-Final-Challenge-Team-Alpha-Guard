@@ -31,7 +31,8 @@ Conventions: decision D17. Status ✅ = implemented and tested, ⏳ = planned.
 | CAPM beta | Cov(monthly excess asset, excess SPY) / Var(excess SPY) (monthly: avoids non-synchronous bias) | — | `cma.capm_betas` | test_return_objective | ✅ |
 | Equity risk premium (own data) | 12 × mean monthly (SPY − T-bill), 95% CI = ± 1.96·12·s/√n | fraction p.a. | `cma.equity_risk_premium` | test_return_objective | ✅ |
 | CAPM expected return | r_f(as-of) + β·ERP | fraction p.a. | `cma.capm_expected` | test_return_objective | ✅ |
-| Portfolio expected compound return | wᵀE[R] − ½·wᵀΣw − Σwᵢ·yieldᵢ·WHT | fraction p.a. | `cma.portfolio_expected` | test_return_objective | ✅ |
+| Annual covariance Σ | daily simple-return covariance × 252 (monthly version reported only) | fraction² p.a. | `cma.annual_covariance` | test_return_objective | ✅ |
+| Portfolio expected compound return | wᵀE[R] − ½·wᵀΣw − Σwᵢ·yieldᵢ·WHTᵢ (WHT per ETF, sensitivity) | fraction p.a. | `cma.portfolio_expected` | test_return_objective | ✅ |
 | Return gap | required − expected compound (> 0 = shortfall) | fraction p.a. | `return_objective.feasibility` | test_return_objective | ✅ |
 | Sustainable spending | S* = (1+E)/((1+I)(1+G)(1+C)) − 1 | fraction p.a. | `return_objective.sustainable_spending` | test_return_objective | ✅ |
 

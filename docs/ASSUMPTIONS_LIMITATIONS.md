@@ -11,13 +11,15 @@ The Streamlit page and the report section are both built from this file, so they
 ## Client & return objective (D12, D10)
 - The university's spending is assumed to be in **USD**, so US inflation (10-year breakeven) is the relevant measure and there is no currency cost. Spending in Sri Lankan rupees would add currency risk this model does not capture.
 - Spending 4%, real growth 0.5% and extra costs 0.2% are team assumptions. The US endowment average is 4.8% (NACUBO FY2024), cited as context only.
-- **Tax-exempt base case.** A non-US investor could lose up to 30% of US dividends to withholding (−0.55 to −0.87 pp a year), shown only as a sensitivity.
+- **Tax-exempt base case.** As a sensitivity, withholding is applied per ETF on its own distribution yield. With 30% on equity ETFs and AGG's interest distributions exempt, the cost is −0.09 to −0.37 pp a year; at 30% on everything (upper bound), −0.55 to −0.87 pp. Treaty rates (e.g. US–Sri Lanka) are not modelled and need checking.
 - No cash sleeve or derivatives: 100% in the seven ETFs. Spending is paid by selling AGG.
 
 ## Expected returns (D12)
 - Expected returns come from CAPM (today's T-bill 4.10% + β × 5% equity risk premium). They are estimates with wide uncertainty: our own-data ERP is 9.7% with a 95% CI of 3.5–15.8%.
 - CAPM gives gold about 4.6% because its beta is near zero. That ignores gold's value as an inflation and crisis hedge.
-- Using today's T-bill assumes short rates stay near 4.1%. Lower future rates would reduce every expected return.
+- The base case uses today's T-bill (4.10%) for the whole 5-year horizon. Scenarios at 3.0% and 2.5% lower every CAPM expected return one-for-one (60/40: 6.59% → 4.99%). AGG's true sensitivity is smaller, because its current yield is locked in for about 6 years of duration.
+- Variance drag uses daily-return covariance, consistent with the VaR/ES framework. Monthly returns give lower volatility (60/40: 9.4% vs 11.5%) and are reported for information only.
+- Gold's expected return stays at its CAPM value (~4.6%). Its hedge value (+24.9% in the GFC, −8.8% vs −15% for AGG in 2022) is shown through stress tests, not by raising its expected return.
 
 ## Benchmarks & risk limits (D3, D6, D7)
 - The policy benchmark weights (40/50/10) are a judgement fixed in advance, not an optimisation result.

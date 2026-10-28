@@ -88,11 +88,19 @@ mandate:                        # D12 inputs. Base values APPROVED 2026-10-28 (p
   spending_rate: {base: 0.04, range: [0.035, 0.04, 0.045, 0.05]}
   real_growth: {base: 0.005, range: [0.0, 0.005, 0.01]}
   extra_costs: {base: 0.002, range: [0.001, 0.002, 0.004]}   # costs not inside ETF prices
-  withholding_tax_rate: 0.30                    # sensitivity only (non-US investor)
+  withholding_tax:                              # base case: tax-exempt endowment; cases below are sensitivities
+    base: none
+    cases:                                      # rate on each ETF's distribution yield (non-US investor)
+      "30% on equity ETFs, AGG interest exempt": {SPY: 0.30, EFA: 0.30, EEM: 0.30, XLE: 0.30, XLK: 0.30, AGG: 0.0, GLD: 0.0}
+      "30% on all distributions (upper bound)":  {SPY: 0.30, EFA: 0.30, EEM: 0.30, XLE: 0.30, XLK: 0.30, AGG: 0.30, GLD: 0.0}
 cma:                            # capital market assumptions (D12)
   market: SPY                   # CAPM market proxy (D3, approved)
   erp_base: 0.05                # D12, APPROVED 2026-10-28 (provisional)
   erp_range: [0.03, 0.04, 0.05, 0.06]
+  rf_scenarios:                 # 5-year horizon (D4): today's T-bill may not last
+    "current T-bill": as_of     # DTB3 on the as-of date (base)
+    "3.0%": 0.030
+    "2.5%": 0.025
   reference_portfolios:         # benchmarks / illustrations, not candidates
     "60/40 SPY/AGG": {SPY: 0.6, AGG: 0.4}
     "Equal weight 7": {SPY: 0.142857142857, EFA: 0.142857142857, EEM: 0.142857142857, AGG: 0.142857142857, GLD: 0.142857142857, XLE: 0.142857142857, XLK: 0.142857142858}
