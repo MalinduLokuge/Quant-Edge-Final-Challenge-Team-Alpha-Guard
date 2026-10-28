@@ -39,7 +39,7 @@ Stage: data · Owner: Raveena · Priority: Core · Target: Week 1
 | T2.10 | Extra quality checks: stale prices, jumps, reversals, large negatives, variance breaks | data_quality_flags.csv, flag counts, Inclán–Tiao table | Critical | Raveena | T2.04 | Done | BR p.9 |
 | T2.11 | Review every flag against market events; document decisions | Flag review table in data/README.md | High | Raveena | T2.10 | Done | BR p.9 'documented, not hidden' |
 | T2.12 | Confirm GLD −10.8% on 2026-01-30 against market news | Note in data/README.md | Medium | Raveena | T2.11 | Not started | REV |
-| T2.13 | Implement chronological train / validation / test split in code | split labels file + leakage test | Critical | Raveena | T1.07 (D5) | Not started | FJ M06 · DEC D5 |
+| T2.13 | Implement chronological train / validation / test split in code | data/processed/split_labels.csv, outputs/tables/split_summary.csv, data/split.py + 5 tests | Critical | Raveena | T1.07 (D5) | Done | FJ M06 · DEC D5 |
 | T2.14 | Download ETF distributions (dividends) for the income objective | data/raw dividends snapshot; distribution yield per ETF | Medium | Raveena | T2.01 | Done | FJ M-N01 · BR p.3 income |
 | T2.15 | ETF instrument register: asset class, role, inception, distribution policy (no extra data sources) | docs/ETF_REGISTER.md | Medium | Raveena | — | Not started | FJ M03/M-N01 |
 | T2.16 | Team sign-off of data-stage validation log entries | Signed rows in HUMAN_VALIDATION_LOG.md | High | Raveena | T2.11 | Not started | BR p.8 · REV |

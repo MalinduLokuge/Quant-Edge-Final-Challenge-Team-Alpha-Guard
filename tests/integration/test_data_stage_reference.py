@@ -58,3 +58,13 @@ def test_fred_rates_cover_whole_sample(stage):
     assert rates[["dtb3_pct", "dgs10_pct"]].notna().all().all()
     assert rates["dtb3_pct"].between(-1, 20).all()
     assert rates["dgs10_pct"].between(0, 20).all()
+
+
+def test_split_matches_approved_d5(stage):
+    from quantedge.data import split
+
+    _, log, _ = stage
+    s = config.load_settings()
+    summ = split.summary(split.split_labels(log.index, s["split"]["train_end"], s["split"]["validation_end"]))
+    assert summ["observations"].tolist() == [2546, 1258, 1708]  # D5 (research doc §5b)
+    assert str(summ.loc["train", "start"]) == "2004-11-19" and str(summ.loc["test", "end"]) == "2026-10-19"

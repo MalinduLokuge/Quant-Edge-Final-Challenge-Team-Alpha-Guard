@@ -4,14 +4,15 @@ Implements the brief's data-governance rules (p.9). Outputs:
     data/processed/prices_aligned.csv, log_returns.csv, simple_returns.csv, outlier_flags_zscore.csv,
                    data_quality_flags.csv (long: Date, Ticker, check, log_return),
                    rates_daily.csv (DTB3, rf_daily, DGS10, 10y change bp, breakeven 10y/5y), cpi_monthly.csv,
-                   distribution_yield_ttm.csv
+                   distribution_yield_ttm.csv, split_labels.csv (D5: train / validation / test per return date)
     outputs/tables/adf_results.csv, data_quality_missing.csv, data_quality_fred_alignment.csv,
-                   data_quality_flag_counts.csv, structural_breaks_inclan_tiao.csv, income_crosscheck.csv
+                   data_quality_flag_counts.csv, structural_breaks_inclan_tiao.csv, income_crosscheck.csv,
+                   split_summary.csv
 """
 from __future__ import annotations
 
 from quantedge.common import config
-from quantedge.data import clean, diagnostics, fred, income, ingest, quality
+from quantedge.data import clean, diagnostics, fred, income, ingest, quality, split
 
 
 def run(refresh: bool = False) -> dict:
@@ -37,6 +38,8 @@ def run(refresh: bool = False) -> dict:
         "simple_returns": clean.simple_returns(prices),
     }
     results["outlier_flags_zscore"] = clean.zscore_outlier_flags(results["log_returns"], d["outlier_z_threshold"])
+    results["split_labels"] = split.split_labels(
+        results["simple_returns"].index, settings["split"]["train_end"], settings["split"]["validation_end"])
 
     config.DATA_PROCESSED.mkdir(parents=True, exist_ok=True)
     config.OUTPUT_TABLES.mkdir(parents=True, exist_ok=True)
@@ -47,6 +50,8 @@ def run(refresh: bool = False) -> dict:
     qc["flags"].to_csv(config.DATA_PROCESSED / "data_quality_flags.csv", index=False)
     qc["counts"].to_csv(config.OUTPUT_TABLES / "data_quality_flag_counts.csv")
     qc["breaks"].to_csv(config.OUTPUT_TABLES / "structural_breaks_inclan_tiao.csv")
+
+    split.summary(results["split_labels"]).to_csv(config.OUTPUT_TABLES / "split_summary.csv")
 
     adf = diagnostics.adf_table(results["log_returns"], d["adf_alpha"])
     adf.to_csv(config.OUTPUT_TABLES / "adf_results.csv")

@@ -21,6 +21,7 @@ Conventions: decision D17. Status ✅ = implemented and tested, ⏳ = planned.
 | Excess return | Rₜ − r_f,ₜ (same date) | fraction | `conventions.excess_returns` | test_conventions | ✅ |
 | Inflation YoY | CPIₘ / CPIₘ₋₁₂ − 1, used with a 1-month release lag | fraction | `fred.cpi_inflation` | test_data_fred | ✅ |
 | TTM distribution yield | Σ distributions (ex-date in last 365 days) / unadjusted close | fraction p.a. | `income.ttm_distribution_yield` | test_data_income | ✅ |
+| Data split (D5) | train ≤ 2014-12-31 < validation ≤ 2019-12-31 < test; `segment()` never returns later rows | label | `split.split_labels`, `split.segment` | test_data_split | ✅ |
 | Expected inflation | FRED 10y breakeven (T10YIE) on the as-of date | fraction p.a. | `portfolio.run` | — | ✅ |
 
 ## Return objective & capital market assumptions (D12)
