@@ -2,7 +2,9 @@
 
 A Python and Streamlit tool that helps decide how to invest a conservative **USD 10M university endowment**, using only the seven approved ETFs (SPY, EFA, EEM, AGG, GLD, XLE, XLK).
 
-> Status: scaffolding. Layers get implemented one at a time. See `tracking/TASKS.md`.
+> Status: data stage and return objective built; portfolio stage in progress. See `tracking/TASKS.md`.
+>
+> Repository: https://github.com/MalinduLokuge/Quant-Edge-Final-Challenge-Team-Alpha-Guard (branch `version-1`)
 
 ## Reproduce everything (one command)
 
