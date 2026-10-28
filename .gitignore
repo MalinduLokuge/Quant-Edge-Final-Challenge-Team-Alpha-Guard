@@ -10,3 +10,5 @@ outputs/**
 !outputs/**/.gitkeep
 data/interim/**
 !data/interim/.gitkeep
+# third-party teaching decks: kept locally, not published (T17.06)
+docs/references/presentations/*.pptx

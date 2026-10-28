@@ -284,7 +284,7 @@ Stage: — · Owner: Malindu · Priority: Core · Target: Week 3
 | T17.03 | Provide one-command Streamlit run instructions | `python run_all.py --app` in README | Critical | Malindu | T14.* | In progress | PM · BR p.6 · entry point exists |
 | T17.04 | Test clean installation and reproduce key results | Clean-machine test record | Critical | Malindu | T17.02 | Not started | PM |
 | T17.05 | Log reproducibility evidence and known environment issues | Reproducibility log | High | Malindu | T17.04 | Not started | PM |
-| T17.06 | Decide which reference files to publish (third-party decks) | .gitignore rule | Medium | Malindu | — | Not started | REV |
+| T17.06 | Decide which reference files to publish (third-party decks) | .gitignore rule: decks kept local, removed from history | Medium | Malindu | — | Done | REV |
 | T17.07 | Optional: deploy to Streamlit Community Cloud | Public app URL (D16) | Low | Malindu | T17.04 | Not started | BR p.6 · DEC D16 |
 | T17.08 | First git commit and judge-accessible GitHub remote | Commit 49eff13 done; remote + URL in README pending | Critical | Malindu | T17.06 | In progress | BR p.6 · Review |
 | T17.09 | Make research evidence reproducible from the one-command run (run_all --research) | run_all flag + README | High | Malindu | T17.03 | Not started | Review: scripts/ not in pipeline |
