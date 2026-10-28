@@ -7,7 +7,7 @@ Sources merged: Project Management Tracker (`.xlsm`, Drive "alpha guard"), FigJa
 | ID | Task | Stage | Owner | Priority | Target | Subtasks | Done | In progress | Blocked | Progress |
 |---|---|---|---|---|---|---|---|---|---|---|
 | T1 | Project setup & shared decisions | — | Malindu | Supporting | Week 1 | 11 | 6 | 3 | 0 | 55% |
-| T2 | Data pipeline & cleaning | data | Raveena | Core | Week 1 | 17 | 13 | 0 | 0 | 76% |
+| T2 | Data pipeline & cleaning | data | Raveena | Core | Week 1 | 17 | 14 | 0 | 0 | 82% |
 | T3 | Client mandate (investment policy) | mandate | Sujan | Core | Week 1 | 20 | 16 | 2 | 0 | 80% |
 | T4 | Portfolio construction & selection | portfolio | Dewmini | Core | Weeks 1–2 | 21 | 0 | 0 | 0 | 0% |
 | T5 | KPIs & benchmarks | portfolio | Raveena | Supporting | Week 2 | 9 | 0 | 1 | 0 | 0% |
@@ -27,7 +27,7 @@ Sources merged: Project Management Tracker (`.xlsm`, Drive "alpha guard"), FigJa
 | T19 | Pitch & Q&A prep | — | All members | Conditional | If finalist | 4 | 0 | 0 | 0 | 0% |
 | T20 | Decision gate & final recommendation (P3) | decision | All members | Core | Week 3 | 6 | 0 | 0 | 0 | 0% |
 | T21 | Quality gates & compliance QA | — | Malindu (coordinates) | Core | Ongoing | 8 | 3 | 1 | 0 | 38% |
-| | **Total** | | | | | **209** | **42** | **15** | **0** | **20%** |
+| | **Total** | | | | | **209** | **43** | **15** | **0** | **21%** |
 
 Progress = share of subtasks marked Done. Recount with `python tracking/update_counts.py` after editing `SUBTASKS.md`.
 

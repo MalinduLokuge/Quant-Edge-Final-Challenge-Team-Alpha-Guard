@@ -11,6 +11,7 @@ Conventions: decision D17. Status ✅ = implemented and tested, ⏳ = planned.
 | Log return | rₜ = ln(Pₜ/Pₜ₋₁) | fraction | `clean.log_returns` | test_data_clean | ✅ |
 | Portfolio return | R_p,t = Σᵢ wᵢ·Rᵢ,ₜ (simple returns only) | fraction | `conventions.portfolio_returns` | test_conventions | ✅ |
 | Weights | wᵢ ≥ 0, Σwᵢ = 1, 7 approved ETFs only (D10) | fraction | `conventions.validate_weights` | test_conventions | ✅ |
+| Rebalanced portfolio return | weights drift with prices, reset to target on the last trading day of each completed period (D11 quarterly); turnover = ½Σ\|drift − target\| per rebalance, annualised | fraction / fraction p.a. | `conventions.rebalanced_returns` | test_conventions | ✅ |
 | Loss | L = −R | positive = loss | `conventions.to_loss` | test_conventions | ✅ |
 | USD amount | x · NAV, NAV = $10,000,000 | USD | `conventions.to_usd` | test_conventions | ✅ |
 | NAV path | Vₜ = V₀·Π(1+Rₛ) | USD or index | `conventions.wealth_index` | test_conventions | ✅ |

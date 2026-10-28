@@ -35,19 +35,9 @@ BENCHMARKS = {
 }
 
 
-def rebalanced(simple: pd.DataFrame, w: pd.Series, freq: str = "QE") -> tuple[pd.Series, float]:
-    """Portfolio returns with weights drifting between calendar rebalances; returns (returns, annual turnover)."""
-    r = simple[w.index].to_numpy()
-    rebal_dates = set(simple.groupby(simple.index.to_period(freq[0])).tail(1).index)
-    hold, out, turnover = w.to_numpy().copy(), np.empty(len(r)), 0.0
-    for t, d in enumerate(simple.index):
-        grown = hold * (1 + r[t])
-        out[t] = grown.sum() / hold.sum() - 1
-        hold = grown / grown.sum()
-        if d in rebal_dates:
-            turnover += np.abs(hold - w.to_numpy()).sum() / 2
-            hold = w.to_numpy().copy()
-    return pd.Series(out, index=simple.index), turnover / (len(r) / cv.TRADING_DAYS)
+def rebalanced(simple: pd.DataFrame, w: pd.Series) -> tuple[pd.Series, float]:
+    """Quarterly-rebalanced returns and turnover, via the shared convention (D11, T2.17)."""
+    return cv.rebalanced_returns(simple, w, "quarterly")
 
 
 def capped_samples(rng: np.random.Generator, tick: list[str], n: int) -> np.ndarray:

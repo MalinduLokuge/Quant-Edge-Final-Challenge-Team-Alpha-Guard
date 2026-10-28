@@ -43,7 +43,7 @@ Stage: data · Owner: Raveena · Priority: Core · Target: Week 1
 | T2.14 | Download ETF distributions (dividends) for the income objective | data/raw dividends snapshot; distribution yield per ETF | Medium | Raveena | T2.01 | Done | FJ M-N01 · BR p.3 income |
 | T2.15 | ETF instrument register: asset class, role, inception, distribution policy (no extra data sources) | docs/ETF_REGISTER.md | Medium | Raveena | — | Not started | FJ M03/M-N01 |
 | T2.16 | Team sign-off of data-stage validation log entries | Signed rows in HUMAN_VALIDATION_LOG.md | High | Raveena | T2.11 | Not started | BR p.8 · REV |
-| T2.17 | Move quarterly-rebalanced NAV/turnover function from research script into common/conventions with tests | conventions.rebalanced_returns + test | High | Malindu | T1.03 | Not started | Review: portfolio and benchmark must use identical rebalancing |
+| T2.17 | Move quarterly-rebalanced NAV/turnover function from research script into common/conventions with tests | conventions.rebalanced_returns + 4 tests; research script uses it (results identical, turnover −0.08 pp) | High | Malindu | T1.03 | Done | Review: portfolio and benchmark must use identical rebalancing |
 
 ## T3 — Client mandate (investment policy)
 Stage: mandate · Owner: Sujan · Priority: Core · Target: Week 1

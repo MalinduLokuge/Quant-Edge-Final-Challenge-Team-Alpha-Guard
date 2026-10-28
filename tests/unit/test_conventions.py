@@ -59,3 +59,39 @@ def test_excess_returns_requires_aligned_rf():
     assert out.tolist() == pytest.approx([0.009, 0.019, 0.029])
     with pytest.raises(ValueError):
         cv.excess_returns(r, pd.Series([0.001], index=IDX[:1]))
+
+
+def test_rebalanced_daily_equals_constant_weights():
+    idx = pd.bdate_range("2024-01-01", periods=130)
+    r = pd.DataFrame(np.random.default_rng(5).normal(0, 0.01, (130, 2)), index=idx, columns=["SPY", "AGG"])
+    w = pd.Series({"SPY": 0.6, "AGG": 0.4})
+    daily, turn = cv.rebalanced_returns(r, w, "daily")
+    pd.testing.assert_series_equal(daily, cv.portfolio_returns(r, w))
+    assert turn == 0.0
+
+
+def test_rebalanced_quarterly_drift_and_turnover_by_hand():
+    # Q1: SPY +10% on day 1 only; weights drift 50/50 -> 55/45, reset on the last trading day of Q1
+    idx = pd.to_datetime(["2024-03-28", "2024-03-29", "2024-04-01"])
+    r = pd.DataFrame({"SPY": [0.10, 0.0, 0.10], "AGG": [0.0, 0.0, 0.0]}, index=idx)
+    out, turn = cv.rebalanced_returns(r, pd.Series({"SPY": 0.5, "AGG": 0.5}), "quarterly")
+    assert out.iloc[0] == pytest.approx(0.05)
+    assert out.iloc[2] == pytest.approx(0.05)           # back to 50/50 after the Q1 reset
+    assert turn == pytest.approx((0.55 / 1.05 - 0.5) / (3 / 252))  # one-way turnover, annualised
+
+
+def test_rebalanced_identical_assets_has_no_turnover():
+    idx = pd.bdate_range("2024-01-01", periods=300)
+    x = np.random.default_rng(6).normal(0, 0.01, 300)
+    r = pd.DataFrame({"A": x, "B": x}, index=idx)
+    out, turn = cv.rebalanced_returns(r, pd.Series({"A": 0.3, "B": 0.7}))
+    np.testing.assert_allclose(out.to_numpy(), x)
+    assert turn == pytest.approx(0.0)
+
+
+def test_rebalanced_rejects_bad_input():
+    r = pd.DataFrame({"A": [0.0]}, index=pd.bdate_range("2024-01-01", periods=1))
+    with pytest.raises(ValueError):
+        cv.rebalanced_returns(r, pd.Series({"A": 0.9}))
+    with pytest.raises(ValueError):
+        cv.rebalanced_returns(r, pd.Series({"A": 1.0}), "weekly")

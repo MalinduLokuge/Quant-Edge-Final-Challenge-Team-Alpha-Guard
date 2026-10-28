@@ -43,6 +43,40 @@ def portfolio_returns(simple_returns: pd.DataFrame, weights: pd.Series) -> pd.Se
     return (simple_returns[w.index] * w).sum(axis=1).rename("portfolio")
 
 
+REBALANCE_PERIODS = {"daily": None, "monthly": "M", "quarterly": "Q", "annual": "Y"}
+
+
+def rebalanced_returns(simple_returns: pd.DataFrame, weights: pd.Series, frequency: str = "quarterly") -> tuple[pd.Series, float]:
+    """Portfolio simple returns when weights drift with prices and are reset to target on the last
+    trading day of each period (D11: quarterly). Returns (daily returns, average annual turnover).
+
+    Turnover at a rebalance = ½ Σ |drifted weight − target| (one-way). "daily" equals portfolio_returns().
+    Use the same function and frequency for portfolios and benchmarks so their KPIs are comparable.
+    """
+    if frequency not in REBALANCE_PERIODS:
+        raise ValueError(f"frequency must be one of {list(REBALANCE_PERIODS)}, got {frequency!r}")
+    w = pd.Series(weights, dtype=float)
+    w = w[w != 0]
+    if abs(w.sum() - 1) > WEIGHT_TOL:
+        raise ValueError(f"Weights must sum to 1, got {w.sum():.10f}")
+    if frequency == "daily":
+        return portfolio_returns(simple_returns, w), 0.0
+    r = simple_returns[w.index].to_numpy()
+    period = simple_returns.index.to_period(REBALANCE_PERIODS[frequency])
+    # last trading day of each *completed* period; the final observation is not a rebalance (period unfinished)
+    is_last = np.r_[period[1:] != period[:-1], False]
+    target = w.to_numpy()
+    hold, out, turnover = target.copy(), np.empty(len(r)), 0.0
+    for t in range(len(r)):
+        grown = hold * (1 + r[t])
+        out[t] = grown.sum() - 1  # hold sums to 1 at the start of each day
+        hold = grown / grown.sum()
+        if is_last[t]:
+            turnover += np.abs(hold - target).sum() / 2
+            hold = target.copy()
+    return pd.Series(out, index=simple_returns.index, name="portfolio"), turnover / (len(r) / TRADING_DAYS)
+
+
 def to_loss(returns: pd.Series | pd.DataFrame | float):
     """Loss = −return. Positive numbers are losses throughout the project."""
     return -returns
