@@ -19,7 +19,7 @@ Stage: — · Owner: Malindu · Priority: Supporting · Target: Week 1
 | T1.07 | Settle blocking decisions D3, D5, D6, D7, D12 before portfolio stage | All five APPROVED in DECISIONS.md | Critical | All members | T3.01–T3.04 | Done | DEC |
 | T1.08 | Settle remaining decisions D1, D4, D8, D9, D11, D13, D16 | APPROVED in DECISIONS.md | High | All members | T1.07 | Not started | DEC |
 | T1.09 | Upload missing Batch04 explainer (slides 61–80); remove duplicate Batch02 | docs/references/explainers complete | Low | Malindu | — | Not started | REV |
-| T1.10 | Approve decisions already implied by approved work: D4 5-year horizon (D7 uses it), D11 quarterly (D3 uses it), D13 1,000-day window, D1 full sample, D2 DTB3, D8 EVT method | APPROVED rows in DECISIONS.md | Critical | All members | — | In progress | Review 2026-10-28 (D4, D11, D13 approved; D1, D2, D8 open) |
+| T1.10 | Approve decisions already implied by approved work: D4 5-year horizon (D7 uses it), D11 quarterly (D3 uses it), D13 1,000-day window, D1 full sample, D2 DTB3, D8 EVT method | APPROVED rows in DECISIONS.md | Critical | All members | — | Done | Review 2026-10-28 (all approved 2026-10-28) |
 | T1.11 | Approve optimiser design for drawdown limit (CVaR constraint + CDaR or post-check) | Decision D22 | Critical | All members | T4.20 | Done | Review 2026-10-28 |
 
 ## T2 — Data pipeline & cleaning

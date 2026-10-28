@@ -6,7 +6,7 @@ Sources merged: Project Management Tracker (`.xlsm`, Drive "alpha guard"), FigJa
 
 | ID | Task | Stage | Owner | Priority | Target | Subtasks | Done | In progress | Blocked | Progress |
 |---|---|---|---|---|---|---|---|---|---|---|
-| T1 | Project setup & shared decisions | — | Malindu | Supporting | Week 1 | 11 | 6 | 3 | 0 | 55% |
+| T1 | Project setup & shared decisions | — | Malindu | Supporting | Week 1 | 11 | 7 | 2 | 0 | 64% |
 | T2 | Data pipeline & cleaning | data | Raveena | Core | Week 1 | 17 | 14 | 0 | 0 | 82% |
 | T3 | Client mandate (investment policy) | mandate | Sujan | Core | Week 1 | 20 | 16 | 2 | 0 | 80% |
 | T4 | Portfolio construction & selection | portfolio | Dewmini | Core | Weeks 1–2 | 21 | 0 | 0 | 0 | 0% |
@@ -27,7 +27,7 @@ Sources merged: Project Management Tracker (`.xlsm`, Drive "alpha guard"), FigJa
 | T19 | Pitch & Q&A prep | — | All members | Conditional | If finalist | 4 | 0 | 0 | 0 | 0% |
 | T20 | Decision gate & final recommendation (P3) | decision | All members | Core | Week 3 | 6 | 0 | 0 | 0 | 0% |
 | T21 | Quality gates & compliance QA | — | Malindu (coordinates) | Core | Ongoing | 8 | 3 | 1 | 0 | 38% |
-| | **Total** | | | | | **209** | **43** | **15** | **0** | **21%** |
+| | **Total** | | | | | **209** | **44** | **14** | **0** | **21%** |
 
 Progress = share of subtasks marked Done. Recount with `python tracking/update_counts.py` after editing `SUBTASKS.md`.
 
@@ -63,7 +63,7 @@ T18 AI log and T21 compliance checks run alongside every stage.
 Can start now, without the decisions: T6.02–T6.04, T7.01–T7.02, T8.01, T8.08 and T10.04–T10.06 as generic functions tested on synthetic data; T11.01; T2.14–T2.15; T3.06.
 
 ## Open blockers
-- **Decisions:** all blocking decisions approved 2026-10-28 (D3, D5, D6, D7, D12). Still open, non-blocking: D1, D4, D8, D9, D11, D13, D16, component-ES cap (T1.08).
+- **Decisions:** all blocking decisions approved 2026-10-28 (D3, D5, D6, D7, D12). Still open, deferred: D9 (before stress stage), D16 (before submission), component-ES cap (risk stage).
 - T2.12: confirm the GLD move on 2026-01-30. T2.16: team sign-off on the validation log.
 - T1.09: Batch04 explainer missing; duplicate Batch02.
 - T21.05: FigJam memo wording (D14) and Min-CVaR block (D20).

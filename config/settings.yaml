@@ -23,9 +23,9 @@ data:
     jump_window: 63                          # ~3 months of trading days
     large_negative_floor: -0.10              # single-day simple return below -10%
   adf_alpha: 0.05
-  start: DECIDE                              # analysis window (D1)
-  end: DECIDE
-  risk_free_series: DTB3                     # D2 (implemented)
+  start: "2004-11-18"                       # D1, APPROVED: common sample start (GLD inception)
+  end: "2026-10-19"                         # D1: snapshot end
+  risk_free_series: DTB3                     # D2, APPROVED
 split:                          # D5, APPROVED 2026-10-28; chronological, no overlap
   train_end: "2014-12-31"
   validation_end: "2019-12-31"     # test = 2020-01-01 onwards, used once
