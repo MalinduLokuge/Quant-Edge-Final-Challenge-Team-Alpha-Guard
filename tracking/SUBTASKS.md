@@ -286,7 +286,7 @@ Stage: — · Owner: Malindu · Priority: Core · Target: Week 3
 | T17.05 | Log reproducibility evidence and known environment issues | Reproducibility log | High | Malindu | T17.04 | Not started | PM |
 | T17.06 | Decide which reference files to publish (third-party decks) | .gitignore rule | Medium | Malindu | — | Not started | REV |
 | T17.07 | Optional: deploy to Streamlit Community Cloud | Public app URL (D16) | Low | Malindu | T17.04 | Not started | BR p.6 · DEC D16 |
-| T17.08 | First git commit and judge-accessible GitHub remote | Repo URL in README | Critical | Malindu | T17.06 | Not started | BR p.6 · Review |
+| T17.08 | First git commit and judge-accessible GitHub remote | Commit 49eff13 done; remote + URL in README pending | Critical | Malindu | T17.06 | In progress | BR p.6 · Review |
 | T17.09 | Make research evidence reproducible from the one-command run (run_all --research) | run_all flag + README | High | Malindu | T17.03 | Not started | Review: scripts/ not in pipeline |
 
 ## T18 — AI disclosure & validation log
