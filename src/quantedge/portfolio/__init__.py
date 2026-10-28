@@ -43,8 +43,10 @@ def run() -> dict:
     assets["volatility_monthly"] = cma.annual_covariance(simple, "monthly").pipe(lambda m_: pd.Series(
         m_.values.diagonal() ** 0.5, index=m_.index))  # reported only; models use daily (warning 5)
     erps = {f"{e:.0%}": e for e in c["erp_range"]} | {"own data": erp["erp_arithmetic"]}
+    bonds = tuple(c.get("bond_assets", ()))
     for label, e in erps.items():
-        assets[f"capm_E[R] erp {label}"] = cma.capm_expected(rf_now, betas, e)
+        assets[f"capm_E[R] erp {label}"] = cma.capm_expected(rf_now, betas, e)                      # pure CAPM (reference)
+        assets[f"E[R] erp {label}"] = cma.expected_returns(assets[f"capm_E[R] erp {label}"], yld, bonds)  # D25, used
 
     grid = return_objective.required_return_grid(
         inflation, m["spending_rate"]["range"], m["real_growth"]["range"], m["extra_costs"]["range"])
@@ -59,7 +61,8 @@ def run() -> dict:
         for rf_label, rf in rf_scen.items():
             for label, e in erps.items():
                 for tax_label, tax in tax_cases.items():
-                    exp = cma.portfolio_expected(w, cma.capm_expected(rf, betas, e), cov, yld, tax)
+                    exp_r = cma.expected_returns(cma.capm_expected(rf, betas, e), yld, bonds)  # AGG yield is locked in
+                    exp = cma.portfolio_expected(w, exp_r, cov, yld, tax)
                     rows.append({"portfolio": name, "rf_scenario": rf_label, "rf": rf, "erp": label,
                                  "tax_case": tax_label, **exp})
     vs = return_objective.feasibility(pd.DataFrame(rows), req_base)
@@ -74,7 +77,7 @@ def run() -> dict:
     # out-of-sample tests); "full" sees everything (P1-final). Same method and ERP for both.
     cma_sets = {}
     for label, as_of_date in (("train", s["split"]["train_end"]), ("full", as_of)):
-        est = cma.estimate_as_of(simple, rates, yields, as_of_date, c["market"], c["erp_base"])
+        est = cma.estimate_as_of(simple, rates, yields, as_of_date, c["market"], c["erp_base"], bond_assets=bonds)
         est["assets"].to_csv(out / f"cma_{label}.csv")
         est["cov"].to_csv(out / f"cma_{label}_cov.csv")
         cma_sets[label] = est

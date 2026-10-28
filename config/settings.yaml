@@ -108,6 +108,7 @@ mandate:                        # D12 inputs. Base values APPROVED 2026-10-28 (p
 cma:                            # capital market assumptions (D12)
   market: SPY                   # CAPM market proxy (D3, approved)
   erp_base: 0.05                # D12, APPROVED 2026-10-28 (provisional)
+  bond_assets: [AGG]            # D25, APPROVED: expected return = distribution yield on the as-of date
   erp_range: [0.03, 0.04, 0.05, 0.06]
   rf_scenarios:                 # 5-year horizon (D4): today's T-bill may not last
     "current T-bill": as_of     # DTB3 on the as-of date (base)

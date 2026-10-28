@@ -42,7 +42,7 @@ def write_return_objective_summary(path: Path, *, as_of, inflation: float, rf: f
          f"| Extra costs | {_pct(c)} | Management and trading costs not already inside ETF prices |",
          "",
          "## 2. What portfolios can realistically earn",
-         f"Expected compound return = CAPM (risk-free {_pct(rf)} + β × equity risk premium {erp_label}) − ½ variance "
+         f"Expected compound return = CAPM (risk-free {_pct(rf)} + β × equity risk premium {erp_label}; AGG = its yield, D25) − ½ variance "
          f"(daily-return covariance). "
          f"Reference portfolios only; the optimised candidates come in the portfolio stage.",
          "",

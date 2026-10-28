@@ -105,7 +105,7 @@ Stage: portfolio · Owner: Dewmini · Priority: Core · Target: Weeks 1–2
 | T4.19 | Produce two P1 sets: P1-train (frozen, for OOS backtests) and P1-final (full-sample re-fit, same frozen method) | outputs/p1_train.csv, outputs/p1_final.csv | Critical | Dewmini | T4.16, T4.18 | Not started | DEC D5 protocol |
 | T4.20 | Optimiser design meeting D6 v2 + D7 (ES as CVaR constraint; drawdown via CDaR or post-check) | Design note + solver choice (cvxpy) | Critical | Dewmini | T4.12 | Not started | Review 2026-10-28 |
 | T4.21 | Add every candidate to the required-vs-expected table with sustainable spending | Extended return_objective_summary.md | High | Dewmini | T4.16 | Not started | DEC D12 |
-| T4.22 | Decide bond expected-return method for near-zero rates (D25) and apply to both CMA sets | D25 approved; cma updated + test | Critical | All members | T4.18 | Not started | T4.18 finding |
+| T4.22 | Decide bond expected-return method for near-zero rates (D25) and apply to both CMA sets | D25 approved; cma.expected_returns applied to both CMA sets, D12 tables, research; 1 test; research doc §8b | Critical | All members | T4.18 | Done | T4.18 finding |
 | T4.23 | Required return in training-period terms (2014 breakeven, same S/G/C) for P1-train return targets | Train-period hurdle in outputs | High | Dewmini | T4.18 | Not started | D5 + D12 consistency |
 
 ## T5 — KPIs & benchmarks

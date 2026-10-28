@@ -95,7 +95,7 @@ def main() -> None:
     tick = list(simple.columns)
     infl = rates["breakeven_10y_pct"].iloc[-1] / 100
     s0 = s["mandate"]["spending_rate"]["base"]
-    mu = assets.loc[tick, f"capm_E[R] erp {ERP:.0%}"].to_numpy()
+    mu = assets.loc[tick, f"E[R] erp {ERP:.0%}"].to_numpy()
     R = simple.to_numpy() + (mu / cv.TRADING_DAYS - simple.mean().to_numpy())
     out = config.OUTPUT_TABLES
     idx5, idx10 = bootstrap(R, 4_000, 5 * 252, seed=21), bootstrap(R, 2_000, 10 * 252, seed=22)

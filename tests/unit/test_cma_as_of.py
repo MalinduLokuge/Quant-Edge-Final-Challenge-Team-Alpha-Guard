@@ -54,3 +54,14 @@ def test_as_of_before_data_raises():
     simple, rates, yields = _data()
     with pytest.raises(ValueError):
         cma.estimate_as_of(simple, rates, yields, "2000-01-01", "SPY", 0.05)
+
+
+def test_d25_bond_expected_return_is_yield_equities_capm():
+    simple, rates, yields = _data()
+    a = cma.estimate_as_of(simple, rates, yields, AS_OF, "SPY", 0.05)
+    assert a["assets"].loc["AGG", "expected_arithmetic"] == pytest.approx(0.03)        # yield, not CAPM
+    assert a["assets"].loc["AGG", "capm_arithmetic"] != pytest.approx(0.03)             # CAPM kept for reference
+    for t in ("SPY", "GLD"):
+        assert a["assets"].loc[t, "expected_arithmetic"] == a["assets"].loc[t, "capm_arithmetic"]
+    none = cma.estimate_as_of(simple, rates, yields, AS_OF, "SPY", 0.05, bond_assets=())
+    pd.testing.assert_series_equal(none["assets"]["expected_arithmetic"], none["assets"]["capm_arithmetic"], check_names=False)

@@ -16,6 +16,7 @@ The Streamlit page and the report section are both built from this file, so they
 
 ## Expected returns (D12)
 - Expected returns come from CAPM (today's T-bill 4.10% + β × 5% equity risk premium). They are estimates with wide uncertainty: our own-data ERP is 9.7% with a 95% CI of 3.5–15.8%.
+- AGG's expected return is its distribution yield on the as-of date (D25), not CAPM: with a near-zero T-bill (2014), CAPM would give bonds about 0.2%. The yield ignores future price gains or losses from rate changes and defaults.
 - CAPM gives gold about 4.6% because its beta is near zero. That ignores gold's value as an inflation and crisis hedge.
 - The base case uses today's T-bill (4.10%) for the whole 5-year horizon. Scenarios at 3.0% and 2.5% lower every CAPM expected return one-for-one (60/40: 6.59% → 4.99%). AGG's true sensitivity is smaller, because its current yield is locked in for about 6 years of duration.
 - Variance drag uses daily-return covariance, consistent with the VaR/ES framework. Monthly returns give lower volatility (60/40: 9.4% vs 11.5%) and are reported for information only.

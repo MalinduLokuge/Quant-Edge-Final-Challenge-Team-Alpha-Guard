@@ -1,8 +1,8 @@
 """Capital market assumptions: expected returns for the 7 ETFs and for portfolios.
 
 Methods (D12):
-    CAPM      E[R_i] = r_f + β_i · ERP          (primary; brief requires CAPM)
-    Income    AGG expected return ≈ its current distribution yield (cross-check for bonds)
+    CAPM      E[R_i] = r_f + β_i · ERP          (primary for equity ETFs and gold; brief requires CAPM)
+    Income    AGG expected return = its distribution yield on the as-of date (D25)
     History   realised arithmetic / geometric means (cross-check only: very noisy)
 Betas use monthly excess returns: daily betas of EFA/EEM are biased down because their home
 markets close before the US (non-synchronous trading).
@@ -61,6 +61,17 @@ def capm_expected(rf_annual: float, betas: pd.Series, erp: float) -> pd.Series:
     return (rf_annual + betas * erp).rename("capm_arithmetic")
 
 
+def expected_returns(capm: pd.Series, yields: pd.Series, bond_assets: tuple[str, ...] = ("AGG",)) -> pd.Series:
+    """D25 expected returns: CAPM for every ETF except bond funds, whose expected return is their
+    distribution yield on the as-of date (building-block). Avoids CAPM's near-zero bond return when the
+    T-bill is near zero (0.16% for AGG at 2014-12-31 vs a 2.4% yield)."""
+    out = capm.copy().rename("expected_arithmetic")
+    for b in bond_assets:
+        if b in out.index:
+            out[b] = yields[b]
+    return out
+
+
 def portfolio_expected(weights: pd.Series, exp_arith: pd.Series, cov: pd.DataFrame,
                        yields: pd.Series, withholding: float | pd.Series = 0.0) -> dict:
     """Portfolio arithmetic and compound expected return, volatility and income yield.
@@ -79,7 +90,7 @@ def portfolio_expected(weights: pd.Series, exp_arith: pd.Series, cov: pd.DataFra
 
 
 def estimate_as_of(simple_returns: pd.DataFrame, rates: pd.DataFrame, yields: pd.DataFrame, as_of,
-                   market: str, erp: float, rf_column: str = "dtb3_pct") -> dict:
+                   market: str, erp: float, rf_column: str = "dtb3_pct", bond_assets: tuple[str, ...] = ("AGG",)) -> dict:
     """Capital market assumptions using ONLY data on or before `as_of` (T4.18, D5 leakage control).
 
     as_of = split train_end gives P1-train inputs (out-of-sample tests); as_of = last date gives P1-final.
@@ -98,6 +109,7 @@ def estimate_as_of(simple_returns: pd.DataFrame, rates: pd.DataFrame, yields: pd
     assets = historical_stats(r).join(betas)
     assets["capm_arithmetic"] = capm_expected(rf, betas, erp)
     assets["ttm_yield"] = yields.loc[:as_of].iloc[-1].reindex(assets.index)
+    assets["expected_arithmetic"] = expected_returns(assets["capm_arithmetic"], assets["ttm_yield"], bond_assets)
     own = equity_risk_premium(mex[market])
     return {"assets": assets, "cov": annual_covariance(r), "rf": rf, "as_of": r.index[-1],
             "erp": erp, "erp_own_data": own["erp_arithmetic"], "observations": len(r)}

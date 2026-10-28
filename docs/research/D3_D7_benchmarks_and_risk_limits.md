@@ -262,6 +262,21 @@ Reproduce: `python scripts/research_d3_d7.py --gold` → `research_gold_assessme
 
 **Conclusion:** D5, D6 v2 and D7 choices are unchanged; only levels moved. The conflict with D12 is **sharper**: a conservative portfolio supports about **3.0% spending in the base case and 1.4–2.0% if rates fall**, against the 4% assumed. The memo should present spending as a range tied to the rate outlook.
 
+## 8b. Revision 2026-10-28c: D25 (AGG expected return = its yield)
+AGG's expected return is now its distribution yield on the as-of date (4.17% in 2026; 2.40% at the 2014 train end, where CAPM gave 0.16%). Pure CAPM is kept as a reference column (`capm_E[R] …`). Every table was rerun:
+
+| Item | Rev. b | **Rev. c (D25)** |
+|---|---|---|
+| 60/40 / 40/60 / Defensive expected return (today's T-bill) | 6.59 / 5.99 / 5.58% | **6.47 / 5.81 / 5.44%** |
+| Same at a 2.5% T-bill | 4.99 / 4.39 / 3.98% | **5.51 / 5.17 / 4.64%** (AGG's yield is locked in, so falling rates hurt less) |
+| Best within D7 + D6 v2 | 6.16% (~3.0% spending) | **6.01% (~2.9% spending)** |
+| Best within 25% DD, ES 2.5%, no caps / draft caps | 6.20 / 5.90% | 6.03 / 5.79% |
+| Risk needed for the 6.66% minimum (no caps) | DD ≈ 33% | **DD ≈ 35%** (still infeasible under any caps) |
+| P(DD > 25% in 5y), policy benchmark | 4.7% | 4.9% |
+| P(real value < 80% in 5y), 40% equity, 4% smoothed spending | 17.8% | 18.5% |
+
+No decision changes. The return conflict is slightly larger in the base case, but **much less severe under falling rates**, which is more realistic for a bond-heavy fund.
+
 ## 9. Risk tolerance and risk capacity: the 12-factor review (2026-10-28)
 The brief gives no loss number, so the client's tolerance must be **approximated**. Method (CFA investment-policy framework): **risk tolerance = the lower of willingness and ability (capacity)**.
 Reproduce: `python scripts/research_d7_capacity.py` → `research_capacity_*.csv`. Bootstrap: 4,000 five-year paths (2,000 ten-year paths for recovery), CAPM means, quarterly spending, inflation 2.35%. Portfolios: global equity mix + 10% gold + rest AGG.

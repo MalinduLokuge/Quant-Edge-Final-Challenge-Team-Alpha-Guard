@@ -97,7 +97,7 @@ def main() -> None:
     rates = pd.read_csv(config.DATA_PROCESSED / "rates_daily.csv", index_col=0, parse_dates=True)
     rf = rates["rf_daily"].reindex(simple.index)
     assets = pd.read_csv(config.OUTPUT_TABLES / "cma_assets.csv", index_col=0)
-    capm = assets[f"capm_E[R] erp {ERP:.0%}"]
+    capm = assets[f"E[R] erp {ERP:.0%}"]
     cov = cma.annual_covariance(simple)
     yld = assets["ttm_yield"]
     ref, _ = rebalanced(simple, pd.Series(BENCHMARKS["60/40 SPY/AGG"]))
@@ -181,7 +181,7 @@ def forward_drawdowns(n_paths: int = 5_000, years: int = 5, block: int = 63, see
     assets = pd.read_csv(config.OUTPUT_TABLES / "cma_assets.csv", index_col=0)
     feas = pd.read_csv(config.OUTPUT_TABLES / "research_d3d7_feasibility.csv")
     tick = list(simple.columns)
-    shift = assets.loc[tick, f"capm_E[R] erp {ERP:.0%}"].to_numpy() / cv.TRADING_DAYS - simple.mean().to_numpy()
+    shift = assets.loc[tick, f"E[R] erp {ERP:.0%}"].to_numpy() / cv.TRADING_DAYS - simple.mean().to_numpy()
     R = simple.to_numpy() + shift
 
     ports = {name: BENCHMARKS[name] for name in ("40/60 SPY/AGG", "Policy 40/50/10 (global eq/AGG/GLD)", "60/40 SPY/AGG")}
@@ -236,7 +236,7 @@ def cap_designs(n: int = 40_000, seed: int = 11) -> None:
     simple = pd.read_csv(config.DATA_PROCESSED / "simple_returns.csv", index_col=0, parse_dates=True)
     assets = pd.read_csv(config.OUTPUT_TABLES / "cma_assets.csv", index_col=0)
     tick = list(simple.columns)
-    mu = assets.loc[tick, f"capm_E[R] erp {ERP:.0%}"].to_numpy()
+    mu = assets.loc[tick, f"E[R] erp {ERP:.0%}"].to_numpy()
     C = cma.annual_covariance(simple).loc[tick, tick].to_numpy()
     R = simple.to_numpy()
     rng = np.random.default_rng(seed)
@@ -281,7 +281,7 @@ def allocation_sweeps(n_paths: int = 4_000, years: int = 5, block: int = 63, see
     assets = pd.read_csv(config.OUTPUT_TABLES / "cma_assets.csv", index_col=0)
     tick = list(simple.columns)
     infl = rates["breakeven_10y_pct"].iloc[-1] / 100
-    mu = assets.loc[tick, f"capm_E[R] erp {ERP:.0%}"]
+    mu = assets.loc[tick, f"E[R] erp {ERP:.0%}"]
     cov = cma.annual_covariance(simple)
     R = simple.to_numpy() + (mu.to_numpy() / cv.TRADING_DAYS - simple.mean().to_numpy())
     rng = np.random.default_rng(seed)
