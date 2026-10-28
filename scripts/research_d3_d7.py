@@ -345,8 +345,42 @@ def gold_assessment() -> None:
     print("gold assessment written")
 
 
+def shrinkage_stability(window: int = 252, step: int = 21) -> None:
+    """T4.08 evidence: do minimum-variance weights jump less between rolling windows with shrinkage?
+    Training period only (D5). Long-only minimum variance by projected gradient (no extra dependency)."""
+    s = config.load_settings()
+    simple = pd.read_csv(config.DATA_PROCESSED / "simple_returns.csv", index_col=0, parse_dates=True)
+    train = simple.loc[: s["split"]["train_end"]]
+
+    def min_var(C: np.ndarray, iters: int = 3000) -> np.ndarray:
+        w = np.full(len(C), 1 / len(C))
+        lr = 0.5 / np.linalg.eigvalsh(C).max()
+        for _ in range(iters):
+            w = w - lr * (C @ w)
+            u = np.sort(w)[::-1]  # project onto the simplex (long-only, fully invested)
+            css = np.cumsum(u) - 1
+            k = np.nonzero(u - css / np.arange(1, len(u) + 1) > 0)[0][-1]
+            w = np.maximum(w - css[k] / (k + 1), 0)
+        return w
+
+    rows, prev = [], {}
+    for end in range(window, len(train), step):
+        win = train.iloc[end - window:end]
+        for label, C in (("sample", cma.annual_covariance(win).to_numpy()), ("shrunk", cma.shrunk_covariance(win)[0].to_numpy())):
+            w = min_var(C)
+            if label in prev:
+                rows.append({"date": win.index[-1].date(), "cov": label, "turnover": np.abs(w - prev[label]).sum() / 2,
+                             "max_weight": w.max()})
+            prev[label] = w
+    df = pd.DataFrame(rows)
+    df.to_csv(config.OUTPUT_TABLES / "research_shrinkage_stability.csv", index=False)
+    print(df.groupby("cov")[["turnover", "max_weight"]].mean().round(4).to_string())
+
+
 if __name__ == "__main__":
-    if "--gold" in sys.argv:
+    if "--shrink" in sys.argv:
+        shrinkage_stability()
+    elif "--gold" in sys.argv:
         gold_assessment()
     elif "--g1" in sys.argv:
         forward_drawdowns()

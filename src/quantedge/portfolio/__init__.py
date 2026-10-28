@@ -5,7 +5,8 @@ Outputs (outputs/tables/):
     erp_estimate.csv            own-data equity risk premium with 95% CI
     required_return_grid.csv    required return for every spending / growth / cost combination
     required_vs_expected.csv    reference portfolios: expected compound return vs required (per ERP), sustainable spending
-    cma_train.csv / cma_full.csv (+ _cov)  optimiser inputs as of the D5 train end / last date (T4.18)
+    cma_train.csv / cma_full.csv (+ _cov, _cov_shrunk)  optimiser inputs as of the D5 train end / last date
+                                (T4.18); _cov_shrunk = Ledoit–Wolf on correlations (T4.08), used by the optimiser
 Outputs (outputs/reports/):
     return_objective_summary.md one-page summary for the team / committee (regenerated on every run)
 
@@ -81,9 +82,11 @@ def run() -> dict:
         est["hurdle"] = return_objective.required_return_as_of(rates, as_of_date, m)  # T4.23: same-date inflation
         est["assets"].to_csv(out / f"cma_{label}.csv")
         est["cov"].to_csv(out / f"cma_{label}_cov.csv")
+        est["cov_shrunk"].to_csv(out / f"cma_{label}_cov_shrunk.csv")  # T4.08: optimiser input
         cma_sets[label] = est
     pd.DataFrame({k: {"as_of": v["as_of"].date(), "rf": v["rf"], "erp_assumed": v["erp"],
                       "erp_own_data_window": v["erp_own_data"], "observations": v["observations"],
+                      "covariance_shrinkage": v["shrinkage"],
                       "inflation_breakeven": v["hurdle"]["inflation"], "required_target": v["hurdle"]["required_gross"],
                       "required_minimum": v["hurdle"]["required_minimum"]}
                   for k, v in cma_sets.items()}).to_csv(out / "cma_sets_summary.csv")

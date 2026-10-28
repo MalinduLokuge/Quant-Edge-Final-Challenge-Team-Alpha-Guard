@@ -7,7 +7,7 @@ yfinance
 pandas-datareader   # FRED
 arch                # GARCH
 scikit-learn        # Ledoit-Wolf shrinkage
-cvxpy               # constrained optimisation
+cvxpy               # constrained optimisation (not yet installed locally; needed for T4.20)
 matplotlib
 plotly
 streamlit

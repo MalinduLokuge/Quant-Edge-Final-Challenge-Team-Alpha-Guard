@@ -65,3 +65,23 @@ def test_d25_bond_expected_return_is_yield_equities_capm():
         assert a["assets"].loc[t, "expected_arithmetic"] == a["assets"].loc[t, "capm_arithmetic"]
     none = cma.estimate_as_of(simple, rates, yields, AS_OF, "SPY", 0.05, bond_assets=())
     pd.testing.assert_series_equal(none["assets"]["expected_arithmetic"], none["assets"]["capm_arithmetic"], check_names=False)
+
+
+def test_shrunk_covariance_keeps_variances_and_shrinks_correlations():
+    simple, _, _ = _data()
+    cov, delta = cma.shrunk_covariance(simple)
+    sample = cma.annual_covariance(simple)
+    np.testing.assert_allclose(np.diag(cov), np.diag(sample))            # each ETF's variance unchanged
+    corr = lambda c: c / np.sqrt(np.outer(np.diag(c), np.diag(c)))       # noqa: E731
+    off = ~np.eye(3, dtype=bool)
+    # shrunk correlation = (1 - delta) x sample correlation (target: zero correlation)
+    np.testing.assert_allclose(corr(cov.to_numpy())[off], (1 - delta) * corr(sample.to_numpy())[off], rtol=1e-6)
+    assert 0 <= delta <= 1
+    assert np.linalg.eigvalsh(cov.to_numpy()).min() > 0                  # positive definite
+
+
+def test_shrinkage_grows_when_data_is_short():
+    simple, _, _ = _data()
+    _, d_long = cma.shrunk_covariance(simple)
+    _, d_short = cma.shrunk_covariance(simple.iloc[:40])
+    assert d_short > d_long

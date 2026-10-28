@@ -34,6 +34,7 @@ Conventions: decision D17. Status ✅ = implemented and tested, ⏳ = planned.
 | CAPM expected return | r_f(as-of) + β·ERP | fraction p.a. | `cma.capm_expected` | test_return_objective | ✅ |
 | Annual covariance Σ | daily simple-return covariance × 252 (monthly version reported only) | fraction² p.a. | `cma.annual_covariance` | test_return_objective | ✅ |
 | Portfolio expected compound return | wᵀE[R] − ½·wᵀΣw − Σwᵢ·yieldᵢ·WHTᵢ (WHT per ETF, sensitivity) | fraction p.a. | `cma.portfolio_expected` | test_return_objective | ✅ |
+| Shrunk covariance (T4.08) | Ledoit–Wolf on standardised returns: corrᵢⱼ ← (1−δ)·corrᵢⱼ, variances unchanged, × 252 | fraction² p.a. | `cma.shrunk_covariance` | test_cma_as_of | ✅ |
 | Expected return used (D25) | CAPM for equity ETFs and GLD; AGG = its TTM distribution yield on the as-of date | fraction p.a. | `cma.expected_returns` | test_cma_as_of | ✅ |
 | CMA as of a date | betas, covariance, rf and yields from data ≤ as-of only; train set = D5 train end, full set = last date; ERP = approved assumption | — | `cma.estimate_as_of` | test_cma_as_of | ✅ |
 | Required return as of a date | same formula; inflation = breakeven on the as-of date, S/G/C = D12 policy; minimum uses G = 0 | fraction p.a. | `return_objective.required_return_as_of` | test_return_objective | ✅ |

@@ -57,6 +57,24 @@ def annual_covariance(simple_returns: pd.DataFrame, frequency: str = "daily") ->
     raise ValueError(f"frequency must be 'daily' or 'monthly', got {frequency!r}")
 
 
+def shrunk_covariance(simple_returns: pd.DataFrame) -> tuple[pd.DataFrame, float]:
+    """Ledoit–Wolf (2004) shrinkage applied to the CORRELATION matrix, keeping each ETF's own variance.
+
+    Plain Ledoit–Wolf shrinks toward a scaled identity, which would pull AGG's 5% volatility toward the
+    average (~20%). Standardising first shrinks only the correlations toward zero, by the optimal
+    intensity δ. Returns (annualised covariance, δ). With 7 ETFs and thousands of days δ is small; it
+    matters more on short windows (rolling estimates).
+    """
+    from sklearn.covariance import LedoitWolf
+
+    r = simple_returns.dropna()
+    sd = r.std(ddof=1)
+    lw = LedoitWolf(assume_centered=False).fit(((r - r.mean()) / sd).to_numpy())
+    corr = lw.covariance_ / np.sqrt(np.outer(np.diag(lw.covariance_), np.diag(lw.covariance_)))
+    cov = pd.DataFrame(corr * np.outer(sd, sd), index=r.columns, columns=r.columns) * cv.TRADING_DAYS
+    return cov, float(lw.shrinkage_)
+
+
 def capm_expected(rf_annual: float, betas: pd.Series, erp: float) -> pd.Series:
     return (rf_annual + betas * erp).rename("capm_arithmetic")
 
@@ -111,5 +129,6 @@ def estimate_as_of(simple_returns: pd.DataFrame, rates: pd.DataFrame, yields: pd
     assets["ttm_yield"] = yields.loc[:as_of].iloc[-1].reindex(assets.index)
     assets["expected_arithmetic"] = expected_returns(assets["capm_arithmetic"], assets["ttm_yield"], bond_assets)
     own = equity_risk_premium(mex[market])
-    return {"assets": assets, "cov": annual_covariance(r), "rf": rf, "as_of": r.index[-1],
-            "erp": erp, "erp_own_data": own["erp_arithmetic"], "observations": len(r)}
+    cov_shrunk, delta = shrunk_covariance(r)
+    return {"assets": assets, "cov": annual_covariance(r), "cov_shrunk": cov_shrunk, "shrinkage": delta,
+            "rf": rf, "as_of": r.index[-1], "erp": erp, "erp_own_data": own["erp_arithmetic"], "observations": len(r)}

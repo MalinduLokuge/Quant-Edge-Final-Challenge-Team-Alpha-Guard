@@ -91,7 +91,7 @@ Stage: portfolio · Owner: Dewmini · Priority: Core · Target: Weeks 1–2
 | T4.05 | Document Markowitz/CAPM concepts and benchmark assumptions | Methods section draft | Critical | Dewmini | T4.11 | Not started | PM · BR p.7 |
 | T4.06 | Compare diversification, concentration and feasible weights | Side-by-side comparison table | Critical | Dewmini | T4.02–T4.10 | Not started | PM · FJ PM07 |
 | T4.07 | Provide candidate and proposed final weights with justification | Recommendation input for T20 | Critical | Dewmini | T4.06, T5.05 | Not started | PM |
-| T4.08 | Robust inputs: shrinkage covariance (Ledoit–Wolf), cautious expected returns | Estimator module + stability note | High | Dewmini | T4.01 | Not started | FJ PM01/robust frontier · REV |
+| T4.08 | Robust inputs: shrinkage covariance (Ledoit–Wolf), cautious expected returns | cma.shrunk_covariance (Ledoit–Wolf on correlations); cma_*_cov_shrunk.csv; δ train 1.6% / full 0.8% / 1y 7% / 3m 18%; stability test (--shrink): turnover 1.61% → 1.57% a month; 2 tests | High | Dewmini | T4.01 | Done | FJ PM01/robust frontier · REV |
 | T4.09 | Implement minimum-CVaR allocation (Rockafellar–Uryasev) | Min-CVaR weights + test | High | Dewmini | T4.08 | Not started | DEC D20 |
 | T4.10 | Implement target-return Markowitz at the D12 hurdle (minimum 6.66% / target 7.19%) with fallback to lowest-risk feasible portfolio | Weights meeting D12 at minimum variance | High | Dewmini | T4.08, T4.18 | Not started | FJ PM05 |
 | T4.11 | Efficient frontier with candidates and benchmarks plotted; trade-off table | Frontier figure + return-vs-risk table | Critical | Dewmini | T4.02–T4.10 | Not started | BR p.4 #5 · R16 |
