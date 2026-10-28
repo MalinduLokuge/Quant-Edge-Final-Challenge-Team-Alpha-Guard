@@ -22,6 +22,7 @@ The Streamlit page and the report section are both built from this file, so they
 - Gold's expected return stays at its CAPM value (~4.6%). Its hedge value (+24.9% in the GFC, −8.8% vs −15% for AGG in 2022) is shown through stress tests, not by raising its expected return.
 
 ## Benchmarks & risk limits (D3, D6, D7)
+- 1-day risk limits (% NAV): VaR99 ≤ 1.7%, ES99 ≤ 2.5% (binding); VaR95 ≤ 0.9%, ES95 ≤ 1.45% (reported). Limits sit at 99% because 95% losses occur about 13 days a year (normal noise), while 99% captures the rare crisis days, and Basel's traffic light is defined at 99%.
 - The policy benchmark weights (40/50/10) are a judgement fixed in advance, not an optimisation result.
 - Drawdown and ES limits are calibrated on 2004–2026 data. That history contains only one 2008-type crisis, so future losses can exceed every historical figure. **Limits are targets, not guarantees.**
 - Forward drawdown probabilities come from resampling past returns (block bootstrap). They cannot create crises unlike anything in the sample (e.g. 1970s stagflation or a sovereign default).

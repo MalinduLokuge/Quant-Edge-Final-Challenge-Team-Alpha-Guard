@@ -46,7 +46,10 @@ risk:
 risk_limits:                    # D7, APPROVED 2026-10-28
   max_drawdown: 0.25            # historical incl. 2008 replay
   max_prob_drawdown_breach_5y: 0.05   # P(DD > 25% within 5y), block bootstrap with CAPM means
-  es99_1d_max: 0.025            # % NAV, full-cycle history (construction limit)
+  es99_1d_max: 0.025            # % NAV, full-cycle history (construction limit, binding)
+  var99_1d_max: 0.017           # = ~0.67 x ES99 limit (observed VaR99/ES99 ratio 0.67-0.70), binding
+  es95_1d_max: 0.0145           # reported limit, consistent with ES99
+  var95_1d_max: 0.009           # reported limit; also used for backtest monitoring
   stress_loss_max: 0.25         # each historical / hypothetical scenario
   min_agg_weight_liquidity: 0.08      # >= 2 years of 4% spending
   component_es_max: DECIDE      # after risk stage (draft 0.40)
