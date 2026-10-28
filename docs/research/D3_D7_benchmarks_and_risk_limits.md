@@ -262,5 +262,104 @@ Reproduce: `python scripts/research_d3_d7.py --gold` → `research_gold_assessme
 
 **Conclusion:** D5, D6 v2 and D7 choices are unchanged; only levels moved. The conflict with D12 is **sharper**: a conservative portfolio supports about **3.0% spending in the base case and 1.4–2.0% if rates fall**, against the 4% assumed. The memo should present spending as a range tied to the rate outlook.
 
+## 9. Risk tolerance and risk capacity: the 12-factor review (2026-10-28)
+The brief gives no loss number, so the client's tolerance must be **approximated**. Method (CFA investment-policy framework): **risk tolerance = the lower of willingness and ability (capacity)**.
+Reproduce: `python scripts/research_d7_capacity.py` → `research_capacity_*.csv`. Bootstrap: 4,000 five-year paths (2,000 ten-year paths for recovery), CAPM means, quarterly spending, inflation 2.35%. Portfolios: global equity mix + 10% gold + rest AGG.
+
+### 9.1 Willingness (factor 1) [A, anchored on evidence]
+| Evidence | Reading |
+|---|---|
+| Brief: "conservative", "capital preservation", "avoiding large losses is more important than maximising gains" (pp.3–4) | Below-average willingness to bear loss |
+| Peers: average US endowment lost 18.7% in FY2009 ([NACUBO via PlanSponsor](https://www.plansponsor.com/study-confirms-tough-year-for-endowments/)) | A conservative fund should lose **less than peers** in a GFC year. Policy-type portfolio lost 7.6% on the same fiscal-year basis |
+| A conventional 60/40 lost 35% peak-to-trough in 2008 | A conservative client should accept clearly less than a balanced investor |
+| **Willingness proxy** | **Peak-to-trough loss ≤ ~25%** (well below 60/40's 35%) and fiscal-year loss below peers' ~19% |
+
+### 9.2 Ability: risk capacity (factors 2, 3, 4) [E]
+**Analytic capacity.** With fixed-dollar spending S, a loss d raises the spending rate to S/(1−d). If the highest acceptable rate is S_max, then capacity is d* = 1 − S/S_max.
+
+| Spending S \ highest acceptable rate | 5.0% (top of NACUBO size bands) | 5.5% | 6.0% |
+|---|---|---|---|
+| 4.0% | **20%** | 27% | 33% |
+| 3.5% | 30% | 36% | 42% |
+| 3.0% | 40% | 45% | 50% |
+
+**Simulated capacity, 5-year paths with spending** (probability that the fund's real value ever falls below 80% of today):
+
+| Equity | Spending 4%: fixed-real / %-of-NAV / smoothed | Spending 3% (smoothed) | Median real value after 5 years (4%) |
+|---|---|---|---|
+| 20% | 14.5% / 11.5% / 13.2% | 6.6% | 95% |
+| 30% | 15.5% / 13.3% / 14.5% | 9.1% | 97% |
+| **40% (policy)** | 18.6% / 16.4% / 17.8% | 11.8% | 99% |
+| 45% (D6 max) | 20.3% / 18.2% / 19.3% | 13.5% | 100% |
+| 60% | 25.6% / 23.9% / 24.8% | 19.8% | 102% |
+
+**Finding:** capacity is driven more by **spending** than by equity. At 4% spending, even a 20%-equity fund has a 14.5% chance of losing a fifth of its real value within 5 years, and its median real value falls. That matches D12: conservative portfolios support about 3% spending. **At 4% spending, capacity is about 20–27%; at about 3%, it rises to 40% or more.**
+
+### 9.3 Spending rule (factor 3) [E]
+| Rule (policy portfolio, 4%) | P(spending rate ever > 5%) | P(real spending ever cut > 10%) |
+|---|---|---|
+| Fixed real dollars | 16.7% | 0% (the fund's value absorbs every loss) |
+| % of current value | 0% | 41.1% (scholarships absorb every loss) |
+| **Smoothed** (70% last year's spending + inflation, 30% × 4% of value; Yale-type) | **5.2%** | **17.4%** |
+
+A smoothing rule spreads losses between the fund's value and spending. **Proposed D24.**
+
+### 9.4 Recovery time (factor 8) [E]
+Forward paths (10 years, no spending), policy-type portfolio (40% equity):
+
+| Loss | P(it happens within 10 yrs) | Median years to recover | 90th percentile | Not recovered within horizon |
+|---|---|---|---|---|
+| 10% | 91% | 1.1 | 3.3 | 6% |
+| 15% | 67% | 1.5 | 3.8 | 15% |
+| 20% | 39% | 2.1 | 4.3 | 25% |
+| 25% | 11% | 2.8 | 4.9 | 38% |
+
+Historical (one path): about 1.0–1.2 years from first hitting each level back to the prior peak (40% equity). At 60% equity it was about 2 years.
+
+**Reading:** a 25% loss can take most of the 5-year horizon (D4) to recover. That supports 25% as an **upper bound**, not a level to loosen.
+
+### 9.5 Liquidity (factor 10) [E]
+- AGG at 50% is $5.0M, about **12.5 years** of spending.
+- AGG's worst day was −6.8% (2008-10-10). Selling a whole year's spending that day would have cost **$27k (0.27% NAV)**.
+- AGG gained 7.2% over the GFC window.
+
+Funding spending from bonds in a crisis is cheap. **Forced-sale risk is low**; the AGG ≥ 8% rule is more than met.
+
+### 9.6 Losses beyond history (factor 11) [E]
+Crisis replays with daily losses scaled up:
+
+| Equity | GFC ×1.0 / ×1.25 / ×1.5 | 2022 ×1.5 | COVID ×1.5 |
+|---|---|---|---|
+| 30% | −13.9 / −17.4 / −21.0% | −25.0% | −17.3% |
+| **40%** | −20.9 / **−26.0 / −30.9%** | −26.4% | −21.9% |
+| 45% | −24.3 / −30.0 / −35.5% | −27.2% | −24.1% |
+
+A crisis 25% worse than 2008 breaks the 25% limit for the policy-type portfolio. **The limit is a target, not a guarantee**, which is why the action ladder (§9.8) is needed. The hypothetical scenario (D9) should include a crisis of this severity.
+
+### 9.7 Other measures and optimised results (factors 5, 6, 7, 9)
+Already covered: the feasibility map (§4, §8), crisis tables (§1.2, §7), and the VaR/ES limits consistent with the drawdown limit (D7). **Committee framing:** the ES99 limit of $250k on one bad day equals about **7.5 months of spending** ($400k a year).
+
+### 9.8 Conclusion: approximated risk tolerance [P]
+| | Value |
+|---|---|
+| Willingness | ≤ ~25% peak-to-trough |
+| Ability at 4% fixed spending | ~20–27% |
+| Ability at ~3% spending with a smoothing rule | 40% or more (willingness binds) |
+| **Risk tolerance (lower of the two)** | **25% peak-to-trough, conditional on a smoothing spending rule** and spending moving toward the sustainable ~3% |
+
+**D7 stays at 25% (confirmed, T3.28)**, with three conditions:
+- **D24:** a smoothed spending rule.
+- **D23:** a monitoring and action ladder.
+- **Disclosure:** at 4% fixed spending the fund is at its capacity edge (~20%).
+
+**Proposed D23 action ladder** (drawdown from peak, or a risk-measure breach):
+
+| Level | Trigger | Action |
+|---|---|---|
+| Watch | −10%, or rolling ES99 > 2.0% | Report to the committee. No trading beyond quarterly rebalancing. Likely ~1 in 10 years |
+| Review | −15%, or Basel yellow zone | Committee meeting: check the model, stress results and next year's spending under D24 |
+| Act | −20%, or rolling ES99 > 2.5% | Formal decision: keep, reduce risk at the next rebalance, or adjust spending. **No forced selling at the low point** |
+| Limit | −25%, or Basel red zone | Mandatory committee decision using the memo options: accept / adjust the risk limit / reject the strategy |
+
 ## 6. Next actions (added to the tracker)
 T3.17 approve D3 structure · T3.18 approve D7 provisional limits · T6.12 forward-looking drawdown probabilities (G1) · T8.13 ERP-sensitivity feasibility (G7) · T11.11 longer-history proxy crises (G2, optional) · T9.06 component-ES limit (G4) · T10.12 out-of-sample check of the limits (G8) · T20.06 drawdown/spending trade-off table in the memo.

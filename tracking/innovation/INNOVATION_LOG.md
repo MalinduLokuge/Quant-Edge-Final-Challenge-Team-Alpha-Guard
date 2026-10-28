@@ -10,6 +10,7 @@ Innovation is worth 15% of the score (brief p.10). Its examples are regime-condi
 | I9 | 2026-10-28 | **Feasibility map of risk limits vs return objective** (50,000 portfolios) | Proves D7 and D12 conflict and quantifies the trade-off (20% DD → 2.1% spending, 25% → 2.8–3.1%) | Research doc §4 | In use |
 | I10 | 2026-10-28 | **Policy benchmark built from asset classes** (sector ETFs excluded, market-cap equity split, frozen in advance) | Fair IR and alpha for a conservative mandate; SAMURAI-compliant | Research doc §1 | In use (D3) |
 | I11 | 2026-10-28 | **Income cross-check**: total-return minus price-return growth vs distribution yield, within 0.1 pp | Shows that adjusted prices and the income data agree | `outputs/tables/income_crosscheck.csv` | In use |
+| I15 | 2026-10-28 | **Risk tolerance approximated as min(willingness, capacity)** with spending-aware capacity simulation and spending-rule comparison | Turns 'no number in the brief' into a defensible 25% limit with conditions; links drawdown to scholarships | Research doc §9 | In use (D7, D23, D24 proposed) |
 
 ## Planned
 | ID | Extension | Hypothesis | Baseline compared | Leakage-safe? | Status |

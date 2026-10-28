@@ -23,6 +23,7 @@ The Streamlit page and the report section are both built from this file, so they
 
 ## Benchmarks & risk limits (D3, D6, D7)
 - 1-day risk limits (% NAV): VaR99 ≤ 1.7%, ES99 ≤ 2.5% (binding); VaR95 ≤ 0.9%, ES95 ≤ 1.45% (reported). Limits sit at 99% because 95% losses occur about 13 days a year (normal noise), while 99% captures the rare crisis days, and Basel's traffic light is defined at 99%.
+- **Client risk tolerance is approximated**, because the brief gives no number: tolerance = lower of willingness (mandate wording, NACUBO peer losses → ~25% peak-to-trough) and ability (capacity: with fixed 4% spending, ~20–27%). The 25% limit is conditional on a smoothed spending rule and is not a guarantee: a crisis 25% worse than 2008 would breach it.
 - The policy benchmark weights (40/50/10) are a judgement fixed in advance, not an optimisation result.
 - Drawdown and ES limits are calibrated on 2004–2026 data. That history contains only one 2008-type crisis, so future losses can exceed every historical figure. **Limits are targets, not guarantees.**
 - Forward drawdown probabilities come from resampling past returns (block bootstrap). They cannot create crises unlike anything in the sample (e.g. 1970s stagflation or a sovereign default).

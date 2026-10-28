@@ -69,6 +69,14 @@ Stage: mandate · Owner: Sujan · Priority: Core · Target: Week 1
 | T3.18 | Research and approve D7 provisional risk limits | Research doc §2/§4; D7 APPROVED | Critical | All members | T3.17 | Done | Research 2026-10-28 (analysis done, approval pending) |
 | T3.19 | Committee choice on the drawdown ↔ spending trade-off (20% → 2.1%, 25% → 2.8%) | Recorded in D7/D12 | Critical | All members | T3.18 | Done | Research §4 |
 | T3.20 | Fix model warnings: daily covariance, per-ETF withholding, risk-free scenarios, separate gold assessment | Research doc §7–§8; cma.py; 2 tests | Critical | Sujan | T3.11 | Done | Team warnings 2026-10-28 |
+| T3.21 | Risk tolerance approximation: willingness (mandate wording, peer losses) vs ability (capacity); tolerance = lower of the two | Tolerance statement in research doc §9 + IPS | Critical | Sujan | T3.22 | Done | Team 2026-10-28 (12-factor review) |
+| T3.22 | Risk capacity: largest loss the fund can take while keeping spending and real value within floors (analytic + bootstrap with spending) | Capacity table by allocation | Critical | Sujan | T3.11 | Done | 12-factor review #2 |
+| T3.23 | Spending continuity after losses: fixed-real-dollar vs %-of-NAV vs smoothing rule over 5-year paths | Spending-rule comparison; proposed rule (D24) | Critical | Sujan | T3.22 | Done | 12-factor review #3 |
+| T3.24 | Recovery time after 10/15/20/25% losses: historical and forward (bootstrap) | Recovery-time table | High | Dewmini | T6.12 | Done | 12-factor review #8 |
+| T3.25 | Liquidity under stress: funding spending and rebalancing from AGG in a crisis (incl. 2008-10-10 discount) | Liquidity note with $ cost | High | Raveena | T2.11 | Done | 12-factor review #10 |
+| T3.26 | Losses beyond history: severity-scaled crisis replays (GFC ×1.25, ×1.5) | Severe-scenario table; feeds D9 | High | Dewmini | T11.02 | Done | 12-factor review #11 |
+| T3.27 | Drawdown monitoring and action ladder (amber / red / limit) for memo and app | Proposed D23 (approval pending) | Critical | All members | T3.22 | In progress | 12-factor review #12 |
+| T3.28 | Re-confirm D7 (drawdown, VaR, ES limits) against tolerance and capacity results | D7 confirmed or revised | Critical | All members | T3.21–T3.27 | Done | 12-factor review |
 | T3.14 | Tax assumption: tax-exempt base case, dividend withholding as sensitivity (check interest-related dividend exemption for AGG) | Note in IPS + limitations | Medium | Sujan | T3.11 | Done | DEC D12 |
 
 ## T4 — Portfolio construction & selection
