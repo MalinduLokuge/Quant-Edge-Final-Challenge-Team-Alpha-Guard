@@ -9,7 +9,7 @@ Sources merged: Project Management Tracker (`.xlsm`, Drive "alpha guard"), FigJa
 | T1 | Project setup & shared decisions | — | Malindu | Supporting | Week 1 | 11 | 7 | 2 | 0 | 64% |
 | T2 | Data pipeline & cleaning | data | Raveena | Core | Week 1 | 17 | 14 | 0 | 0 | 82% |
 | T3 | Client mandate (investment policy) | mandate | Sujan | Core | Week 1 | 28 | 24 | 2 | 0 | 86% |
-| T4 | Portfolio construction & selection | portfolio | Dewmini | Core | Weeks 1–2 | 21 | 0 | 0 | 0 | 0% |
+| T4 | Portfolio construction & selection | portfolio | Dewmini | Core | Weeks 1–2 | 23 | 1 | 0 | 0 | 4% |
 | T5 | KPIs & benchmarks | portfolio | Raveena | Supporting | Week 2 | 9 | 0 | 1 | 0 | 0% |
 | T6 | VaR with 3 methods | risk | Sujan | Core | Week 2 | 12 | 1 | 1 | 0 | 8% |
 | T7 | Expected Shortfall | risk | Sujan | Core | Week 2 | 5 | 0 | 0 | 0 | 0% |
@@ -27,7 +27,7 @@ Sources merged: Project Management Tracker (`.xlsm`, Drive "alpha guard"), FigJa
 | T19 | Pitch & Q&A prep | — | All members | Conditional | If finalist | 4 | 0 | 0 | 0 | 0% |
 | T20 | Decision gate & final recommendation (P3) | decision | All members | Core | Week 3 | 6 | 0 | 0 | 0 | 0% |
 | T21 | Quality gates & compliance QA | — | Malindu (coordinates) | Core | Ongoing | 8 | 3 | 1 | 0 | 38% |
-| | **Total** | | | | | **217** | **52** | **14** | **0** | **24%** |
+| | **Total** | | | | | **219** | **53** | **14** | **0** | **24%** |
 
 Progress = share of subtasks marked Done. Recount with `python tracking/update_counts.py` after editing `SUBTASKS.md`.
 

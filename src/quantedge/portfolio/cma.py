@@ -76,3 +76,28 @@ def portfolio_expected(weights: pd.Series, exp_arith: pd.Series, cov: pd.DataFra
     return {"expected_arithmetic": arith, "volatility": np.sqrt(var),
             "expected_geometric": arith - var / 2 - drag, "withholding_drag": drag,
             "income_yield": float((w * yields.reindex(w.index, fill_value=0.0)).sum())}
+
+
+def estimate_as_of(simple_returns: pd.DataFrame, rates: pd.DataFrame, yields: pd.DataFrame, as_of,
+                   market: str, erp: float, rf_column: str = "dtb3_pct") -> dict:
+    """Capital market assumptions using ONLY data on or before `as_of` (T4.18, D5 leakage control).
+
+    as_of = split train_end gives P1-train inputs (out-of-sample tests); as_of = last date gives P1-final.
+    ERP is the approved assumption (D12), not re-estimated, so both sets share one premium; the
+    own-data ERP for the window is reported alongside for information.
+    Returns {"assets": per-ETF table, "cov": annualised daily covariance, "rf": rate used, "as_of": date}.
+    """
+    as_of = pd.Timestamp(as_of)
+    r = simple_returns.loc[:as_of]
+    if r.empty:
+        raise ValueError(f"No return data on or before {as_of.date()}")
+    rt = rates.loc[:as_of]
+    rf = float(rt[rf_column].iloc[-1]) / 100
+    mex = monthly_excess_returns(r, rt["rf_daily"])
+    betas = capm_betas(mex, market)
+    assets = historical_stats(r).join(betas)
+    assets["capm_arithmetic"] = capm_expected(rf, betas, erp)
+    assets["ttm_yield"] = yields.loc[:as_of].iloc[-1].reindex(assets.index)
+    own = equity_risk_premium(mex[market])
+    return {"assets": assets, "cov": annual_covariance(r), "rf": rf, "as_of": r.index[-1],
+            "erp": erp, "erp_own_data": own["erp_arithmetic"], "observations": len(r)}

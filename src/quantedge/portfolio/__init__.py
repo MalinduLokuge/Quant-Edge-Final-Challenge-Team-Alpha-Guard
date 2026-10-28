@@ -5,6 +5,7 @@ Outputs (outputs/tables/):
     erp_estimate.csv            own-data equity risk premium with 95% CI
     required_return_grid.csv    required return for every spending / growth / cost combination
     required_vs_expected.csv    reference portfolios: expected compound return vs required (per ERP), sustainable spending
+    cma_train.csv / cma_full.csv (+ _cov)  optimiser inputs as of the D5 train end / last date (T4.18)
 Outputs (outputs/reports/):
     return_objective_summary.md one-page summary for the team / committee (regenerated on every run)
 
@@ -68,6 +69,18 @@ def run() -> dict:
     out = config.OUTPUT_TABLES
     out.mkdir(parents=True, exist_ok=True)
     assets.to_csv(out / "cma_assets.csv")
+
+    # T4.18: two CMA sets for the optimiser. "train" sees only data up to the D5 train end (P1-train,
+    # out-of-sample tests); "full" sees everything (P1-final). Same method and ERP for both.
+    cma_sets = {}
+    for label, as_of_date in (("train", s["split"]["train_end"]), ("full", as_of)):
+        est = cma.estimate_as_of(simple, rates, yields, as_of_date, c["market"], c["erp_base"])
+        est["assets"].to_csv(out / f"cma_{label}.csv")
+        est["cov"].to_csv(out / f"cma_{label}_cov.csv")
+        cma_sets[label] = est
+    pd.DataFrame({k: {"as_of": v["as_of"].date(), "rf": v["rf"], "erp_assumed": v["erp"],
+                      "erp_own_data_window": v["erp_own_data"], "observations": v["observations"]}
+                  for k, v in cma_sets.items()}).to_csv(out / "cma_sets_summary.csv")
     pd.Series(erp | {"rf_now": rf_now, "inflation_breakeven_10y": inflation, "as_of": as_of.date()}).to_csv(
         out / "erp_estimate.csv", header=["value"])
     grid.to_csv(out / "required_return_grid.csv", index=False)
@@ -77,4 +90,5 @@ def run() -> dict:
         mandate=m, erp_base=c["erp_base"], erp_own=erp, grid=grid, vs=vs, assets=assets)
     print(f"[portfolio] as of {as_of.date()}: required return (base) {req_base:.2%}, "
           f"own-data ERP {erp['erp_arithmetic']:.2%}, rf {rf_now:.2%}, breakeven {inflation:.2%}")
-    return {"assets": assets, "erp": erp, "grid": grid, "required_vs_expected": vs, "required_base": req_base}
+    return {"assets": assets, "erp": erp, "grid": grid, "required_vs_expected": vs, "required_base": req_base,
+            "cma_sets": cma_sets}

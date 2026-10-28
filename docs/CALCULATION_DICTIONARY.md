@@ -34,6 +34,7 @@ Conventions: decision D17. Status ✅ = implemented and tested, ⏳ = planned.
 | CAPM expected return | r_f(as-of) + β·ERP | fraction p.a. | `cma.capm_expected` | test_return_objective | ✅ |
 | Annual covariance Σ | daily simple-return covariance × 252 (monthly version reported only) | fraction² p.a. | `cma.annual_covariance` | test_return_objective | ✅ |
 | Portfolio expected compound return | wᵀE[R] − ½·wᵀΣw − Σwᵢ·yieldᵢ·WHTᵢ (WHT per ETF, sensitivity) | fraction p.a. | `cma.portfolio_expected` | test_return_objective | ✅ |
+| CMA as of a date | betas, covariance, rf and yields from data ≤ as-of only; train set = D5 train end, full set = last date; ERP = approved assumption | — | `cma.estimate_as_of` | test_cma_as_of | ✅ |
 | Return gap | required − expected compound (> 0 = shortfall) | fraction p.a. | `return_objective.feasibility` | test_return_objective | ✅ |
 | Sustainable spending | S* = (1+E)/((1+I)(1+G)(1+C)) − 1 | fraction p.a. | `return_objective.sustainable_spending` | test_return_objective | ✅ |
 

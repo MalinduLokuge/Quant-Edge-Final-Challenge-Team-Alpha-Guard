@@ -101,10 +101,12 @@ Stage: portfolio · Owner: Dewmini · Priority: Core · Target: Weeks 1–2
 | T4.15 | Weight sensitivity to input changes (sub-period / bootstrap re-estimation) | Weight stability table | Medium | Dewmini | T4.12 | Not started | FJ robust frontier |
 | T4.16 | Freeze P1 handoff: candidate weights + metadata file | outputs/p1_candidates.csv (versioned) | Critical | Dewmini | T4.12 | Not started | FJ PM08 |
 | T4.17 | Unit tests for all optimisers (constraints respected, known solutions) | tests/unit/test_portfolio_*.py | Critical | Dewmini | T4.02–T4.10 | Not started | BR p.6 software |
-| T4.18 | Capital market assumptions estimated on the training window only, for out-of-sample candidates | CMA function with date window + leakage test | Critical | Dewmini | T2.13 | Not started | Review: current CMA uses full sample |
+| T4.18 | Capital market assumptions estimated on the training window only, for out-of-sample candidates | cma.estimate_as_of; outputs/tables/cma_train*.csv, cma_full*.csv, cma_sets_summary.csv; 4 tests incl. leakage | Critical | Dewmini | T2.13 | Done | Review: current CMA uses full sample |
 | T4.19 | Produce two P1 sets: P1-train (frozen, for OOS backtests) and P1-final (full-sample re-fit, same frozen method) | outputs/p1_train.csv, outputs/p1_final.csv | Critical | Dewmini | T4.16, T4.18 | Not started | DEC D5 protocol |
 | T4.20 | Optimiser design meeting D6 v2 + D7 (ES as CVaR constraint; drawdown via CDaR or post-check) | Design note + solver choice (cvxpy) | Critical | Dewmini | T4.12 | Not started | Review 2026-10-28 |
 | T4.21 | Add every candidate to the required-vs-expected table with sustainable spending | Extended return_objective_summary.md | High | Dewmini | T4.16 | Not started | DEC D12 |
+| T4.22 | Decide bond expected-return method for near-zero rates (D25) and apply to both CMA sets | D25 approved; cma updated + test | Critical | All members | T4.18 | Not started | T4.18 finding |
+| T4.23 | Required return in training-period terms (2014 breakeven, same S/G/C) for P1-train return targets | Train-period hurdle in outputs | High | Dewmini | T4.18 | Not started | D5 + D12 consistency |
 
 ## T5 — KPIs & benchmarks
 Stage: portfolio · Owner: Raveena · Priority: Supporting · Target: Week 2
