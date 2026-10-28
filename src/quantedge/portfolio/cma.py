@@ -57,6 +57,19 @@ def annual_covariance(simple_returns: pd.DataFrame, frequency: str = "daily") ->
     raise ValueError(f"frequency must be 'daily' or 'monthly', got {frequency!r}")
 
 
+def ledoit_wolf_shrinkage(x: np.ndarray) -> float:
+    """Optimal Ledoit–Wolf (2004) intensity toward a scaled identity for data x (n × p).
+    Same formula as sklearn.covariance.ledoit_wolf_shrinkage (verified equal to 1e-12); implemented here
+    because importing scikit-learn before cvxpy crashes Python on this platform."""
+    n, p = x.shape
+    xc = x - x.mean(axis=0)
+    s = xc.T @ xc / n
+    mu = np.trace(s) / p
+    d2 = ((s - mu * np.eye(p)) ** 2).sum() / p
+    b2 = (((xc[:, :, None] * xc[:, None, :]) - s) ** 2).sum() / n ** 2 / p
+    return float(min(b2, d2) / d2) if d2 > 0 else 0.0
+
+
 def shrunk_covariance(simple_returns: pd.DataFrame) -> tuple[pd.DataFrame, float]:
     """Ledoit–Wolf (2004) shrinkage applied to the CORRELATION matrix, keeping each ETF's own variance.
 
@@ -65,14 +78,13 @@ def shrunk_covariance(simple_returns: pd.DataFrame) -> tuple[pd.DataFrame, float
     intensity δ. Returns (annualised covariance, δ). With 7 ETFs and thousands of days δ is small; it
     matters more on short windows (rolling estimates).
     """
-    from sklearn.covariance import LedoitWolf
-
     r = simple_returns.dropna()
     sd = r.std(ddof=1)
-    lw = LedoitWolf(assume_centered=False).fit(((r - r.mean()) / sd).to_numpy())
-    corr = lw.covariance_ / np.sqrt(np.outer(np.diag(lw.covariance_), np.diag(lw.covariance_)))
-    cov = pd.DataFrame(corr * np.outer(sd, sd), index=r.columns, columns=r.columns) * cv.TRADING_DAYS
-    return cov, float(lw.shrinkage_)
+    z = ((r - r.mean()) / sd).to_numpy()
+    delta = ledoit_wolf_shrinkage(z)
+    corr = r.corr().to_numpy()
+    corr = (1 - delta) * corr + delta * np.eye(len(sd))
+    return pd.DataFrame(corr * np.outer(sd, sd), index=r.columns, columns=r.columns) * cv.TRADING_DAYS, delta
 
 
 def capm_expected(rf_annual: float, betas: pd.Series, erp: float) -> pd.Series:

@@ -6,8 +6,7 @@ statsmodels
 yfinance
 pandas-datareader   # FRED
 arch                # GARCH
-scikit-learn        # Ledoit-Wolf shrinkage
-cvxpy               # constrained optimisation (not yet installed locally; needed for T4.20)
+cvxpy>=1.5,<1.6     # constrained optimisation; 1.5.x keeps numpy < 2 (pandas 2.1 / scipy 1.11)
 matplotlib
 plotly
 streamlit

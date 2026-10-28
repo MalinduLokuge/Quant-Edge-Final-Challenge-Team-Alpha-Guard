@@ -5,6 +5,8 @@ Outputs (outputs/tables/):
     erp_estimate.csv            own-data equity risk premium with 95% CI
     required_return_grid.csv    required return for every spending / growth / cost combination
     required_vs_expected.csv    reference portfolios: expected compound return vs required (per ERP), sustainable spending
+    p1_train_weights.csv / p1_final_weights.csv (+ _diagnostics)  P1 candidates: min-variance, risk parity,
+                                max-Sharpe, min-CVaR, target-return, + max-expected-return frontier end
     cma_train.csv / cma_full.csv (+ _cov, _cov_shrunk)  optimiser inputs as of the D5 train end / last date
                                 (T4.18); _cov_shrunk = Ledoit–Wolf on correlations (T4.08), used by the optimiser
 Outputs (outputs/reports/):
@@ -19,7 +21,7 @@ import pandas as pd
 
 from quantedge.common import config
 from quantedge.common import conventions as cv
-from quantedge.portfolio import cma, return_objective, summary
+from quantedge.portfolio import candidates, cma, return_objective, summary
 
 
 def run() -> dict:
@@ -94,10 +96,12 @@ def run() -> dict:
         out / "erp_estimate.csv", header=["value"])
     grid.to_csv(out / "required_return_grid.csv", index=False)
     vs.to_csv(out / "required_vs_expected.csv", index=False)
+    p1 = candidates.run(simple, s)  # T4.02–T4.10, T4.16, T4.19: P1-train and P1-final (D6 v2 + D7, D22)
+
     summary.write_return_objective_summary(
         config.OUTPUT_REPORTS / "return_objective_summary.md", as_of=as_of.date(), inflation=inflation, rf=rf_now,
         mandate=m, erp_base=c["erp_base"], erp_own=erp, grid=grid, vs=vs, assets=assets)
     print(f"[portfolio] as of {as_of.date()}: required return (base) {req_base:.2%}, "
           f"own-data ERP {erp['erp_arithmetic']:.2%}, rf {rf_now:.2%}, breakeven {inflation:.2%}")
     return {"assets": assets, "erp": erp, "grid": grid, "required_vs_expected": vs, "required_base": req_base,
-            "cma_sets": cma_sets}
+            "cma_sets": cma_sets, "p1": p1}

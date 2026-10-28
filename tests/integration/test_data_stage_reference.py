@@ -80,3 +80,22 @@ def test_train_and_full_hurdles_match_d12():
     train = ro.required_return_as_of(rates, s["split"]["train_end"], s["mandate"])
     assert round(full["required_gross"], 4) == 0.0719 and round(full["required_minimum"], 4) == 0.0666  # D12
     assert train["inflation"] == 0.0168 and round(train["required_gross"], 4) == 0.0649
+
+
+def test_p1_candidates_meet_d6_and_d7():
+    import pandas as pd
+
+    s = config.load_settings()
+    c, lim = s["constraints"], s["risk_limits"]
+    for p1 in ("p1_train", "p1_final"):
+        w = pd.read_csv(config.OUTPUT_TABLES / f"{p1}_weights.csv", index_col=0)
+        d = pd.read_csv(config.OUTPUT_TABLES / f"{p1}_diagnostics.csv", index_col=0)
+        assert {"min_variance", "risk_parity", "max_sharpe", "min_cvar", "target_return"} <= set(w.index)
+        for name, row in w.iterrows():
+            assert abs(row.sum() - 1) < 1e-6 and (row >= -1e-12).all()
+            assert all(row[t] <= c["max_weight"][t] + 1e-6 for t in row.index)
+            for g in c["groups"].values():
+                assert g["min"] - 1e-6 <= row[g["tickers"]].sum() <= g["max"] + 1e-6
+            assert bool(d.loc[name, "pass_D7"]) in (True, "True")
+            assert float(d.loc[name, "max_drawdown"]) >= -lim["max_drawdown"] - 1e-9
+            assert float(d.loc[name, "ES99_1d"]) <= lim["es99_1d_max"] + 1e-9

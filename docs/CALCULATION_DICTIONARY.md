@@ -41,6 +41,16 @@ Conventions: decision D17. Status ✅ = implemented and tested, ⏳ = planned.
 | Return gap | required − expected compound (> 0 = shortfall) | fraction p.a. | `return_objective.feasibility` | test_return_objective | ✅ |
 | Sustainable spending | S* = (1+E)/((1+I)(1+G)(1+C)) − 1 | fraction p.a. | `return_objective.sustainable_spending` | test_return_objective | ✅ |
 
+## Candidate portfolios (T4, D20, D22) — `portfolio/optimise.py`, tests: test_optimise, integration
+| Candidate | Problem | Status |
+|---|---|---|
+| Minimum variance | min wᵀΣw (Σ shrunk) | ✅ |
+| Risk parity | Spinu: min ½yᵀΣy − Σ log y, w = y/Σy; then closest weights meeting D6 + D7 | ✅ |
+| Max-Sharpe | homogenised: min yᵀΣy s.t. (μ−r_f)ᵀy = 1, constraints × κ; w = y/κ | ✅ |
+| Min-CVaR | min CVaR99 (Rockafellar–Uryasev LP) s.t. expected ≥ hurdle; fallback min CVaR99 | ✅ |
+| Target-return Markowitz | min wᵀΣw s.t. μᵀw − ½wᵀΣw ≥ hurdle; fallback (D12) lowest risk | ✅ |
+| All candidates | D6 v2 weights; CVaR99 ≤ 2.5%; summed-return drawdown ≤ bound (CDaR β→1), bound bisected until compounded quarterly-rebalanced drawdown ≤ 25%; VaR/ES95 post-checked | ✅ |
+
 ## Portfolio stage (brief Layer 1)
 | Quantity | Formula | Units | Status |
 |---|---|---|---|
