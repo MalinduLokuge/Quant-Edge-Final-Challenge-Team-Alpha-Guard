@@ -1,0 +1,12 @@
+{
+  "files": [
+    "yahoo_close_2026-10-28.csv",
+    "yahoo_dividends_2026-10-28.csv"
+  ],
+  "source": "Yahoo Finance via yfinance",
+  "call": "yf.download(['SPY', 'EFA', 'EEM', 'AGG', 'GLD', 'XLE', 'XLK'], start='1993-01-29', end='2026-10-20', auto_adjust=False, actions=True)",
+  "download_date": "2026-10-28",
+  "yfinance_version": "1.7.0",
+  "content": "Unadjusted Close (split-adjusted, not dividend-adjusted) and cash distributions per share on ex-date",
+  "dividend_events": 703
+}

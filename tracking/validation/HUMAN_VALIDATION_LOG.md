@@ -1,0 +1,12 @@
+# Human Validation Log (feeds AI disclosure)
+
+| Date | Module / file | AI-assisted? | Check performed | Result | Reviewer |
+|---|---|---|---|---|---|
+| 2026-10-28 | src/quantedge/data/* (ported from Raveena's notebook) | Yes (Claude Code port) | Regenerated outputs vs original CSVs: prices max diff 2.8e-14, log returns 5e-16, outlier flags 0 mismatches, ADF stat 3e-13; 9 pytest tests | Pass | _team to sign_ |
+| 2026-10-28 | src/quantedge/data/fred.py | Yes (Claude Code) | 6 new tests (as-of alignment, no look-ahead, rate compounding, CPI YoY, coverage); spot checks: DGS10 2022-12-30 = 3.88%, CPI YoY 2022-06 = 8.98%, 2009-03-18 10y move −51bp (QE1) | Pass | _team to sign_ |
+| 2026-10-28 | src/quantedge/data/quality.py | Yes (Claude Code) | 6 unit tests (stale runs, past-only jump sigma, reversal, Inclán–Tiao power and size); all 53 real flags reviewed against known market events (data/README.md) | Pass, 1 open item (GLD 2026-01-30) | _team to sign_ |
+| 2026-10-28 | src/quantedge/common/conventions.py | Yes (Claude Code) | 10 unit tests (simple vs log aggregation, weight rules: no cash, no shorts, approved ETFs only; loss sign; USD; annualisation; drawdown; rf alignment) | Pass | _team to sign_ |
+| 2026-10-28 | data/income.py, data/fred.py (breakevens), portfolio/cma.py, portfolio/return_objective.py | Yes (Claude Code) | 7 new tests (multiplicative required return, grid, gap sign, beta = 1 / 0.5, CAPM, portfolio compound return with withholding drag, ERP CI, TTM-yield window). Income cross-check: total-minus-price return vs average yield within 0.1 pp for all ETFs | Pass | _team to sign_ |
+| 2026-10-28 | portfolio/return_objective.sustainable_spending, portfolio/summary.py | Yes (Claude Code) | Test: sustainable spending inverts the required-return formula; summary numbers checked against required_vs_expected.csv | Pass | _team to sign_ |
+| 2026-10-28 | scripts/research_d3_d7.py, docs/research/D3_D7_benchmarks_and_risk_limits.md | Yes (Claude Code) | Report numbers spot-checked against research_d3d7_*.csv; external facts checked by web search (NACUBO FY2009 −18.7%, FY2024 spending 4.8%, FRTB ES 97.5%, SAMURAI) | Pass, team review pending | _team to sign_ |
+| 2026-10-28 | tracking/export_excel.py, review doc, compliance/innovation/assumptions/AI-disclosure updates | Yes (Claude Code) | Export check: 98/98 original subtasks unchanged, 0 status mismatches vs SUBTASKS.md, every original Block Reference cell unchanged | Pass | _team to sign_ |

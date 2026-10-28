@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+.pytest_cache/
+.env
+# generated — regenerate with `python run_all.py`
+outputs/**
+!outputs/**/.gitkeep
+data/interim/**
+!data/interim/.gitkeep

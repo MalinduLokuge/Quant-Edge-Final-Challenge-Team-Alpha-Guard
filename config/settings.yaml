@@ -1,0 +1,100 @@
+# Single source of truth for assumptions. Values marked DECIDE need team sign-off (log in docs/DECISIONS.md).
+universe: [SPY, EFA, EEM, AGG, GLD, XLE, XLK]
+portfolio_value_usd: 10000000
+data:
+  snapshot: yahoo_adj_close_2026-10-20.csv   # data/raw/; the committed source of truth
+  download_start: "1993-01-29"               # SPY inception; common sample starts at GLD (2004-11-18)
+  download_end: "2026-10-20"                 # exclusive
+  price_field: adj_close                     # yfinance auto_adjust=False, 'Adj Close'
+  income_snapshot:                           # data/raw/; unadjusted close + cash distributions
+    close: yahoo_close_2026-10-28.csv
+    dividends: yahoo_dividends_2026-10-28.csv
+  fred_snapshots:                            # data/external/; refresh with --refresh-data
+    DTB3: fred_DTB3_2026-10-28.csv           # risk-free (3M T-bill)
+    DGS10: fred_DGS10_2026-10-28.csv         # 10y Treasury yield
+    CPIAUCSL: fred_CPIAUCSL_2026-10-28.csv   # CPI (monthly)
+    T10YIE: fred_T10YIE_2026-10-28.csv       # 10y breakeven inflation (market expectation)
+    T5YIE: fred_T5YIE_2026-10-28.csv         # 5y breakeven inflation
+  fred_max_stale_days: 5                     # max business days to carry a FRED value forward
+  outlier_z_threshold: 5.0                   # full-sample z audit (original T2 rule)
+  quality:                                   # extra checks, brief p.9; flag only
+    stale_min_run: 3                         # >= 3 consecutive unchanged prices
+    jump_k: 6.0                              # |r_t| > 6 x past-only rolling sigma
+    jump_window: 63                          # ~3 months of trading days
+    large_negative_floor: -0.10              # single-day simple return below -10%
+  adf_alpha: 0.05
+  start: DECIDE                              # analysis window (D1)
+  end: DECIDE
+  risk_free_series: DTB3                     # D2 (implemented)
+split:                          # D5, APPROVED 2026-10-28; chronological, no overlap
+  train_end: "2014-12-31"
+  validation_end: "2019-12-31"     # test = 2020-01-01 onwards, used once
+conventions:                    # D17 (approved)
+  trading_days_per_year: 252
+  loss_sign: positive_is_loss   # loss = -return
+  portfolio_returns: simple     # sum_i w_i * simple return_i; log returns only per asset
+risk:
+  confidence_levels: [0.90, 0.95, 0.99]   # D18: app 90/95/99, report 95/99
+  report_confidence_levels: [0.95, 0.99]
+  horizon_days: 1                         # D17: primary, backtestable
+  strategic_horizon_years: 5              # D4, APPROVED: annual review
+  backtest_window_days: 1000              # D13, APPROVED (sensitivity 500)
+  backtest_window_sensitivity_days: 500
+  mc_distribution: student_t              # D19: multivariate t or t-copula, never plain normal
+  mc_simulations: DECIDE
+  random_seed: 42
+risk_limits:                    # D7, APPROVED 2026-10-28
+  max_drawdown: 0.25            # historical incl. 2008 replay
+  max_prob_drawdown_breach_5y: 0.05   # P(DD > 25% within 5y), block bootstrap with CAPM means
+  es99_1d_max: 0.025            # % NAV, full-cycle history (construction limit)
+  stress_loss_max: 0.25         # each historical / hypothetical scenario
+  min_agg_weight_liquidity: 0.08      # >= 2 years of 4% spending
+  component_es_max: DECIDE      # after risk stage (draft 0.40)
+  monitoring:                   # review triggers, not forced sales
+    rolling_es_window: 250
+    basel_zones_review: [yellow, red]
+constraints:                    # D6 v2, APPROVED 2026-10-28 (docs/research/D3_D7_benchmarks_and_risk_limits.md §5c)
+  long_only: true
+  fully_invested: true          # D10: weights sum to 1 across the 7 ETFs, no cash or derivatives
+  groups:                       # L2 strategic ranges
+    equity: {tickers: [SPY, EFA, EEM, XLE, XLK], min: 0.20, max: 0.45}
+    gold: {tickers: [GLD], min: 0.0, max: 0.20}
+    sector_tilts: {tickers: [XLE, XLK], min: 0.0, max: 0.15}
+  max_weight:                   # L3: 2x policy-benchmark weight; sector tilts 10%
+    SPY: 0.50
+    EFA: 0.20
+    EEM: 0.10
+    AGG: 1.00                   # bounded by equity/gold ranges (>= 35% implied)
+    GLD: 0.20
+    XLE: 0.10
+    XLK: 0.10
+  min_weight: 0.0               # no minimum weights
+  component_es_max: DECIDE      # L4, set in risk stage
+optimiser:                      # D22, APPROVED 2026-10-28
+  es_constraint: cvar           # Rockafellar-Uryasev linear programme
+  drawdown_constraint: cdar     # conditional drawdown-at-risk (Chekhlov-Uryasev-Zabarankin)
+  drawdown_fallback: post_check # reject candidates breaching D7 if CDaR is infeasible
+benchmarks:                     # D3, APPROVED 2026-10-28. Frozen: do not tune to results
+  capm_market: SPY
+  rebalance: quarterly          # D11, APPROVED (portfolio and benchmarks)
+  primary:                      # policy benchmark for IR / tracking error
+    name: "Policy 40/50/10"
+    weights: {SPY: 0.25, EFA: 0.10, EEM: 0.05, AGG: 0.50, GLD: 0.10}
+  secondary:
+    "60/40 SPY/AGG": {SPY: 0.60, AGG: 0.40}
+    "Equal weight 7": {SPY: 0.142857142857, EFA: 0.142857142857, EEM: 0.142857142857, AGG: 0.142857142857, GLD: 0.142857142857, XLE: 0.142857142857, XLK: 0.142857142858}
+mandate:                        # D12 inputs. Base values APPROVED 2026-10-28 (provisional); ranges = sensitivity. Change base + rerun `python run_all.py --only portfolio`
+  inflation_series: breakeven_10y_pct          # FRED T10YIE on the as-of date
+  spending_rate: {base: 0.04, range: [0.035, 0.04, 0.045, 0.05]}
+  real_growth: {base: 0.005, range: [0.0, 0.005, 0.01]}
+  extra_costs: {base: 0.002, range: [0.001, 0.002, 0.004]}   # costs not inside ETF prices
+  withholding_tax_rate: 0.30                    # sensitivity only (non-US investor)
+cma:                            # capital market assumptions (D12)
+  market: SPY                   # CAPM market proxy (D3, approved)
+  erp_base: 0.05                # D12, APPROVED 2026-10-28 (provisional)
+  erp_range: [0.03, 0.04, 0.05, 0.06]
+  reference_portfolios:         # benchmarks / illustrations, not candidates
+    "60/40 SPY/AGG": {SPY: 0.6, AGG: 0.4}
+    "Equal weight 7": {SPY: 0.142857142857, EFA: 0.142857142857, EEM: 0.142857142857, AGG: 0.142857142857, GLD: 0.142857142857, XLE: 0.142857142857, XLK: 0.142857142858}
+    "40/60 SPY/AGG": {SPY: 0.4, AGG: 0.6}
+    "Defensive 30/50/20 SPY/AGG/GLD": {SPY: 0.3, AGG: 0.5, GLD: 0.2}

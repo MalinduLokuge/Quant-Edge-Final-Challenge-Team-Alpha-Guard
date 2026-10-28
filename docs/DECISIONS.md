@@ -1,0 +1,45 @@
+# Decision Log
+Status: OPEN (needs team), PROPOSED (recommended, awaiting approval), APPROVED.
+
+| ID | Decision | Recommendation | Status | Source / reason |
+|---|---|---|---|---|
+| D1 | Sample date range | Common start at GLD inception (Nov 2004) through the latest full month | PROPOSED | Brief p.9; covers 2008 |
+| D2 | Risk-free series | FRED DTB3, converted to daily | IMPLEMENTED (pending team approval) | Brief p.9 example |
+| D3 | Benchmarks | CAPM proxy **SPY**; primary policy benchmark **Policy 40/50/10** (SPY 25 / EFA 10 / EEM 5 / AGG 50 / GLD 10, quarterly, total return, frozen before optimisation); secondary **60/40 SPY/AGG** and **Equal weight 7**. 60/40 rejected as primary: fails 'appropriate' (−35% DD, ES 3.0%) | APPROVED 2026-10-28 | docs/research/D3_D7_benchmarks_and_risk_limits.md §1 |
+| D4 | Investment horizon | **5-year strategic horizon with annual review**; risk measured on 1-day horizon (backtestable). Already used by D7 (P(DD > 25% within 5 years)) | APPROVED 2026-10-28 | Brief p.4; masterclass draft 3y not binding |
+| D5 | Train / validation / test split | **Option B:** train 2004-11-18 → 2014-12-31 (2,546 days, incl. 2008); validation 2015-01-01 → 2019-12-31 (1,258 days; 12.6 expected 99% exceptions); test 2020-01-01 → 2026-10-19 (1,708 days; COVID, 2022, 2025; unseen stock-bond correlation regime). Methods frozen on train+validation, test used once; final client weights re-estimated on full sample with the frozen method. Limitation: validation is calm | APPROVED 2026-10-28 | Research doc §5b |
+| D6 | Weight constraints (v2) | **L1** long-only, fully invested, 7 ETFs, no leverage/cash. **L2** equity (SPY+EFA+EEM+XLE+XLK) 20–45%; GLD 0–20%; AGG remainder (≥ 35% implied). **L3** each ETF ≤ 2× policy-benchmark weight (EFA ≤ 20%, EEM ≤ 10%, GLD ≤ 20%); XLE, XLK ≤ 10% each, ≤ 15% together; no minimum weights. **L4** component-ES cap per ETF (value set in risk stage). Derived from the client's two risks (drawdown vs purchasing power), calibrated on data, not tuned to backtest | APPROVED 2026-10-28 (L4 value OPEN) | Research doc §5c |
+| D7 | Risk limits | **Drawdown tolerance 25%** peak-to-trough incl. 2008 replay **and** P(DD > 25% within 5 yrs) ≤ 5% (block bootstrap, CAPM means); construction **1-day ES99 ≤ 2.5% NAV ($250k)** on full-cycle history (ES97.5 also reported); each stress-scenario loss ≤ 25%; liquidity ≥ 2 years of spending (≥ 8% NAV) in AGG; rolling 250-day ES above the limit or Basel yellow/red = review trigger, not forced sale; component-ES cap set after risk stage. Consequence for D12: ~6.0% expected → ~2.8% sustainable spending (memo) | APPROVED 2026-10-28 (component-ES value OPEN) | Research doc §2, §4, §4b |
+| D8 | EVT threshold rule | Mean-excess + parameter-stability plots, sensitivity across 90–97.5th pct; GARCH-filtered residuals | PROPOSED | Brief p.7 |
+| D9 | Hypothetical scenario | e.g. stagflation shock: equities down, rates up (AGG down), oil up, gold up | OPEN | Brief p.8 |
+| D10 | Cash sleeve / derivatives | None. 100% across the 7 ETFs; spending liquidity comes from selling AGG | APPROVED 2026-10-28 | Brief p.4–5: eligible funds only |
+| D11 | Rebalancing | **Quarterly** back to target weights; turnover 6–10% a year (cost < 0.01% a year). Already used by D3 benchmark and research | APPROVED 2026-10-28 | Research doc §1.2 |
+| D12 | Return objective & risk-aware selection | **Required return** (1+R) = (1+I)(1+S)(1+G)(1+C): I = expected inflation (FRED breakeven), S = spending rate, G = real growth, C = costs not already in ETF prices. **Selection** = minimise risk (variance; ES for Min-CVaR) subject to E[R_net] ≥ required return and D6/D7 limits. **Fallback** if infeasible: lowest-risk portfolio within limits, and the return shortfall goes to the memo (adjust risk limit / lower spending). Expected returns use CAPM + income yield, with history as a cross-check. Assumptions: USD-denominated spending (US inflation, no FX cost); tax-exempt, with dividend withholding tax as a sensitivity case | APPROVED 2026-10-28, provisional: S = 4%, G = 0.5%, C = 0.2%, ERP = 5%, I = 10y breakeven. Values can be revised after further research (edit config, rerun). Shortfall policy: **lower spending** (report the highest sustainable spending rate) | Brief p.3–4, p.8; team discussion 2026-10-28 |
+| D13 | VaR rolling window for backtest | **1,000 days**, re-estimated daily on data ≤ t−1; 500 days as sensitivity. Fits D5: first validation forecast (2015) has history from 2011 | APPROVED 2026-10-28 | BL5; ~10 tail points at 99% |
+| D14 | Memo decision wording | Use the brief's options exactly: accept / adjust risk limit / reject | APPROVED 2026-10-28 | Brief p.8 (FigJam says accept/resize/reject) |
+| D15 | Code package naming | Stage names (`data`, `portfolio`, `risk`, `validation`, `decision`) instead of l1–l5 | APPROVED 2026-10-28 | Avoid confusion with brief Layers 1–5 |
+| D16 | Deployment | Local one-command run + Streamlit Community Cloud | OPEN | Brief p.6; cloud needs committed outputs |
+| D17 | Calculation conventions | Portfolio return = Σ wᵢ·simple returnᵢ; loss = −return (positive = loss); 1-day primary horizon, no √t scaling without a flag; 252 days/yr; ETF fees not deducted again | APPROVED 2026-10-28 | Brief p.9; `common/conventions.py`, `docs/CALCULATION_DICTIONARY.md` |
+| D18 | Confidence levels & uncertainty | VaR / ES / EVT at 90, 95 and 99% (report uses 95/99); every estimate shown with an uncertainty band (bootstrap CI, GPD parameter CI, MC standard error) | APPROVED 2026-10-28 | Brief p.5 sidebar + "how confident" |
+| D19 | Monte Carlo distribution | Multivariate Student-t or t-copula with a fixed seed. Not multivariate normal, which would just repeat parametric VaR | APPROVED 2026-10-28 | Makes the 3-method comparison meaningful (brief p.7) |
+| D20 | Extra candidate portfolio | Add minimum-CVaR (Rockafellar–Uryasev) alongside Min-Var, Risk Parity and capped Max-Sharpe | APPROVED 2026-10-28 | Directly targets "avoid large losses" |
+| D21 | Risk-model diagnostics | Test the assumptions behind each model (Jarque–Bera, Ljung–Box on squared returns, QQ plots) and compare VaR/ES/EVT on stress windows | APPROVED 2026-10-28 | Brief p.7 (BL2, BL4) |
+| D22 | Optimiser for drawdown/ES limits | ES limit as a CVaR constraint (linear programme, Rockafellar–Uryasev); drawdown limit enforced either as **conditional drawdown-at-risk (CDaR, Chekhlov–Uryasev–Zabarankin)** in the optimiser or as a post-check that rejects candidates. Recommend CDaR (exact, also an innovation) with post-check as fallback | APPROVED 2026-10-28 (CDaR primary, post-check fallback) | Review §3 |
+
+## Review recommendations (2026-10-28 review), status
+| # | Recommendation | Priority | Status |
+|---|---|---|---|
+| 1 | Stage package names | Critical | APPROVED, done (D15) |
+| 2 | Data code + raw snapshot in repo | Critical | APPROVED, done |
+| 3 | Return / loss conventions | Critical | APPROVED (D17), done in Stage 0 |
+| 4 | No cash sleeve | High | APPROVED (D10) |
+| 5 | 90/95/99 + uncertainty bands | High | APPROVED (D18), build in risk stage |
+| 6 | Student-t / copula Monte Carlo | High | APPROVED (D19), build in risk stage |
+| 7 | CPI + real-return objective | High | APPROVED. CPI data done; the target itself is D12 (OPEN) |
+| 8 | Min-CVaR candidate | High | APPROVED (D20), build in portfolio stage |
+| 9 | Brief's memo wording | High | APPROVED (D14). The FigJam board still says "resize": update it by hand |
+| 10 | Model diagnostics + stress-window comparison | High | APPROVED (D21), build in risk / validation stages |
+| 11 | Optional macro section | Medium | PROPOSED |
+| 12 | Innovation set (GARCH-EVT, t-copula, EVT threshold rules, regime VaR) | Medium | PROPOSED |
+| 13 | Drop wavelets / appendix only | Low | PROPOSED |
+| 14 | Streamlit Community Cloud | Low | PROPOSED (D16) |

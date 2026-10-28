@@ -1,0 +1,11 @@
+{
+  "file": "fred_DTB3_2026-10-28.csv",
+  "source": "FRED, Federal Reserve Bank of St. Louis",
+  "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTB3",
+  "series": "DTB3",
+  "download_date": "2026-10-28",
+  "rows": 18996,
+  "first_date": "1954-01-04",
+  "last_date": "2026-10-26",
+  "missing_values": 801
+}

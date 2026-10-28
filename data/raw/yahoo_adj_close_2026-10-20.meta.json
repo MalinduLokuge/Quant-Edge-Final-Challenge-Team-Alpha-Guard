@@ -1,0 +1,13 @@
+{
+  "file": "yahoo_adj_close_2026-10-20.csv",
+  "source": "Yahoo Finance via yfinance",
+  "call": "yf.download(TICKERS, start='1993-01-29', end='2026-10-20', auto_adjust=False)['Adj Close']",
+  "download_date": "2026-10-20",
+  "downloaded_by": "Raveena (T2), original notebook archived at notebooks/00_data_original_raveena.ipynb",
+  "tickers": ["SPY", "EFA", "EEM", "AGG", "GLD", "XLE", "XLK"],
+  "price_type": "Adjusted close (dividends and splits)",
+  "rows": 8488,
+  "first_date": "1993-01-29",
+  "last_date": "2026-10-19",
+  "note": "Unbalanced panel; NaN before each ETF's inception. Never edit by hand."
+}

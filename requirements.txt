@@ -1,0 +1,16 @@
+# Pin exact versions once the environment is frozen (T1.02 / T17.02).
+numpy
+pandas
+scipy
+statsmodels
+yfinance
+pandas-datareader   # FRED
+arch                # GARCH
+scikit-learn        # Ledoit-Wolf shrinkage
+cvxpy               # constrained optimisation
+matplotlib
+plotly
+streamlit
+pyyaml
+openpyxl           # tracker Excel exports
+pytest
