@@ -53,6 +53,11 @@ risk_limits:                    # D7, APPROVED 2026-10-28
   stress_loss_max: 0.25         # each historical / hypothetical scenario
   min_agg_weight_liquidity: 0.08      # >= 2 years of 4% spending
   component_es_max: DECIDE      # after risk stage (draft 0.40)
+  action_ladder:                # D23, APPROVED: drawdown from peak -> action (no forced selling)
+    watch: {drawdown: 0.10, rolling_es99: 0.020, action: report to committee}
+    review: {drawdown: 0.15, basel_zone: yellow, action: committee check of model, stress and spending}
+    act: {drawdown: 0.20, rolling_es99: 0.025, action: formal decision - keep / reduce risk at next rebalance / adjust spending}
+    limit: {drawdown: 0.25, basel_zone: red, action: mandatory decision - accept / adjust risk limit / reject}
   monitoring:                   # review triggers, not forced sales
     rolling_es_window: 250
     basel_zones_review: [yellow, red]
@@ -91,6 +96,10 @@ mandate:                        # D12 inputs. Base values APPROVED 2026-10-28 (p
   spending_rate: {base: 0.04, range: [0.035, 0.04, 0.045, 0.05]}
   real_growth: {base: 0.005, range: [0.0, 0.005, 0.01]}
   extra_costs: {base: 0.002, range: [0.001, 0.002, 0.004]}   # costs not inside ETF prices
+  spending_rule:                # D24, APPROVED: smoothed (Yale-type)
+    type: smoothed
+    weight_on_last_year: 0.70   # x last year's spending x (1 + inflation)
+    weight_on_policy: 0.30      # x spending_rate.base x fund value
   withholding_tax:                              # base case: tax-exempt endowment; cases below are sensitivities
     base: none
     cases:                                      # rate on each ETF's distribution yield (non-US investor)

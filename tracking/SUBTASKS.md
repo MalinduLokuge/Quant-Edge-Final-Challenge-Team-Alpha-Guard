@@ -75,7 +75,7 @@ Stage: mandate · Owner: Sujan · Priority: Core · Target: Week 1
 | T3.24 | Recovery time after 10/15/20/25% losses: historical and forward (bootstrap) | Recovery-time table | High | Dewmini | T6.12 | Done | 12-factor review #8 |
 | T3.25 | Liquidity under stress: funding spending and rebalancing from AGG in a crisis (incl. 2008-10-10 discount) | Liquidity note with $ cost | High | Raveena | T2.11 | Done | 12-factor review #10 |
 | T3.26 | Losses beyond history: severity-scaled crisis replays (GFC ×1.25, ×1.5) | Severe-scenario table; feeds D9 | High | Dewmini | T11.02 | Done | 12-factor review #11 |
-| T3.27 | Drawdown monitoring and action ladder (amber / red / limit) for memo and app | Proposed D23 (approval pending) | Critical | All members | T3.22 | In progress | 12-factor review #12 |
+| T3.27 | Drawdown monitoring and action ladder (amber / red / limit) for memo and app | D23 approved; ladder in config risk_limits.action_ladder | Critical | All members | T3.22 | Done | 12-factor review #12 |
 | T3.28 | Re-confirm D7 (drawdown, VaR, ES limits) against tolerance and capacity results | D7 confirmed or revised | Critical | All members | T3.21–T3.27 | Done | 12-factor review |
 | T3.14 | Tax assumption: tax-exempt base case, dividend withholding as sensitivity (check interest-related dividend exemption for AGG) | Note in IPS + limitations | Medium | Sujan | T3.11 | Done | DEC D12 |
 
