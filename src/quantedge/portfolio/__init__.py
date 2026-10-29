@@ -7,6 +7,8 @@ Outputs (outputs/tables/):
     required_vs_expected.csv    reference portfolios: expected compound return vs required (per ERP), sustainable spending
     p1_train_weights.csv / p1_final_weights.csv (+ _diagnostics)  P1 candidates: min-variance, risk parity,
                                 max-Sharpe, min-CVaR, target-return, + max-expected-return frontier end
+    frontier_full.csv           9-point frontier within D6 + D7: return, drawdown, ES, P(DD>25%), spending (T4.11)
+    ../figures/frontier_full.png
     cma_train.csv / cma_full.csv (+ _cov, _cov_shrunk)  optimiser inputs as of the D5 train end / last date
                                 (T4.18); _cov_shrunk = Ledoit–Wolf on correlations (T4.08), used by the optimiser
 Outputs (outputs/reports/):
@@ -21,7 +23,7 @@ import pandas as pd
 
 from quantedge.common import config
 from quantedge.common import conventions as cv
-from quantedge.portfolio import candidates, cma, return_objective, summary
+from quantedge.portfolio import candidates, cma, frontier, return_objective, summary
 
 
 def run() -> dict:
@@ -97,6 +99,11 @@ def run() -> dict:
     grid.to_csv(out / "required_return_grid.csv", index=False)
     vs.to_csv(out / "required_vs_expected.csv", index=False)
     p1 = candidates.run(simple, s)  # T4.02–T4.10, T4.16, T4.19: P1-train and P1-final (D6 v2 + D7, D22)
+    front = frontier.build(simple, s, "full")  # T4.11: trade-off table for D26 and the memo
+    front.to_csv(out / "frontier_full.csv")
+    fig_dir = config.ROOT / "outputs" / "figures"
+    fig_dir.mkdir(parents=True, exist_ok=True)
+    frontier.plot(front, p1["full"][1], fig_dir / "frontier_full.png")
 
     summary.write_return_objective_summary(
         config.OUTPUT_REPORTS / "return_objective_summary.md", as_of=as_of.date(), inflation=inflation, rf=rf_now,
@@ -104,4 +111,4 @@ def run() -> dict:
     print(f"[portfolio] as of {as_of.date()}: required return (base) {req_base:.2%}, "
           f"own-data ERP {erp['erp_arithmetic']:.2%}, rf {rf_now:.2%}, breakeven {inflation:.2%}")
     return {"assets": assets, "erp": erp, "grid": grid, "required_vs_expected": vs, "required_base": req_base,
-            "cma_sets": cma_sets, "p1": p1}
+            "cma_sets": cma_sets, "p1": p1, "frontier": front}

@@ -5,6 +5,7 @@ import pandas as pd
 
 from quantedge.common import config
 from quantedge.common import conventions as cv
+from quantedge.portfolio import frontier as fr
 from quantedge.portfolio import optimise as op
 from quantedge.portfolio import return_objective as ro
 
@@ -31,6 +32,11 @@ def build(label: str, simple: pd.DataFrame, settings: dict) -> tuple[pd.DataFram
         cv.validate_weights(pd.Series(w, index=tick), settings["universe"])  # long-only, sums to 1, approved ETFs
         weights[name] = pd.Series(w, index=tick)
         rc = d.pop("risk_contributions")
+        # D7 second condition: P(drawdown > limit within 5 years) <= max_prob (block bootstrap, expected-return means)
+        p_dd = fr.forward_drawdown_prob(w, scen[tick].to_numpy(), inp.mu, settings["risk_limits"]["max_drawdown"])
+        d["P(DD>limit, 5y)"] = p_dd
+        d["pass_D7_historical"] = d["pass_D7"]
+        d["pass_D7"] = bool(d["pass_D7"] and p_dd <= settings["risk_limits"]["max_prob_drawdown_breach_5y"])
         diags[name] = {"status": status, "dd_bound_used": bound, **d,
                        "hurdle_target": inp.hurdle, "gap_to_target": inp.hurdle - d["expected_geo"],
                        "sustainable_spending": ro.sustainable_spending(d["expected_geo"], infl, m["real_growth"]["base"],

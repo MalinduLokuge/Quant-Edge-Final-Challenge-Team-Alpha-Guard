@@ -96,6 +96,20 @@ def test_p1_candidates_meet_d6_and_d7():
             assert all(row[t] <= c["max_weight"][t] + 1e-6 for t in row.index)
             for g in c["groups"].values():
                 assert g["min"] - 1e-6 <= row[g["tickers"]].sum() <= g["max"] + 1e-6
-            assert bool(d.loc[name, "pass_D7"]) in (True, "True")
+            # historical D7 limits are hard constraints; the 5-year probability is a post-check that may flag
+            assert str(d.loc[name, "pass_D7_historical"]) == "True"
+            p = float(d.loc[name, "P(DD>limit, 5y)"])
+            assert str(d.loc[name, "pass_D7"]) == str(p <= lim["max_prob_drawdown_breach_5y"])
             assert float(d.loc[name, "max_drawdown"]) >= -lim["max_drawdown"] - 1e-9
             assert float(d.loc[name, "ES99_1d"]) <= lim["es99_1d_max"] + 1e-9
+
+
+def test_frontier_is_monotone_and_starts_at_min_variance():
+    import pandas as pd
+
+    f = pd.read_csv(config.OUTPUT_TABLES / "frontier_full.csv", index_col=0)
+    d = pd.read_csv(config.OUTPUT_TABLES / "p1_final_diagnostics.csv", index_col=0)
+    assert (f["expected_geo"].diff().dropna() > -1e-6).all()          # return rises along the frontier
+    assert (f["volatility"].diff().dropna() > -1e-6).all()            # and so does risk
+    assert abs(f["expected_geo"].iloc[0] - float(d.loc["min_variance", "expected_geo"])) < 1e-6
+    assert (f["spending_usd"].diff().dropna() > 0).all()

@@ -49,6 +49,8 @@ Conventions: decision D17. Status ✅ = implemented and tested, ⏳ = planned.
 | Max-Sharpe | homogenised: min yᵀΣy s.t. (μ−r_f)ᵀy = 1, constraints × κ; w = y/κ | ✅ |
 | Min-CVaR | min CVaR99 (Rockafellar–Uryasev LP) s.t. expected ≥ hurdle; fallback min CVaR99 | ✅ |
 | Target-return Markowitz | min wᵀΣw s.t. μᵀw − ½wᵀΣw ≥ hurdle; fallback (D12) lowest risk | ✅ |
+| Frontier (T4.11) | 9 targets from min-variance to max expected return; each = min wᵀΣw s.t. expected ≥ target, D6 + D7 | ✅ |
+| D7 5-year test | P(drawdown > 25% within 5 yrs) by moving-block bootstrap (63-day blocks, 4,000 paths, means = expected returns) ≤ 5%; post-check on every candidate and frontier point | ✅ |
 | All candidates | D6 v2 weights; CVaR99 ≤ 2.5%; summed-return drawdown ≤ bound (CDaR β→1), bound bisected until compounded quarterly-rebalanced drawdown ≤ 25%; VaR/ES95 post-checked | ✅ |
 
 ## Portfolio stage (brief Layer 1)

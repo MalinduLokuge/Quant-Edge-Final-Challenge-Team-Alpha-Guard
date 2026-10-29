@@ -77,6 +77,7 @@ Stage: mandate · Owner: Sujan · Priority: Core · Target: Week 1
 | T3.26 | Losses beyond history: severity-scaled crisis replays (GFC ×1.25, ×1.5) | Severe-scenario table; feeds D9 | High | Dewmini | T11.02 | Done | 12-factor review #11 |
 | T3.27 | Drawdown monitoring and action ladder (amber / red / limit) for memo and app | D23 approved; ladder in config risk_limits.action_ladder | Critical | All members | T3.22 | Done | 12-factor review #12 |
 | T3.28 | Re-confirm D7 (drawdown, VaR, ES limits) against tolerance and capacity results | D7 confirmed or revised | Critical | All members | T3.21–T3.27 | Done | 12-factor review |
+| T3.29 | Open question for committee: is 4% spending compulsory (fixed) or flexible? Memo shows both: fixed → disclosed real erosion ~0.6–1.2%/yr and capacity ~20%; flexible → move toward ~2.9% via D24 | Both cases in memo (T20) | Critical | All members | T4.11 | Not started | Team discussion 2026-10-29 |
 | T3.14 | Tax assumption: tax-exempt base case, dividend withholding as sensitivity (check interest-related dividend exemption for AGG) | Note in IPS + limitations | Medium | Sujan | T3.11 | Done | DEC D12 |
 
 ## T4 — Portfolio construction & selection
@@ -94,7 +95,7 @@ Stage: portfolio · Owner: Dewmini · Priority: Core · Target: Weeks 1–2
 | T4.08 | Robust inputs: shrinkage covariance (Ledoit–Wolf), cautious expected returns | cma.shrunk_covariance (Ledoit–Wolf on correlations); cma_*_cov_shrunk.csv; δ train 1.6% / full 0.8% / 1y 7% / 3m 18%; stability test (--shrink): turnover 1.61% → 1.57% a month; 2 tests | High | Dewmini | T4.01 | Done | FJ PM01/robust frontier · REV |
 | T4.09 | Implement minimum-CVaR allocation (Rockafellar–Uryasev) | p1_*: min_cvar (CVaR LP) | High | Dewmini | T4.08 | Done | DEC D20 |
 | T4.10 | Implement target-return Markowitz at the D12 hurdle (minimum 6.66% / target 7.19%) with fallback to lowest-risk feasible portfolio | p1_*: target_return (fallback per D12) | High | Dewmini | T4.08, T4.18 | Done | FJ PM05 |
-| T4.11 | Efficient frontier with candidates and benchmarks plotted; trade-off table | Frontier figure + return-vs-risk table | Critical | Dewmini | T4.02–T4.10 | Not started | BR p.4 #5 · R16 |
+| T4.11 | Efficient frontier with candidates and benchmarks plotted; trade-off table | outputs/tables/frontier_full.csv (9 points: return, DD, ES, VaR, P(DD>25%), spending $), outputs/figures/frontier_full.png | Critical | Dewmini | T4.02–T4.10 | Done | BR p.4 #5 · R16 |
 | T4.12 | Feasibility filters: D6 v2 layers (equity 20–45%, GLD ≤ 20%, ≤ 2× benchmark, sector tilts) + D7 limits | D6 v2 + D7 in optimiser; post-check on compounded quarterly NAV | Critical | Dewmini | T4.02–T4.10 | Done | FJ PM06 |
 | T4.13 | Net-of-cost and turnover test under chosen rebalancing | Turnover, cost drag per candidate | Medium | Dewmini | T3.06, T3.07 | Not started | FJ PM-N03 |
 | T4.14 | Diversification metrics: diversification ratio, risk contribution vs weight | Diversification table | High | Dewmini | T4.12 | Not started | BR p.4 'diversification benefits' |
@@ -107,7 +108,7 @@ Stage: portfolio · Owner: Dewmini · Priority: Core · Target: Weeks 1–2
 | T4.21 | Add every candidate to the required-vs-expected table with sustainable spending | Extended return_objective_summary.md | High | Dewmini | T4.16 | Not started | DEC D12 |
 | T4.22 | Decide bond expected-return method for near-zero rates (D25) and apply to both CMA sets | D25 approved; cma.expected_returns applied to both CMA sets, D12 tables, research; 1 test; research doc §8b | Critical | All members | T4.18 | Done | T4.18 finding |
 | T4.23 | Required return in training-period terms (2014 breakeven, same S/G/C) for P1-train return targets | return_objective.required_return_as_of; cma_sets_summary.csv: train 6.49% / 5.96% (breakeven 1.68%), full 7.19% / 6.66%; 2 tests | High | Dewmini | T4.18 | Done | D5 + D12 consistency |
-| T4.24 | Decide portfolio choice rule when the hurdle is infeasible (D26) | D26 approved | Critical | All members | T4.11 | Not started | T4 finding 2026-10-29 |
+| T4.24 | Decide portfolio choice rule when the hurdle is infeasible (D26) | D26 approved | Critical | All members | T4.11 | In progress | T4 finding 2026-10-29 |
 
 ## T5 — KPIs & benchmarks
 Stage: portfolio · Owner: Raveena · Priority: Supporting · Target: Week 2

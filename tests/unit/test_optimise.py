@@ -72,3 +72,14 @@ def test_postcheck_passes_compounded_drawdown():
     inp = _inp(limits=lim, n=800, seed=3)
     w, st, d, bound = op.solve_with_postcheck(op.max_expected_return, inp)
     assert w is not None and d["max_drawdown"] >= -0.05 - 1e-9
+
+
+def test_forward_drawdown_probability_bounds():
+    from quantedge.portfolio import frontier as fr
+
+    rng = np.random.default_rng(1)
+    calm = rng.normal(0, 0.001, (2000, 2))
+    wild = rng.normal(0, 0.03, (2000, 2))
+    w = np.array([0.5, 0.5])
+    assert fr.forward_drawdown_prob(w, calm, np.array([0.05, 0.05]), 0.25, n_paths=300) == 0.0
+    assert fr.forward_drawdown_prob(w, wild, np.array([0.0, 0.0]), 0.25, n_paths=300) > 0.5
