@@ -39,6 +39,12 @@ The Streamlit page and the report section are both built from this file, so they
 - Monthly paths are stylised: order and timing are assumptions. Gaps, convexity and liquidity spirals are not modelled. The credit factor is investment grade (Moody's Baa).
 - A multi-month scenario loss is not comparable to the 1-day ES limit. Scenario VaR is a volatility rescaling of GARCH-EVT, not a re-estimated model.
 
+## Five-year drawdown test and recovery (audit 2026-10-29)
+- P(drawdown > 25% within 5 years) is a block-bootstrap estimate. It now uses 32,000 paths (Monte Carlo error about ±0.12 pp at 5%). With 4,000 paths and one seed, the selection rule had tuned itself to simulation noise.
+- **The estimate depends on the block length** (63 days approved). Longer blocks keep bear markets intact and raise P: for the old D26, 5.1% at 63 days, 6.4% at 126 and 6.8% at 252. This is model uncertainty, reported next to the test.
+- In falling-rate scenarios, AGG keeps its current yield (bonds held over the horizon lock it in). New money would earn less, so low-rate results flatter bond-heavy portfolios slightly.
+- **Spending at 2.8% (D30) leaves only about 0.5% a year of expected real growth.** After any large fall the fund regains its *nominal* value within a few years, but its *real* value can take much longer (`sustainability_*.csv`). Recovery paths are stylised scenarios, not forecasts.
+
 ## Models
 ## Tail / EVT uncertainty
 ## Backtesting scope

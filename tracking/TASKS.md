@@ -25,9 +25,9 @@ Sources merged: Project Management Tracker (`.xlsm`, Drive "alpha guard"), FigJa
 | T17 | Repository & reproducibility | — | Malindu | Core | Week 3 | 9 | 2 | 1 | 0 | 22% |
 | T18 | AI disclosure & validation log | — | Malindu | Core | Ongoing | 8 | 0 | 4 | 0 | 0% |
 | T19 | Pitch & Q&A prep | — | All members | Conditional | If finalist | 4 | 0 | 0 | 0 | 0% |
-| T20 | Decision gate & final recommendation (P3) | decision | All members | Core | Week 3 | 8 | 0 | 0 | 0 | 0% |
+| T20 | Decision gate & final recommendation (P3) | decision | All members | Core | Week 3 | 10 | 2 | 0 | 0 | 20% |
 | T21 | Quality gates & compliance QA | — | Malindu (coordinates) | Core | Ongoing | 8 | 3 | 1 | 0 | 38% |
-| | **Total** | | | | | **238** | **144** | **11** | **0** | **61%** |
+| | **Total** | | | | | **240** | **146** | **11** | **0** | **61%** |
 
 Progress = share of subtasks marked Done. Recount with `python tracking/update_counts.py` after editing `SUBTASKS.md`.
 

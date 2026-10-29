@@ -33,8 +33,9 @@ def build(label: str, simple: pd.DataFrame, settings: dict) -> tuple[pd.DataFram
         weights[name] = pd.Series(w, index=tick)
         rc = d.pop("risk_contributions")
         # D7 second condition: P(drawdown > limit within 5 years) <= max_prob (block bootstrap, expected-return means)
-        p_dd = fr.forward_drawdown_prob(w, scen[tick].to_numpy(), inp.mu, settings["risk_limits"]["max_drawdown"])
-        d["P(DD>limit, 5y)"] = p_dd
+        kw = fr.dd_test_kwargs(settings)
+        p_dd = fr.forward_drawdown_prob(w, scen[tick].to_numpy(), inp.mu, settings["risk_limits"]["max_drawdown"], **kw)
+        d["P(DD>limit, 5y)"], d["P_mc_se"] = p_dd, fr.mc_se(p_dd, kw["n_paths"])
         d["pass_D7_historical"] = d["pass_D7"]
         d["pass_D7"] = bool(d["pass_D7"] and p_dd <= settings["risk_limits"]["max_prob_drawdown_breach_5y"])
         diags[name] = {"status": status, "dd_bound_used": bound, **d,
@@ -58,6 +59,7 @@ def build(label: str, simple: pd.DataFrame, settings: dict) -> tuple[pd.DataFram
             weights["d26_selected"] = pd.Series(w, index=tick)
             diags["d26_selected"] = {"status": f"D26: highest compliant target {target:.4f}", "dd_bound_used": None, **d,
                                      "pass_D7_historical": d["pass_D7"], "hurdle_target": inp.hurdle,
+                                     "P_mc_se": fr.mc_se(d["P(DD>limit, 5y)"], fr.dd_test_kwargs(settings)["n_paths"]),
                                      "gap_to_target": inp.hurdle - d["expected_geo"],
                                      "sustainable_spending": ro.sustainable_spending(d["expected_geo"], infl, m["real_growth"]["base"],
                                                                                      m["extra_costs"]["base"]),

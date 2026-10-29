@@ -98,7 +98,7 @@ def main():
             saved.append(w.rename(f"{o} | {label}"))
             inp, infl = inputs(label, simple, s)
             d = op.diagnostics(w.to_numpy(), inp)
-            p = fr.forward_drawdown_prob(w.to_numpy(), inp.scenarios[inp.tickers].to_numpy(), inp.mu, lim["max_drawdown"])
+            p = fr.forward_drawdown_prob(w.to_numpy(), inp.scenarios[inp.tickers].to_numpy(), inp.mu, lim["max_drawdown"], **fr.dd_test_kwargs(s))
             row |= {f"{label}_{k}": v for k, v in {
                 "weights": ", ".join(f"{k} {v:.1%}" for k, v in w.items() if v > 0.004),
                 "expected": d["expected_geo"], "max_drawdown": d["max_drawdown"], "ES99": d["ES99_1d"], "VaR99": d["VaR99_1d"],

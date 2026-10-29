@@ -7,7 +7,9 @@ Reads the exact option weights from research_t425_options.py and scores every op
   D  historical + hypothetical stress, stress-beta and ×1.5 equity sensitivities
   E  full KPI set (in-sample on 2026 weights; out-of-sample on 2014 weights), turnover and costs
   F  paired block-bootstrap confidence intervals for out-of-sample differences vs O1, weight stability (2014 vs
-     2026 weights), attribution of O4 − O1 test-period return by ETF
+     2026 weights), attribution of O4 − O1 test-period return by ETF, 5-year test at 32k paths with s.e. and
+     block-length sensitivity (21 / 126 / 252 days)
+  G  endowment sustainability and recovery test (T20.09): views 1–3 from validation.sustainability_tables
 
     python scripts/research_t425_evaluation.py   → outputs/tables/research_t425_eval_*.csv
 """
@@ -102,8 +104,12 @@ def main():
         gfc = S.replay(simple, w, *s["stress"]["windows"]["GFC 2007-09"])
         r["gfc_recovery_days"] = gfc["recovery_days"]
         mu = cma["expected_arithmetic"].to_numpy()
-        p = fr.forward_drawdown_prob(w.to_numpy(), simple.to_numpy(), mu, lim["max_drawdown"])
-        r["P_DD25_5y"], r["P_DD25_mc_se"] = p, float(np.sqrt(p * (1 - p) / 4000))
+        p = fr.forward_drawdown_prob(w.to_numpy(), simple.to_numpy(), mu, lim["max_drawdown"], **fr.dd_test_kwargs(s))
+        r["P_DD25_5y"], r["P_DD25_mc_se"] = p, fr.mc_se(p, fr.dd_test_kwargs(s)["n_paths"])
+        kw = fr.dd_test_kwargs(s)
+        for blk in s["risk_limits"]["drawdown_test"]["sensitivity_blocks"]:  # model uncertainty: block length
+            r[f"P_DD25_5y_block{blk}"] = fr.forward_drawdown_prob(w.to_numpy(), simple.to_numpy(), mu, lim["max_drawdown"],
+                                                                  n_paths=kw["n_paths"], block=blk)
         r |= {"margin_dd_pp": lim["max_drawdown"] + r["max_dd"], "margin_ES99_pp": lim["es99_1d_max"] - r["ES99"],
               "margin_VaR99_pp": lim["var99_1d_max"] - r["VaR99"], "margin_P_pp": lim["max_prob_drawdown_breach_5y"] - p}
         att = A.scenario_components(simple, w, 0.99)
@@ -170,6 +176,14 @@ def main():
     # gold cumulative return by year (context for the 2020-26 result)
     gy = (1 + simple["GLD"]).groupby(simple.index.year).prod() - 1
     gy.rename("GLD_calendar_return").to_csv(OUT / "research_t425_eval_gld_years.csv")
+    # T20.09 sustainability and recovery test on the same option weights (+ policy benchmark)
+    from quantedge import validation as V
+
+    ports = dict(wf)
+    b = s["benchmarks"]["primary"]
+    ports[f"[benchmark] {b['name']}"] = pd.Series(b["weights"]).reindex(simple.columns, fill_value=0.0)
+    for k, v in V.sustainability_tables(simple, s, ports).items():
+        v.to_csv(OUT / f"research_t425_eval_sustainability_{k}.csv", index=False)
     print("written research_t425_eval_*.csv")
 
 

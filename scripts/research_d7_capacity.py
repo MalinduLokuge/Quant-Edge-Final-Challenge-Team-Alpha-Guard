@@ -17,6 +17,7 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from quantedge.common import config  # noqa: E402
 from quantedge.common import conventions as cv  # noqa: E402
+from quantedge.validation.sustainability import bootstrap, recovery_times, spending_paths  # noqa: E402,F401
 
 ERP = 0.05
 Q = 63  # trading days per quarter
@@ -28,63 +29,6 @@ PORTFOLIOS = {  # global equity mix SPY/EFA/EEM 62.5/25/12.5, GLD 10%, rest AGG 
 
 def weights(eq: float) -> pd.Series:
     return pd.Series({"SPY": .625 * eq, "EFA": .25 * eq, "EEM": .125 * eq, "GLD": .10, "AGG": .90 - eq})
-
-
-def bootstrap(R: np.ndarray, n_paths: int, days: int, seed: int, block: int = 63) -> np.ndarray:
-    rng = np.random.default_rng(seed)
-    starts = rng.integers(0, len(R) - block, size=(n_paths, int(np.ceil(days / block))))
-    return (starts[:, :, None] + np.arange(block)).reshape(n_paths, -1)[:, :days]
-
-
-def spending_paths(P: np.ndarray, rule: str, s0: float, infl: float, smooth: float = 0.7) -> dict:
-    """Quarterly spending on daily portfolio return paths P (paths x days), start NAV = 1.
-
-    rules: 'fixed_real'  s0 x start NAV, grown with inflation (budget certainty, value absorbs losses)
-           'pct_nav'     s0 x current NAV each quarter (value protected, spending absorbs losses)
-           'smoothed'    yearly: S = smooth*S_prev*(1+infl) + (1-smooth)*s0*NAV (Yale-type rule)
-    """
-    n, days = P.shape
-    V, spend_q = np.ones(n), np.full(n, s0 / 4)
-    real_min, eff_max, spend_real_min = np.ones(n), np.full(n, s0), np.ones(n)
-    for q in range(days // Q):
-        V = V * np.prod(1 + P[:, q * Q:(q + 1) * Q], axis=1)
-        years = (q + 1) / 4
-        if rule == "fixed_real":
-            spend_q = np.full(n, s0 / 4 * (1 + infl) ** years)
-        elif rule == "pct_nav":
-            spend_q = s0 / 4 * V
-        elif rule == "smoothed" and q % 4 == 0 and q > 0:
-            spend_q = smooth * spend_q * (1 + infl) + (1 - smooth) * s0 / 4 * V
-        eff_max = np.maximum(eff_max, 4 * spend_q / V)
-        V = V - spend_q
-        deflator = (1 + infl) ** years
-        real_min = np.minimum(real_min, V / deflator)
-        spend_real_min = np.minimum(spend_real_min, spend_q / deflator / (s0 / 4))
-    return {"real_nav_end": V / (1 + infl) ** (days / cv.TRADING_DAYS), "real_nav_min": real_min,
-            "max_effective_rate": eff_max, "real_spending_min": spend_real_min}
-
-
-def recovery_times(P: np.ndarray, levels=(0.10, 0.15, 0.20, 0.25)) -> dict:
-    """For paths that hit each drawdown level: trading days from the first hit until the prior peak is regained."""
-    nav = np.cumprod(1 + P, axis=1)
-    peak = np.maximum.accumulate(nav, axis=1)
-    dd = nav / peak - 1
-    out = {}
-    for lvl in levels:
-        dur, censored = [], 0
-        for i in np.where((dd <= -lvl).any(axis=1))[0]:
-            t0 = int(np.argmax(dd[i] <= -lvl))
-            rec = np.where(nav[i, t0:] >= peak[i, t0])[0]
-            if len(rec):
-                dur.append(rec[0])
-            else:
-                censored += 1
-        hits = len(dur) + censored
-        out[f"{lvl:.0%}"] = {"P(hit)": hits / len(P),
-                             "median_years_to_recover": np.median(dur) / 252 if dur else np.nan,
-                             "p90_years_to_recover": np.quantile(dur, .9) / 252 if dur else np.nan,
-                             "share_not_recovered_in_horizon": censored / hits if hits else np.nan}
-    return out
 
 
 def main() -> None:

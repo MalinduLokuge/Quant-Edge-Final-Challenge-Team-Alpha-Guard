@@ -105,14 +105,26 @@ stress:                         # T11
     xle_oil_beta_variant: 0.50  # hedge variant: XLE oil beta implied by the 2022 / Mar 2026 supply shocks
     gld_band: 0.10              # +/- band on GLD's scenario move (factor model unreliable for gold)
     trading_cost: 0.0010        # one-way, on traded value at each quarterly rebalance (D11)
-    spending_rate: 0.04         # D24 policy rate; last year's spending = rate x NAV at the start
     mc_draws: 20000             # shocks ~ triangular(0.5 x central, central, severe); betas ~ N(b, SE)
     mc_low_multiplier: 0.5
     mc_residual_months: 3       # residual (non-factor) noise of a 3-month episode, correlated across ETFs
     one_at_a_time_multiplier: 1.5
+sustainability:                 # T20.09: endowment sustainability and recovery stress test (D24 at the D30 rate)
+  declines: [0.15, 0.20, 0.25]  # initial fall (view 1: portfolio value; view 2: stock market)
+  recovery_years: [1, 3, 5, 7]  # years to regain the pre-crisis level after the fall; plus a lost decade
+  lost_decade: true             # view 1: 0% real return for 10 years after the fall
+  horizon_years: 15
+  stagflation_inflation: 0.05   # inflation during the fall and recovery years (variant); base = 10y breakeven
+  market_types: {stagflation: "A Energy stagflation (Hormuz II)", recession: "B AI unwind with recession"}  # factor mixes
+  mc_paths: 20000               # view 3: block bootstrap, 10 years, 63-day blocks, CAPM-reset means
+  mc_years: 10
 risk_limits:                    # D7, APPROVED 2026-10-28
   max_drawdown: 0.25            # historical incl. 2008 replay
   max_prob_drawdown_breach_5y: 0.05   # P(DD > 25% within 5y), block bootstrap with CAPM means
+  drawdown_test:                # D7 5-year test settings (T20.10, 2026-10-29): 4,000 paths with one seed let the D26
+    paths: 32000                # bisection tune itself to Monte Carlo noise; 32k paths -> s.e. about 0.12 pp at P = 5%
+    block: 63                   # approved block length (quarter)
+    sensitivity_blocks: [21, 126, 252]   # model-uncertainty report, not the test
   es99_1d_max: 0.025            # % NAV, full-cycle history (construction limit, binding)
   var99_1d_max: 0.017           # = ~0.67 x ES99 limit (observed VaR99/ES99 ratio 0.67-0.70), binding
   es95_1d_max: 0.0145           # reported limit, consistent with ES99
@@ -160,7 +172,7 @@ benchmarks:                     # D3, APPROVED 2026-10-28. Frozen: do not tune t
     "Equal weight 7": {SPY: 0.142857142857, EFA: 0.142857142857, EEM: 0.142857142857, AGG: 0.142857142857, GLD: 0.142857142857, XLE: 0.142857142857, XLK: 0.142857142858}
 mandate:                        # D12 inputs. Base values APPROVED 2026-10-28 (provisional); ranges = sensitivity. Change base + rerun `python run_all.py --only portfolio`
   inflation_series: breakeven_10y_pct          # FRED T10YIE on the as-of date
-  spending_rate: {base: 0.04, range: [0.035, 0.04, 0.045, 0.05]}
+  spending_rate: {base: 0.028, range: [0.026, 0.027, 0.028, 0.029, 0.04]}   # D30 (2026-10-29): flexible, policy 2.8%; 4% kept for comparison
   real_growth: {base: 0.005, range: [0.0, 0.005, 0.01]}
   extra_costs: {base: 0.002, range: [0.001, 0.002, 0.004]}   # costs not inside ETF prices
   spending_rule:                # D24, APPROVED: smoothed (Yale-type)

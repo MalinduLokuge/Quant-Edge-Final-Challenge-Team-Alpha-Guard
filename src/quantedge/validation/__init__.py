@@ -8,6 +8,7 @@ backtest_forecasts_<period>.csv, backtest_results_<period>.csv, backtest_window_
 Stress (T11): historical replays (stress_results.csv, stress_contributions.csv, stress_correlations.csv) and the
 D9 v2 / D29 hypothetical scenarios (stress_hyp_*.csv; rows also added to stress_results.csv).
 Limit stability (T10.12): D7 limits on train / validation / test / full periods → limit_stability.csv.
+Sustainability (T20.09): recovery from 15/20/25% falls while paying D24 spending → sustainability_*.csv.
 """
 from __future__ import annotations
 
@@ -15,7 +16,7 @@ import numpy as np
 import pandas as pd
 
 from quantedge.common import config
-from quantedge.validation import backtest, coverage, hypothetical as H, limits, stress
+from quantedge.validation import backtest, coverage, hypothetical as H, limits, stress, sustainability as SU
 
 
 def portfolios(s: dict) -> dict[str, pd.Series]:
@@ -105,7 +106,7 @@ def run_hypothetical(simple: pd.DataFrame, s: dict, ports: dict[str, pd.Series])
                 ret, _, c = H.instant(wt, full["beta"], f)
                 g = float(wt.get("GLD", 0.0)) * h["gld_band"]
                 p = H.path(wt, full["beta"], f, h["profiles"], h["trading_cost"])
-                sp = H.next_year_spending(nav0, p["end_return"], h["spending_rate"], spec["inflation"][sev])
+                sp = H.next_year_spending(nav0, p["end_return"], s["mandate"]["spending_rate"]["base"], spec["inflation"][sev])
                 has_var = pname in gev.index
                 v, e = H.scenario_var(float(gev.loc[pname, "VaR"]) if has_var else np.nan,
                                       float(gev.loc[pname, "ES"]) if has_var else np.nan, vix_now, spec["vix"][sev])
@@ -164,11 +165,101 @@ def run_limits(simple: pd.DataFrame, s: dict) -> pd.DataFrame:
     return t
 
 
+def sustainability_inputs(simple: pd.DataFrame, s: dict) -> dict:
+    """Shared inputs of the recovery test: CMA (expected returns, covariance, yields), inflation, betas, scenarios."""
+    out = config.OUTPUT_TABLES
+    cma = pd.read_csv(out / "cma_full.csv", index_col=0).reindex(simple.columns)
+    cov = pd.read_csv(out / "cma_full_cov_shrunk.csv", index_col=0).loc[simple.columns, simple.columns]
+    summ = pd.read_csv(out / "cma_sets_summary.csv", index_col=0)
+    b = pd.read_csv(out / "stress_hyp_betas.csv", index_col=0)
+    h = s["stress"]["hypothetical"]
+    beta = b[b["sample"] == "full"][h["factors"]]
+    types = {k: H.factor_vector(h["scenarios"][v]["severe"], h["factors"]) for k, v in s["sustainability"]["market_types"].items()}
+    return {"cma": cma, "cov": cov, "infl": float(summ.loc["inflation_breakeven", "full"]), "beta": beta, "types": types}
+
+
+def sustainability_tables(simple: pd.DataFrame, s: dict, ports: dict[str, pd.Series], inp: dict | None = None) -> dict:
+    """T20.09 views 1–3 for any set of portfolios (pipeline portfolios here; O1–O5 in the T4.25 research)."""
+    inp = inp or sustainability_inputs(simple, s)
+    su, m = s["sustainability"], s["mandate"]
+    rate, cost, infl, hz = m["spending_rate"]["base"], m["extra_costs"]["base"], inp["infl"], su["horizon_years"]
+    cma, cov = inp["cma"], inp["cov"].to_numpy()
+    taxes = {"tax-exempt (base)": 0.0} | {k: pd.Series(v) for k, v in m["withholding_tax"]["cases"].items()}
+    mu_a = cma["expected_arithmetic"]
+    mu_spy = float(mu_a["SPY"] - 0.5 * inp["cov"].loc["SPY", "SPY"])
+    v1, v2, v3 = [], [], []
+    for name, w in ports.items():
+        w = w.reindex(simple.columns, fill_value=0.0)
+        mu_p = float(mu_a @ w - 0.5 * w.to_numpy() @ cov @ w.to_numpy())
+        base = SU.path_metrics(SU.d24_path(np.full(hz, mu_p), rate, infl, cost), rate)  # no-crisis reference path
+        v1.append({"portfolio": name, "decline": 0.0, "recovery": "no crisis", "inflation_case": "base",
+                   "tax_case": "tax-exempt (base)", "expected_return": mu_p, "tax_drag": 0.0, **base})
+        for d in su["declines"]:
+            paths = [(f"{r} years", r, False) for r in su["recovery_years"]] + ([("lost decade", None, True)] if su["lost_decade"] else [])
+            for lab, r, lost in paths:
+                g = SU.recovery_returns(d, r, mu_p, hz, infl, lost)
+                n_stress = 1 + (10 if lost else r)
+                for icase, pi in (("base", np.full(hz, infl)),
+                                  ("stagflation", np.r_[np.full(n_stress, su["stagflation_inflation"]), np.full(hz - n_stress, infl)][:hz])):
+                    g_i = g.copy()
+                    if lost:  # lost decade = 0% real under the inflation case
+                        g_i[1:11] = pi[1:11]
+                    for tlab, t in taxes.items():
+                        if icase == "stagflation" and tlab != "tax-exempt (base)":
+                            continue
+                        drag = SU.tax_drag(w, cma["ttm_yield"], t)
+                        met = SU.path_metrics(SU.d24_path(g_i, rate, pi, cost, drag), rate)
+                        v1.append({"portfolio": name, "decline": d, "recovery": lab, "inflation_case": icase, "tax_case": tlab,
+                                   "expected_return": mu_p, "tax_drag": drag, **met})
+            for typ, f in inp["types"].items():
+                for r in su["recovery_years"]:
+                    g = SU.market_returns(w, inp["beta"], f, d, r, mu_p, mu_spy, hz)
+                    met = SU.path_metrics(SU.d24_path(g, rate, infl, cost), rate)
+                    v2.append({"portfolio": name, "market_decline": d, "type": typ, "recovery_years": r,
+                               "portfolio_year1_return": g[0], **met})
+    # view 3: bootstrap
+    R = (simple.to_numpy() + (mu_a.to_numpy() / cv_days() - simple.mean().to_numpy())).astype(np.float32)
+    days = su["mc_years"] * 252
+    for name, w in ports.items():
+        wv = w.reindex(simple.columns, fill_value=0.0).to_numpy().astype(np.float32)
+        P = np.vstack([R[SU.bootstrap(R, 2000, days, s["risk"]["random_seed"] + k)] @ wv for k in range(su["mc_paths"] // 2000)])
+        sp = SU.spending_paths(P, "smoothed", rate, infl, cost=cost)
+        rec = SU.recovery_times(P, (0.15, 0.20, 0.25))
+        row = {"portfolio": name, "paths": len(P), "median_real_nav_end": float(np.median(sp["real_nav_end"])),
+               "P(real NAV end < 90%)": float((sp["real_nav_end"] < 0.9).mean()),
+               "P(real NAV ever < 80%)": float((sp["real_nav_min"] < 0.8).mean()),
+               "P(real spending ever cut > 10%)": float((sp["real_spending_min"] < 0.9).mean()),
+               "P(spending rate ever > 4%)": float((sp["max_effective_rate"] > 0.04).mean())}
+        for lvl, v in rec.items():
+            row |= {f"DD{lvl} {k}": x for k, x in v.items()}
+        v3.append(row)
+    return {"grid": pd.DataFrame(v1), "market": pd.DataFrame(v2), "mc": pd.DataFrame(v3)}
+
+
+def cv_days() -> int:
+    from quantedge.common.conventions import TRADING_DAYS
+    return TRADING_DAYS
+
+
+def run_sustainability(simple: pd.DataFrame, s: dict) -> dict:
+    """T20.09 on the P1-final portfolios and the policy benchmark."""
+    w = pd.read_csv(config.OUTPUT_TABLES / "p1_final_weights.csv", index_col=0)
+    ports = {n: w.loc[n] for n in s["risk"]["p2_portfolios"] if n in w.index}
+    b = s["benchmarks"]["primary"]
+    ports[f"[benchmark] {b['name']}"] = pd.Series(b["weights"]).reindex(simple.columns, fill_value=0.0)
+    t = sustainability_tables(simple, s, ports)
+    for k, v in t.items():
+        v.to_csv(config.OUTPUT_TABLES / f"sustainability_{k}.csv", index=False)
+    print(f"[validation] sustainability: {len(t['grid'])} portfolio-value paths, {len(t['market'])} market paths, "
+          f"{int(t['mc']['paths'].sum())} bootstrap paths")
+    return {f"sustainability_{k}": v for k, v in t.items()}
+
+
 def run(include_test: bool | None = None, stress_only: bool = False) -> dict:
     s = config.load_settings()
     simple = pd.read_csv(config.DATA_PROCESSED / "simple_returns.csv", index_col=0, parse_dates=True)
     if stress_only:
-        return run_stress(simple, s) | {"limits": run_limits(simple, s)}
+        return run_stress(simple, s) | {"limits": run_limits(simple, s)} | run_sustainability(simple, s)
     ports, out = portfolios(s), config.OUTPUT_TABLES
     names = ["validation"]
     if include_test if include_test is not None else s["validation"]["test_unlocked"]:
@@ -187,4 +278,4 @@ def run(include_test: bool | None = None, stress_only: bool = False) -> dict:
     sens = [run_period("validation", simple, s, key, w)[1].assign(window=w)
             for w in (s["risk"]["backtest_window_days"], s["risk"]["backtest_window_sensitivity_days"])]
     pd.concat(sens).to_csv(out / "backtest_window_sensitivity.csv", index=False)
-    return res | run_stress(simple, s) | {"limits": run_limits(simple, s)}
+    return res | run_stress(simple, s) | {"limits": run_limits(simple, s)} | run_sustainability(simple, s)

@@ -19,17 +19,34 @@ from quantedge.portfolio import return_objective as ro
 
 
 def forward_drawdown_prob(w: np.ndarray, daily: np.ndarray, mu_annual: np.ndarray, limit: float,
-                          years: int = 5, n_paths: int = 4000, block: int = 63, seed: int = 7) -> float:
+                          years: int = 5, n_paths: int = 4000, block: int = 63, seed: int = 7,
+                          batch: int = 4000) -> float:
     """P(max drawdown > limit within `years`): moving-block bootstrap of daily returns with each asset's mean
-    reset to its expected return (D7 definition; same method as the research scripts)."""
+    reset to its expected return (D7 definition; same method as the research scripts). Paths run in batches of
+    `batch` (memory), batch k seeded `seed + k`, so every portfolio sees the same random paths (common random
+    numbers) and n_paths = batch reproduces the single-batch result. Monte Carlo s.e. = √(p(1−p)/n_paths)."""
     r = daily + (mu_annual / 252 - daily.mean(axis=0))
-    rng = np.random.default_rng(seed)
     days = years * 252
-    starts = rng.integers(0, len(r) - block, size=(n_paths, int(np.ceil(days / block))))
-    idx = (starts[:, :, None] + np.arange(block)).reshape(n_paths, -1)[:, :days]
-    nav = np.cumprod(1 + r[idx] @ w, axis=1)
-    dd = (nav / np.maximum.accumulate(nav, axis=1) - 1).min(axis=1)
-    return float((dd < -limit).mean())
+    hits, done, k = 0, 0, 0
+    while done < n_paths:
+        n = min(batch, n_paths - done)
+        rng = np.random.default_rng(seed + k)
+        starts = rng.integers(0, len(r) - block, size=(n, int(np.ceil(days / block))))
+        idx = (starts[:, :, None] + np.arange(block)).reshape(n, -1)[:, :days]
+        nav = np.cumprod(1 + r[idx] @ w, axis=1)
+        hits += int(((nav / np.maximum.accumulate(nav, axis=1) - 1).min(axis=1) < -limit).sum())
+        done, k = done + n, k + 1
+    return hits / n_paths
+
+
+def dd_test_kwargs(settings: dict) -> dict:
+    """Paths and block length of the D7 5-year drawdown test (risk_limits.drawdown_test; 63-day blocks approved)."""
+    t = settings["risk_limits"].get("drawdown_test", {})
+    return {"n_paths": int(t.get("paths", 4000)), "block": int(t.get("block", 63))}
+
+
+def mc_se(p: float, n_paths: int) -> float:
+    return float(np.sqrt(p * (1 - p) / n_paths))
 
 
 def build(simple: pd.DataFrame, settings: dict, label: str = "full", n_points: int = 9) -> pd.DataFrame:
@@ -60,7 +77,8 @@ def build(simple: pd.DataFrame, settings: dict, label: str = "full", n_points: i
         d = dict(d)
         d.pop("risk_contributions", None)
         rows.append({"point": k + 1, "target": target, **d,
-                     "P(DD>limit, 5y)": forward_drawdown_prob(w, scen[tick].to_numpy(), mu, settings["risk_limits"]["max_drawdown"]),
+                     "P(DD>limit, 5y)": forward_drawdown_prob(w, scen[tick].to_numpy(), mu, settings["risk_limits"]["max_drawdown"],
+                                                              **dd_test_kwargs(settings)),
                      "sustainable_spending": ro.sustainable_spending(d["expected_geo"], infl, m["real_growth"]["base"],
                                                                      m["extra_costs"]["base"]),
                      "spending_usd": ro.sustainable_spending(d["expected_geo"], infl, m["real_growth"]["base"],
@@ -117,7 +135,7 @@ def select_highest_compliant(inp, settings: dict, lo: float, hi: float, iters: i
         if w is None or status.startswith("fallback"):
             return None
         d = op.diagnostics(w, trial)
-        p = forward_drawdown_prob(w, daily, inp.mu, lim["max_drawdown"])
+        p = forward_drawdown_prob(w, daily, inp.mu, lim["max_drawdown"], **dd_test_kwargs(settings))
         cap_ok = trial.es_cap is None or d["max_ES99_share"] <= trial.es_cap + 1e-3  # D27 verified on the final tail set
         return (w, dict(d, **{"P(DD>limit, 5y)": p}), target) if d["pass_D7"] and cap_ok and p <= lim["max_prob_drawdown_breach_5y"] else None
 

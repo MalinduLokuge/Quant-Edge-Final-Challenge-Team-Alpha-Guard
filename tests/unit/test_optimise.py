@@ -101,3 +101,20 @@ def test_component_es_cap_holds_and_binds():
     share = op.component_es_shares(w, inp)
     assert 0.48 <= share.max() <= 0.5 + 1e-3
     np.testing.assert_allclose(share.sum(), 1.0, atol=1e-9)
+
+
+def test_drawdown_test_batches_reproduce_single_batch_and_settings():
+    from quantedge.portfolio import frontier as fr
+
+    rng = np.random.default_rng(3)
+    daily = rng.normal(0.0002, 0.012, (3000, 2))
+    w, mu = np.array([0.6, 0.4]), np.array([0.05, 0.03])
+    one = fr.forward_drawdown_prob(w, daily, mu, 0.15, n_paths=1000, batch=1000)
+    assert fr.forward_drawdown_prob(w, daily, mu, 0.15, n_paths=1000, batch=4000) == one  # same seed, same paths
+    many = fr.forward_drawdown_prob(w, daily, mu, 0.15, n_paths=3000, batch=1000)
+    first = fr.forward_drawdown_prob(w, daily, mu, 0.15, n_paths=1000, batch=1000, seed=7)
+    assert many == pytest.approx((first + fr.forward_drawdown_prob(w, daily, mu, 0.15, n_paths=1000, batch=1000, seed=8)
+                                  + fr.forward_drawdown_prob(w, daily, mu, 0.15, n_paths=1000, batch=1000, seed=9)) / 3)
+    assert fr.mc_se(0.05, 32000) < fr.mc_se(0.05, 4000)
+    assert fr.dd_test_kwargs({"risk_limits": {"drawdown_test": {"paths": 32000, "block": 63}}}) == {"n_paths": 32000, "block": 63}
+    assert fr.dd_test_kwargs({"risk_limits": {}}) == {"n_paths": 4000, "block": 63}

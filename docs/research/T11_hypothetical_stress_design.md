@@ -354,15 +354,15 @@ This is the 2022 regime. The current +0.44 stock–bond correlation [V] says it 
 **Model inputs are as of the ETF data end (2026-10-19, D1):** Brent $118.8, 10y 5.15%, real 2.80%, VIX 18.4. §1 shows the latest FRED values (27 Oct) as context.
 **Outputs:** `stress_hyp_betas.csv`, `stress_hyp_backcast.csv`, `stress_hyp_shocks.csv`, `stress_hyp_results.csv`, `stress_hyp_paths.csv`, `stress_hyp_sensitivity.csv`; hypothetical rows added to `stress_results.csv` and `stress_contributions.csv`.
 
-**Pipeline results, D26 selected ($10M):**
+**Pipeline results, D26 selected ($10M; updated after the 2026-10-29 audit: D24 spending at the D30 rate 2.8%, D26 re-selected with the 32k-path test):**
 
 | Scenario | Instant loss | Stress betas | XLE hedge variant | Path worst / 12 months | Next-year spending (real) | Scenario 1-day VaR99 / ES99 |
 |---|---|---|---|---|---|---|
-| A central | **9.0% ($0.90M)** | 8.5% | 8.9% | −9.0% / −7.8% | $405k (−3.7%) | 1.59% / 2.01% |
-| A severe | **19.4% ($1.94M)** | 18.0% | 19.1% | −19.3% / −16.8% | $399k (−6.7%) | **2.38% / 3.01%** (above the 1.7% / 2.5% limits) |
-| B central | 9.6% | 9.3% | 9.9% | −10.2% / −7.8% | $396k (−2.9%) | 1.85% / 2.34% |
-| B severe | 15.5% | 14.8% | 16.1% | −16.9% / −13.0% | $387k (−4.2%) | 2.91% / 3.68% |
-| C term premium | 11.5% | 10.9% | 11.5% | −11.3% / −10.1% | $398k (−3.9%) | 1.48% / 1.88% |
+| A central | **9.0% ($0.90M)** | 8.5% | 8.9% | −9.0% / −7.8% | $283k (−3.6%) | 1.58% / 2.00% |
+| A severe | **19.4% ($1.94M)** | 18.0% | 19.1% | −19.2% / −16.8% | $280k (−6.7%) | **2.38% / 3.01%** (above the 1.7% / 2.5% limits) |
+| B central | 9.5% | 9.3% | 9.9% | −10.0% / −7.7% | $277k (−2.9%) | 1.85% / 2.34% |
+| B severe | 15.4% | 14.8% | 16.1% | −16.7% / −12.9% | $271k (−4.1%) | 2.91% / 3.68% |
+| C term premium | 11.5% | 10.9% | 11.5% | −11.3% / −10.1% | $278k (−3.9%) | 1.48% / 1.88% |
 
 - **Robustness (A):** Monte Carlo median 10.9%, 95th pct 14.8%, 99th pct 16.1%, P(loss > 25%) = 0. Equity shock × 1.5 → 25.7% (the only one-at-a-time breach). Same pattern in B (SPY × 1.5 → 23.9%).
 - **Back-cast errors (mean absolute):** AGG 1.1 pp, EEM 1.7, EFA 2.1, XLK 5.9, GLD 8.1, XLE 21.9: as in the design.
