@@ -221,6 +221,18 @@ Stage: validation · Owner: Dewmini · Priority: Core · Target: Weeks 2–3
 | T11.09 | ETF liquidity under stress (e.g. AGG −7.1% on 2008-10-10) | AGG −6.8% 2008-10-10, −4.0% 2020-03-12: liquidity note in T11 §3 | Medium | Dewmini | T2.11 | Done | FJ exit gate · REV |
 | T11.10 | Check every scenario against client risk limits | breach_table: no breach; GFC binding (24.5% vs 25%) | Critical | Dewmini | T11.05, T3.04 | Done | FJ VD06 |
 | T11.11 | Optional: longer-history crises via disclosed proxies (2000–02, 1994) | Proxy scenario losses | Low | Dewmini | T11.02 | Not started | Research gap G2 |
+| T11.12 | Research current macro/market vulnerabilities (oil, Fed, yields, credit, USD, AI valuations, stock–bond correlation) | Design report §1 (tagged V/H/F/N/A, sources dated) | Critical | Dewmini | T11.03 | Done | User brief 2026-10-29 |
+| T11.13 | Compare candidate hypothetical scenarios (energy stagflation, AI unwind/recession, term premium, EM/USD) | Design report §2 + recommendation | Critical | Dewmini | T11.12 | Done | User brief |
+| T11.14 | Download and disclose new FRED stress factors (DFII10, BAA10Y, Brent/WTI, DTWEXBGS, VIXCLS, DGS2) | data/external snapshots; config + README disclosure | High | Dewmini | T2.09 | In progress | Snapshots saved 2026-10-28; pipeline wiring pending |
+| T11.15 | Calibrate central and severe factor shocks from history, current levels and published scenarios | Design report §4.2 (ranges, evidence) | Critical | Dewmini | T11.12 | Done | Awaiting D9 v2 approval |
+| T11.16 | Six-factor ETF response model: full vs stress betas, SEs; reject unconditional oil→equity mapping | Design report §4.3 | Critical | Dewmini | T11.14 | Done | Research script; module pending |
+| T11.17 | Validate factor model by back-casting six episodes (2008, 2020, 2022, Mar 2026) | Back-cast table; XLE/GLD flagged unreliable | High | Dewmini | T11.16 | Done | Research script; test pending |
+| T11.18 | Implement validation/hypothetical.py (panel, betas, back-cast, shocks, instant impact) | Module + unit tests | Critical | Dewmini | D9 v2 | Not started | Design report §8 |
+| T11.19 | 12-month scenario path: quarterly rebalancing, costs, D24 spending, liquidity | stress_hyp_paths.csv | High | Dewmini | T11.18 | Not started | Prototype in design report §6.2 |
+| T11.20 | Robustness: Monte Carlo over shock ranges and beta SEs; one-at-a-time; XLE/GLD variants | stress_hyp_sensitivity.csv | High | Dewmini | T11.18 | Not started | Prototype in design report §7 |
+| T11.21 | Scenario-conditional VaR (GARCH-EVT scaled by stressed volatility) vs D7/D23 triggers | Limits table (stress loss vs 1-day ES explained) | Medium | Dewmini | T11.18, T10.07 | Not started | Design report §6.3 |
+| T11.22 | Stress page: scenario/severity selector, factor sliders, contribution waterfall, path chart | App stress panel | High | Dewmini | T11.18, T14 | Not started | BR pp.5–6 |
+| T11.23 | Feed severe-scenario loss and headroom into memo and T20 decision (gold/XLE hedge test in T4.25) | Memo stress section | Critical | Dewmini | T11.20, T20 | Not started | Decision 30% |
 
 ## T12 — Macro & industry risk (optional)
 Stage: validation · Owner: Malindu · Priority: Optional · Target: Week 3

@@ -1,0 +1,11 @@
+{
+  "file": "fred_DFII10_2026-10-29.csv",
+  "source": "FRED, Federal Reserve Bank of St. Louis",
+  "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DFII10",
+  "series": "DFII10",
+  "download_date": "2026-10-29",
+  "rows": 6214,
+  "first_date": "2003-01-02",
+  "last_date": "2026-10-27",
+  "missing_values": 255
+}

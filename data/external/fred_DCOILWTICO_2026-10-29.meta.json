@@ -1,0 +1,11 @@
+{
+  "file": "fred_DCOILWTICO_2026-10-29.csv",
+  "source": "FRED, Federal Reserve Bank of St. Louis",
+  "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILWTICO",
+  "series": "DCOILWTICO",
+  "download_date": "2026-10-29",
+  "rows": 10649,
+  "first_date": "1986-01-02",
+  "last_date": "2026-10-27",
+  "missing_values": 1117
+}

@@ -1,0 +1,11 @@
+{
+  "file": "fred_VIXCLS_2026-10-29.csv",
+  "source": "FRED, Federal Reserve Bank of St. Louis",
+  "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=VIXCLS",
+  "series": "VIXCLS",
+  "download_date": "2026-10-29",
+  "rows": 9606,
+  "first_date": "1990-01-02",
+  "last_date": "2026-10-27",
+  "missing_values": 302
+}

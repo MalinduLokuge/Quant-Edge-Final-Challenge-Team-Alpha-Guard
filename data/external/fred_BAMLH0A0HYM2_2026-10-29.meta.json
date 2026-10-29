@@ -1,0 +1,11 @@
+{
+  "file": "fred_BAMLH0A0HYM2_2026-10-29.csv",
+  "source": "FRED, Federal Reserve Bank of St. Louis",
+  "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2",
+  "series": "BAMLH0A0HYM2",
+  "download_date": "2026-10-29",
+  "rows": 793,
+  "first_date": "2023-10-30",
+  "last_date": "2026-10-27",
+  "missing_values": 8
+}

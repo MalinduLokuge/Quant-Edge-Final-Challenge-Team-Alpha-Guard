@@ -1,0 +1,11 @@
+{
+  "file": "fred_DCOILBRENTEU_2026-10-29.csv",
+  "source": "FRED, Federal Reserve Bank of St. Louis",
+  "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU",
+  "series": "DCOILBRENTEU",
+  "download_date": "2026-10-29",
+  "rows": 10290,
+  "first_date": "1987-05-20",
+  "last_date": "2026-10-27",
+  "missing_values": 1173
+}

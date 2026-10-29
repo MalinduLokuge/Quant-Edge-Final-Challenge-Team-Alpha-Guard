@@ -1,0 +1,11 @@
+{
+  "file": "fred_BAA10Y_2026-10-29.csv",
+  "source": "FRED, Federal Reserve Bank of St. Louis",
+  "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAA10Y",
+  "series": "BAA10Y",
+  "download_date": "2026-10-29",
+  "rows": 10648,
+  "first_date": "1986-01-02",
+  "last_date": "2026-10-26",
+  "missing_values": 444
+}
