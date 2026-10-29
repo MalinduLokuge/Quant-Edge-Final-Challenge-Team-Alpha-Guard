@@ -7,6 +7,7 @@ Outputs (outputs/tables/):
     required_vs_expected.csv    reference portfolios: expected compound return vs required (per ERP), sustainable spending
     p1_train_weights.csv / p1_final_weights.csv (+ _diagnostics)  P1 candidates: min-variance, risk parity,
                                 max-Sharpe, min-CVaR, target-return, + max-expected-return frontier end
+    kpis.csv                    Sharpe, Sortino, Treynor, Jensen α, IR, max DD, Calmar per period (T5)
     frontier_full.csv           9-point frontier within D6 + D7: return, drawdown, ES, P(DD>25%), spending (T4.11)
     ../figures/frontier_full.png
     cma_train.csv / cma_full.csv (+ _cov, _cov_shrunk)  optimiser inputs as of the D5 train end / last date
@@ -23,7 +24,7 @@ import pandas as pd
 
 from quantedge.common import config
 from quantedge.common import conventions as cv
-from quantedge.portfolio import candidates, cma, frontier, return_objective, summary
+from quantedge.portfolio import candidates, cma, frontier, kpis, return_objective, summary
 
 
 def run() -> dict:
@@ -99,6 +100,7 @@ def run() -> dict:
     grid.to_csv(out / "required_return_grid.csv", index=False)
     vs.to_csv(out / "required_vs_expected.csv", index=False)
     p1 = candidates.run(simple, s)  # T4.02–T4.10, T4.16, T4.19: P1-train and P1-final (D6 v2 + D7, D22)
+    write_kpis(simple, rates["rf_daily"], s, out)  # T5: KPIs per period, candidates vs D3 benchmarks
     front = frontier.build(simple, s, "full")  # T4.11: trade-off table for D26 and the memo
     front.to_csv(out / "frontier_full.csv")
     fig_dir = config.ROOT / "outputs" / "figures"
@@ -112,3 +114,21 @@ def run() -> dict:
           f"own-data ERP {erp['erp_arithmetic']:.2%}, rf {rf_now:.2%}, breakeven {inflation:.2%}")
     return {"assets": assets, "erp": erp, "grid": grid, "required_vs_expected": vs, "required_base": req_base,
             "cma_sets": cma_sets, "p1": p1, "frontier": front}
+
+
+def write_kpis(simple: pd.DataFrame, rf_daily: pd.Series, s: dict, out) -> None:
+    """T5 KPI tables. P1-train weights (fixed 2014 information) are scored on train, validation and the unseen
+    test period; P1-final weights on the full sample (descriptive only: those weights saw all of it)."""
+    sp = s["split"]
+    train_w = pd.read_csv(out / "p1_train_weights.csv", index_col=0)
+    final_w = pd.read_csv(out / "p1_final_weights.csv", index_col=0)
+    t_end, v_end = pd.Timestamp(sp["train_end"]), pd.Timestamp(sp["validation_end"])
+    day = pd.Timedelta(days=1)
+    windows = {"train": (None, t_end), "validation": (t_end + day, v_end), "test": (v_end + day, None)}
+    frames = []
+    for period, (a, b) in windows.items():
+        k = kpis.kpi_table(simple, rf_daily, {n: w for n, w in train_w.iterrows()}, s, a, b)
+        frames.append(k.assign(period=period, weights="P1-train"))
+    k = kpis.kpi_table(simple, rf_daily, {n: w for n, w in final_w.iterrows()}, s)
+    frames.append(k.assign(period="full (in-sample)", weights="P1-final"))
+    pd.concat(frames).rename_axis("portfolio").to_csv(out / "kpis.csv")

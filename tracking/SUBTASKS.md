@@ -90,7 +90,7 @@ Stage: portfolio · Owner: Dewmini · Priority: Core · Target: Weeks 1–2
 | T4.03 | Implement risk-parity allocation | p1_*: risk_parity (ERC moved ≤ 1% to meet limits) | Critical | Dewmini | T4.08 | Done | PM · FJ PM03 |
 | T4.04 | Implement capped maximum-Sharpe allocation | p1_*: max_sharpe (homogenised) | Critical | Dewmini | T4.08, T3.03 | Done | PM · FJ PM04 |
 | T4.05 | Document Markowitz/CAPM concepts and benchmark assumptions | Methods section draft | Critical | Dewmini | T4.11 | Not started | PM · BR p.7 |
-| T4.06 | Compare diversification, concentration and feasible weights | Side-by-side comparison table | Critical | Dewmini | T4.02–T4.10 | Not started | PM · FJ PM07 |
+| T4.06 | Compare diversification, concentration and feasible weights | p1_*_diagnostics (risk contributions, equity weight) + research doc P1_candidates_and_kpis.md | Critical | Dewmini | T4.02–T4.10 | Done | PM · FJ PM07 |
 | T4.07 | Provide candidate and proposed final weights with justification | Recommendation input for T20 | Critical | Dewmini | T4.06, T5.05 | Not started | PM |
 | T4.08 | Robust inputs: shrinkage covariance (Ledoit–Wolf), cautious expected returns | cma.shrunk_covariance (Ledoit–Wolf on correlations); cma_*_cov_shrunk.csv; δ train 1.6% / full 0.8% / 1y 7% / 3m 18%; stability test (--shrink): turnover 1.61% → 1.57% a month; 2 tests | High | Dewmini | T4.01 | Done | FJ PM01/robust frontier · REV |
 | T4.09 | Implement minimum-CVaR allocation (Rockafellar–Uryasev) | p1_*: min_cvar (CVaR LP) | High | Dewmini | T4.08 | Done | DEC D20 |
@@ -108,22 +108,24 @@ Stage: portfolio · Owner: Dewmini · Priority: Core · Target: Weeks 1–2
 | T4.21 | Add every candidate to the required-vs-expected table with sustainable spending | Extended return_objective_summary.md | High | Dewmini | T4.16 | Not started | DEC D12 |
 | T4.22 | Decide bond expected-return method for near-zero rates (D25) and apply to both CMA sets | D25 approved; cma.expected_returns applied to both CMA sets, D12 tables, research; 1 test; research doc §8b | Critical | All members | T4.18 | Done | T4.18 finding |
 | T4.23 | Required return in training-period terms (2014 breakeven, same S/G/C) for P1-train return targets | return_objective.required_return_as_of; cma_sets_summary.csv: train 6.49% / 5.96% (breakeven 1.68%), full 7.19% / 6.66%; 2 tests | High | Dewmini | T4.18 | Done | D5 + D12 consistency |
-| T4.24 | Decide portfolio choice rule when the hurdle is infeasible (D26) | D26 approved | Critical | All members | T4.11 | In progress | T4 finding 2026-10-29 |
+| T4.24 | Decide portfolio choice rule when the hurdle is infeasible (D26) | D26 approved (option b); frontier.select_highest_compliant; d26_selected in P1-train / P1-final | Critical | All members | T4.11 | Done | T4 finding 2026-10-29 |
+| T4.25 | Final-selection robustness: D26 with a 5-year-test margin, component-ES cap, or blend with Risk Parity (out-of-sample evidence) | Option table for T20 | High | Dewmini | T9.06, T10.07 | Not started | KPI findings 2026-10-29 |
+| T4.26 | Speed up portfolio stage (~7 min): cache solves, fewer bisection steps | run_all under ~2 min | Medium | Malindu | — | Not started | Review 2026-10-29 |
 
 ## T5 — KPIs & benchmarks
 Stage: portfolio · Owner: Raveena · Priority: Supporting · Target: Week 2
 
 | ID | Subtask | Expected output | Priority | Owner | Depends on | Status | Source |
 |---|---|---|---|---|---|---|---|
-| T5.01 | Implement Sharpe and Sortino metrics consistently | kpi functions + tests | Critical | Raveena | T1.03 | Not started | PM · BR p.7 |
-| T5.02 | Compute Treynor and Jensen alpha with market benchmark | β, Treynor, α (annual) | Critical | Raveena | T3.08 (D3 done) | Not started | PM · BR p.7 |
-| T5.03 | Compute Information Ratio against the Policy 40/50/10 benchmark (D3) | IR, tracking error | Critical | Raveena | T3.08 | Not started | PM · BR p.7 |
-| T5.04 | Compute maximum drawdown and Calmar ratio | MaxDD, Calmar | Critical | Raveena | T1.03 | Not started | PM · BR p.7 |
-| T5.05 | Prepare comparative KPI and benchmark results | KPI table: candidates vs benchmarks | Critical | Raveena | T4.16, T5.01–T5.04 | Not started | PM · FJ PM-N02 |
-| T5.06 | CAPM expected return and beta per ETF and candidate | CAPM table (security market line) | Critical | Raveena | T3.08 | In progress | FJ PM-N01 · BR p.7 |
-| T5.07 | Report KPIs separately for training and out-of-sample periods | Two-period KPI table | High | Raveena | T2.13, T5.05 | Not started | REV leakage |
-| T5.08 | Verify KPIs against hand-calculated examples | Unit tests with known answers | High | Raveena | T5.01–T5.04 | Not started | REV |
-| T5.09 | KPIs for portfolio and all D3 benchmarks with identical (quarterly) rebalancing and total returns | KPI table incl. benchmarks | High | Raveena | T2.17 | Not started | DEC D3 |
+| T5.01 | Implement Sharpe and Sortino metrics consistently | kpis.kpis: Sharpe, Sortino | Critical | Raveena | T1.03 | Done | PM · BR p.7 |
+| T5.02 | Compute Treynor and Jensen alpha with market benchmark | kpis.kpis: beta, Jensen α vs SPY (D3) | Critical | Raveena | T3.08 (D3 done) | Done | PM · BR p.7 |
+| T5.03 | Compute Information Ratio against the Policy 40/50/10 benchmark (D3) | kpis.kpis: IR vs Policy 40/50/10 | Critical | Raveena | T3.08 | Done | PM · BR p.7 |
+| T5.04 | Compute maximum drawdown and Calmar ratio | kpis.kpis: max DD, Calmar | Critical | Raveena | T1.03 | Done | PM · BR p.7 |
+| T5.05 | Prepare comparative KPI and benchmark results | outputs/tables/kpis.csv (candidates + D3 benchmarks) | Critical | Raveena | T4.16, T5.01–T5.04 | Done | PM · FJ PM-N02 |
+| T5.06 | CAPM expected return and beta per ETF and candidate | cma_full.csv / cma_train.csv betas and CAPM E[R] | Critical | Raveena | T3.08 | Done | FJ PM-N01 · BR p.7 |
+| T5.07 | Report KPIs separately for training and out-of-sample periods | kpis.csv periods: train / validation / test (P1-train) + full (P1-final) | High | Raveena | T2.13, T5.05 | Done | REV leakage |
+| T5.08 | Verify KPIs against hand-calculated examples | tests/unit/test_kpis.py (4 known-answer tests) | High | Raveena | T5.01–T5.04 | Done | REV |
+| T5.09 | KPIs for portfolio and all D3 benchmarks with identical (quarterly) rebalancing and total returns | same quarterly rebalancing for all (conventions.rebalanced_returns) | High | Raveena | T2.17 | Done | DEC D3 |
 
 ## T6 — VaR with 3 methods
 Stage: risk · Owner: Sujan · Priority: Core · Target: Week 2

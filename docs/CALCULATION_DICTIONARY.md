@@ -56,13 +56,13 @@ Conventions: decision D17. Status ✅ = implemented and tested, ⏳ = planned.
 ## Portfolio stage (brief Layer 1)
 | Quantity | Formula | Units | Status |
 |---|---|---|---|
-| Sharpe | (R̄_p − r̄_f)·252 / (σ_p·√252) | ratio | ⏳ |
-| Sortino | annual excess return / annual downside deviation (MAR = r_f) | ratio | ⏳ |
-| Treynor | annual excess return / β | fraction p.a. | ⏳ |
-| Jensen's α | annual (R_p−r_f) − β·(R_m−r_f), regression intercept × 252 | fraction p.a. | ⏳ |
-| Information ratio | annual mean(R_p−R_b) / tracking error, benchmark = D3 | ratio | ⏳ |
-| Max drawdown | min DDₜ | fraction ≤ 0 | ⏳ |
-| Calmar | annual return / abs(max drawdown) | ratio | ⏳ |
+| Sharpe | (R̄_p − r̄_f)·252 / (σ_p·√252) | ratio | ✅ (`kpis.kpis`, test_kpis) |
+| Sortino | annual excess return / annual downside deviation (MAR = r_f) | ratio | ✅ (`kpis.kpis`, test_kpis) |
+| Treynor | annual excess return / β | fraction p.a. | ✅ (`kpis.kpis`, test_kpis) |
+| Jensen's α | annual (R_p−r_f) − β·(R_m−r_f), regression intercept × 252 | fraction p.a. | ✅ (`kpis.kpis`, test_kpis) |
+| Information ratio | annual mean(R_p−R_b) / tracking error, benchmark = D3 | ratio | ✅ (`kpis.kpis`, test_kpis) |
+| Max drawdown | min DDₜ | fraction ≤ 0 | ✅ (`kpis.kpis`, test_kpis) |
+| Calmar | annual return / abs(max drawdown) | ratio | ✅ (`kpis.kpis`, test_kpis) |
 
 ## Risk stage (brief Layers 2–4, §8.6)
 All at α ∈ {90, 95, 99}%, 1-day horizon, on portfolio loss L, reported as % of NAV and USD, each with an uncertainty band (D18).

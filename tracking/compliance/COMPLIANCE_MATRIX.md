@@ -7,8 +7,8 @@ Status: ✅ done with evidence · 🟡 partly done or decided but not built · �
 |---|---|---|---|---|---|
 | R1 | Mandate: horizon, return objective, limits, suitability (pp.3–4) | data/decision | D12 return objective, D7 risk limits, D6 constraints APPROVED; D4 horizon PROPOSED; IPS doc not written (T3.05) | 🟡 | 2026-10-28 |
 | R2 | 7 prescribed ETFs only (p.5) | data | `conventions.validate_weights` rejects other instruments (test_conventions); config `universe` | ✅ | 2026-10-28 |
-| R3 | Markowitz + CAPM (p.7) | portfolio | CAPM betas and expected returns built (`portfolio/cma.py`, tests); Markowitz optimiser not built (T4) | 🟡 | 2026-10-28 |
-| R4 | 7 KPIs (p.7) | portfolio | Formulas in CALCULATION_DICTIONARY; research-script versions only, no tested module (T5) | ⬜ | 2026-10-28 |
+| R3 | Markowitz + CAPM (p.7) | portfolio | Markowitz target-return, min-variance, max-Sharpe (`optimise.py`), CAPM betas/expected returns (`cma.py`), frontier; tests | ✅ | 2026-10-29 |
+| R4 | 7 KPIs (p.7) | portfolio | `kpis.py` (Sharpe, Sortino, Treynor, Jensen α, IR, max DD, Calmar), kpis.csv per period; 4 tests. Interpretation: research doc P1_candidates_and_kpis.md (report text pending) | ✅ | 2026-10-29 |
 | R5 | VaR ×3 at 95/99 on the same portfolio (p.7) | risk | Not built (T6) | ⬜ | 2026-10-28 |
 | R6 | Expected Shortfall + rationale (p.7) | risk | Historical ES in research script only (T7) | ⬜ | 2026-10-28 |
 | R7 | EVT, justified threshold (p.7) | risk | Method PROPOSED (D8); not built (T8) | ⬜ | 2026-10-28 |
@@ -20,7 +20,7 @@ Status: ✅ done with evidence · 🟡 partly done or decided but not built · �
 | R13 | Assumptions & Limitations page, explicitly graded (p.6) | app/docs | docs/ASSUMPTIONS_LIMITATIONS.md has data + D3/D7/D12 sections; app page not built (T15.05, T14.07) | 🟡 | 2026-10-28 |
 | R14 | Repo + README, one-command run, 7–15 pp report, tear sheet, 1-page memo (pp.6, 8) | decision/docs | `run_all.py` runs data → portfolio; no commit/remote yet (T17.08); report/memo not started | 🟡 | 2026-10-28 |
 | R15 | AI disclosure (4 columns) + human validation (pp.8–9) | docs | Validation log has 9 entries, all unsigned (T18.08); disclosure drafted, team review pending (T18.07) | 🟡 | 2026-10-28 |
-| R16 | Quantify return vs risk trade-offs; diversification benefits (p.4) | portfolio | Drawdown ↔ spending table, frontier search (research doc §4, §5c); diversification metrics not built (T4.14) | 🟡 | 2026-10-28 |
+| R16 | Quantify return vs risk trade-offs; diversification benefits (p.4) | portfolio | Frontier with spending $ (frontier_full.csv/.png), feasibility map; diversification metrics still pending (T4.14) | 🟡 | 2026-10-29 |
 | R17 | Confidence in risk estimates (p.5) | risk | ERP CI done; VaR/ES/EVT bands approved (D18), not built (T6.09, T8.09) | 🟡 | 2026-10-28 |
 | R18 | Risk models under stressed conditions (p.7) | risk/validation | Not built (T8.11) | ⬜ | 2026-10-28 |
 | R19 | Critically assess model assumptions (p.7) | risk | Approved (D21), not built (T6.08) | ⬜ | 2026-10-28 |

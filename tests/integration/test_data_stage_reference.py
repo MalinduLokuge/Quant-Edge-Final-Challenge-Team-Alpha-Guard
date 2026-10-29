@@ -113,3 +113,19 @@ def test_frontier_is_monotone_and_starts_at_min_variance():
     assert (f["volatility"].diff().dropna() > -1e-6).all()            # and so does risk
     assert abs(f["expected_geo"].iloc[0] - float(d.loc["min_variance", "expected_geo"])) < 1e-6
     assert (f["spending_usd"].diff().dropna() > 0).all()
+
+
+def test_kpis_and_d26_selection_outputs():
+    import pandas as pd
+
+    s = config.load_settings()
+    k = pd.read_csv(config.OUTPUT_TABLES / "kpis.csv", index_col=0)
+    assert set(k["period"]) == {"train", "validation", "test", "full (in-sample)"}
+    spy = k[k.index == "[benchmark] SPY (CAPM market)"]
+    assert (spy["beta"].sub(1).abs() < 1e-9).all() and (spy["Jensen_alpha"].abs() < 1e-9).all()
+    for p1 in ("p1_train", "p1_final"):
+        d = pd.read_csv(config.OUTPUT_TABLES / f"{p1}_diagnostics.csv", index_col=0)
+        sel = d.loc["d26_selected"]
+        assert str(sel["pass_D7"]) == "True"
+        assert float(sel["P(DD>limit, 5y)"]) <= s["risk_limits"]["max_prob_drawdown_breach_5y"]
+        assert float(sel["expected_geo"]) >= float(d.loc["min_variance", "expected_geo"]) - 1e-9

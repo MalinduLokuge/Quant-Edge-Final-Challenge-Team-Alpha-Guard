@@ -97,3 +97,38 @@ def plot(frontier: pd.DataFrame, p1_diag: pd.DataFrame, path) -> None:
     fig.tight_layout()
     fig.savefig(path, dpi=150)
     plt.close(fig)
+
+
+def select_highest_compliant(inp, settings: dict, lo: float, hi: float, iters: int = 6):
+    """D26 rule: Markowitz target-return at the HIGHEST target that passes every D7 test
+    (historical limits via the optimiser + post-check, and P(drawdown > limit in 5 years) <= max_prob).
+    Bisection between lo (a compliant return, e.g. min variance) and hi (max feasible return).
+    Returns (weights, diagnostics incl. the 5-year probability, target used)."""
+    lim = settings["risk_limits"]
+    daily = inp.scenarios[inp.tickers].to_numpy()
+
+    def check(target):
+        # one solve per step: summed-return bound = -ln(1 - limit) (28.8% for 25%), the log-return equivalent of
+        # the compounded limit; the compounded quarterly-rebalanced drawdown is still post-checked (d["pass_D7"])
+        trial = copy.copy(inp)
+        trial.hurdle = float(target)
+        trial.dd_bound = float(-np.log(1 - lim["max_drawdown"]))
+        w, status = op.target_return(trial)
+        if w is None or status.startswith("fallback"):
+            return None
+        d = op.diagnostics(w, trial)
+        p = forward_drawdown_prob(w, daily, inp.mu, lim["max_drawdown"])
+        return (w, dict(d, **{"P(DD>limit, 5y)": p}), target) if d["pass_D7"] and p <= lim["max_prob_drawdown_breach_5y"] else None
+
+    top = check(hi)
+    if top:
+        return top
+    best = check(lo)
+    for _ in range(iters):
+        mid = (lo + hi) / 2
+        res = check(mid)
+        if res:
+            best, lo = res, mid
+        else:
+            hi = mid
+    return best

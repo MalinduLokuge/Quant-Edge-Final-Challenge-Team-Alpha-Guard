@@ -44,6 +44,21 @@ def build(label: str, simple: pd.DataFrame, settings: dict) -> tuple[pd.DataFram
                        "max_risk_contribution": max(rc.values()),
                        "max_risk_contribution_etf": max(rc, key=rc.get),
                        **{f"rc_{k}": v for k, v in rc.items()}}
+    # D26: highest-return Markowitz target-return portfolio passing every D7 test (same rule for train and full)
+    if "min_variance" in weights and "max_expected_return" in weights:
+        sel = fr.select_highest_compliant(inp, settings, float(diags["min_variance"]["expected_geo"]),
+                                          float(diags["max_expected_return"]["expected_geo"]))
+        if sel:
+            w, d, target = sel
+            rc = d.pop("risk_contributions")
+            weights["d26_selected"] = pd.Series(w, index=tick)
+            diags["d26_selected"] = {"status": f"D26: highest compliant target {target:.4f}", "dd_bound_used": None, **d,
+                                     "pass_D7_historical": d["pass_D7"], "hurdle_target": inp.hurdle,
+                                     "gap_to_target": inp.hurdle - d["expected_geo"],
+                                     "sustainable_spending": ro.sustainable_spending(d["expected_geo"], infl, m["real_growth"]["base"],
+                                                                                     m["extra_costs"]["base"]),
+                                     "max_risk_contribution": max(rc.values()), "max_risk_contribution_etf": max(rc, key=rc.get),
+                                     **{f"rc_{k}": v for k, v in rc.items()}}
     return pd.DataFrame(weights).T, pd.DataFrame(diags).T
 
 
