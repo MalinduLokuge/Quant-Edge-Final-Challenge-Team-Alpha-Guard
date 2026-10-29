@@ -4,6 +4,8 @@ Series (brief p.9: FRED for the risk-free proxy and macro inputs to CAPM / stres
     DTB3      3-month T-bill, secondary market, % p.a. (discount basis), daily  -> risk-free rate
     DGS10     10-year Treasury constant maturity, % p.a., daily                 -> rate shocks, AGG rate sensitivity
     CPIAUCSL  CPI all urban consumers, SA index, monthly                        -> inflation / real return objective
+Stress factors (T11 hypothetical, D9 v2): DFII10 (10y real yield), T10YIE (10y breakeven), BAA10Y (Baa − 10y
+spread), DCOILBRENTEU (Brent), DTWEXBGS (broad USD), VIXCLS, DGS2, DCOILWTICO (context) -> monthly factor panel.
 """
 from __future__ import annotations
 
@@ -11,6 +13,7 @@ import datetime as dt
 import json
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 FRED_CSV_URL = "https://fred.stlouisfed.org/graph/fredgraph.csv?id={series}"
@@ -92,3 +95,20 @@ def missing_report(series: dict[str, pd.Series], calendar: pd.DatetimeIndex) -> 
         same_day = s.dropna().reindex(calendar)
         rows[name] = {"trading_days": len(calendar), "no_same_day_value": int(same_day.isna().sum())}
     return pd.DataFrame(rows).T
+
+
+def stress_factor_panel(series: dict[str, pd.Series], end) -> pd.DataFrame:
+    """Monthly stress-factor panel (T11, D9 v2): month-end levels as of each month's last observation on or
+    before `end` (the ETF data end, so the final month matches the partial ETF month), and monthly changes:
+    d_real10, d_be10, d_baa in pp; oil and usd as log changes. Levels are prefixed lvl_."""
+    from quantedge.common.conventions import MONTH_END
+
+    names = {"DFII10": "real10", "T10YIE": "be10", "DGS10": "y10", "DGS2": "y2", "BAA10Y": "baa",
+             "DCOILBRENTEU": "brent", "DCOILWTICO": "wti", "DTWEXBGS": "usd", "VIXCLS": "vix"}
+    lv = pd.DataFrame({names[k]: v.dropna().loc[:pd.Timestamp(end)] for k, v in series.items() if k in names})
+    m = lv.ffill().resample(MONTH_END).last()
+    out = m.add_prefix("lvl_")
+    out["d_real10"], out["d_be10"], out["d_baa"] = m["real10"].diff(), m["be10"].diff(), m["baa"].diff()
+    out["oil"], out["usd"] = np.log(m["brent"]).diff(), np.log(m["usd"]).diff()
+    out.index.name = "month"
+    return out

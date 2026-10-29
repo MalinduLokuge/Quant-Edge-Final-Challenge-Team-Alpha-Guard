@@ -1,6 +1,6 @@
 # T11 Hypothetical stress testing: research and design report
 
-**Status:** research and design for approval. No pipeline code changes yet.
+**Status:** D9 v2, D29 and the method **APPROVED 2026-10-29** and implemented (§12). Design text below is as approved.
 - The approved D9 stays in force until the proposed **D9 v2** below is approved.
 - Research scripts used: `hs_research.py`, `hs_calib.py`, `hs_path.py`. They will be turned into the pipeline module described in §8.
 
@@ -132,7 +132,7 @@ The model uses six factors, each from FRED or yfinance [V]:
 | Oil | Δlog Brent (DCOILBRENTEU) | global seaborne benchmark |
 | Dollar | Δlog DTWEXBGS, broad USD | currency effect on EFA, EEM and GLD |
 
-### 4.2 Shock calibration (12-month totals; month 1 carries most of the oil and equity move)
+### 4.2 Shock calibration (peak cumulative moves; month profiles in config give the 12-month path: equities peak in month 6, oil in month 3, partial normalisation after)
 
 | Factor | Start | **Central** | **Severe** | Range tested | Evidence |
 |---|---|---|---|---|---|
@@ -347,3 +347,24 @@ This is the 2022 regime. The current +0.44 stock–bond correlation [V] says it 
 1. **D9 v2:** replace the D9 v1 calibration with scenario A at central and severe levels, using the six-factor model and the XLE/GLD treatment above.
 2. **D29:** add scenario B, AI unwind with recession and credit stress, as the secondary hypothetical. Keep C as a sensitivity and drop D.
 3. **Method:** primary model is full-sample betas, with stress-subsample betas, the XLE hedge variant, the GLD band and Monte Carlo as robustness. Approve the 10 bp trading-cost assumption.
+
+## 12. Implementation (approved 2026-10-29)
+**Reproduce:** `python run_all.py --only data` (stress factor panel), then `--only validation` (or `validation.run(stress_only=True)`).
+**Code:** `data/fred.stress_factor_panel` → `data/processed/stress_factors_monthly.csv`; `validation/hypothetical.py`; runner `validation.run_hypothetical`; spec in `config stress.hypothetical`. 10 unit tests (`test_hypothetical.py`).
+**Model inputs are as of the ETF data end (2026-10-19, D1):** Brent $118.8, 10y 5.15%, real 2.80%, VIX 18.4. §1 shows the latest FRED values (27 Oct) as context.
+**Outputs:** `stress_hyp_betas.csv`, `stress_hyp_backcast.csv`, `stress_hyp_shocks.csv`, `stress_hyp_results.csv`, `stress_hyp_paths.csv`, `stress_hyp_sensitivity.csv`; hypothetical rows added to `stress_results.csv` and `stress_contributions.csv`.
+
+**Pipeline results, D26 selected ($10M):**
+
+| Scenario | Instant loss | Stress betas | XLE hedge variant | Path worst / 12 months | Next-year spending (real) | Scenario 1-day VaR99 / ES99 |
+|---|---|---|---|---|---|---|
+| A central | **9.0% ($0.90M)** | 8.5% | 8.9% | −9.0% / −7.8% | $405k (−3.7%) | 1.59% / 2.01% |
+| A severe | **19.4% ($1.94M)** | 18.0% | 19.1% | −19.3% / −16.8% | $399k (−6.7%) | **2.38% / 3.01%** (above the 1.7% / 2.5% limits) |
+| B central | 9.6% | 9.3% | 9.9% | −10.2% / −7.8% | $396k (−2.9%) | 1.85% / 2.34% |
+| B severe | 15.5% | 14.8% | 16.1% | −16.9% / −13.0% | $387k (−4.2%) | 2.91% / 3.68% |
+| C term premium | 11.5% | 10.9% | 11.5% | −11.3% / −10.1% | $398k (−3.9%) | 1.48% / 1.88% |
+
+- **Robustness (A):** Monte Carlo median 10.9%, 95th pct 14.8%, 99th pct 16.1%, P(loss > 25%) = 0. Equity shock × 1.5 → 25.7% (the only one-at-a-time breach). Same pattern in B (SPY × 1.5 → 23.9%).
+- **Back-cast errors (mean absolute):** AGG 1.1 pp, EEM 1.7, EFA 2.1, XLK 5.9, GLD 8.1, XLE 21.9: as in the design.
+- **No limit breached in any approved scenario.** In A and B severe the 1-day scenario VaR exceeds the 1.7% construction limit. As designed, that triggers D23 monitoring and committee review, not forced selling.
+- **Path costs:** trading costs on rebalancing are $700–2,600, negligible.

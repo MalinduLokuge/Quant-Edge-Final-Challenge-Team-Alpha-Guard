@@ -45,7 +45,7 @@ tracking/      tasks, innovation log, compliance matrix, human validation log
 ```
 
 ## Data sources
-Yahoo Finance (`yfinance`, adjusted close) and FRED (risk-free rate). The source log is in `data/README.md`.
+Yahoo Finance (`yfinance`, adjusted close) and FRED: risk-free rate, 10y yield, breakevens and CPI. The hypothetical stress factors (D9 v2) also come from FRED: DFII10, BAA10Y, DCOILBRENTEU, DCOILWTICO, DTWEXBGS, VIXCLS, DGS2. IMF, World Bank, IEA, EIA and Federal Reserve publications are cited as context only (`docs/research/T11_hypothetical_stress_design.md` §10). The source log is in `data/README.md`.
 
 ## AI disclosure
 See `docs/AI_DISCLOSURE.md` and `tracking/validation/`.

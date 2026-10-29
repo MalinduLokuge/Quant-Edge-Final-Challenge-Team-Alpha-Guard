@@ -32,6 +32,13 @@ The Streamlit page and the report section are both built from this file, so they
 - Calibration used the full sample. Training-only data gives the same drawdowns because 2008 binds in both, but the risk limits were not chosen blind to the test period.
 - The 7 ETFs are among the most liquid in the world, but in a panic they can trade below the value of their holdings (AGG −7.1% on 2008-10-10).
 
+## Hypothetical stress scenarios (D9 v2, D29)
+- Scenarios are plausible adverse cases, **not forecasts**, and carry no probabilities. Shock sizes come from past episodes (1990, 2008, 2020, 2022, Mar 2026), factor-change tails and current levels.
+- ETF moves use linear monthly factor betas (2006–2026). They are reliable for AGG, EFA, EEM and XLK (episode errors 1–6 pp), not for XLE (re-rates with energy profits) or GLD (central-bank demand). Those two get a hedge variant and a ±10 pp band.
+- The equity fall is a scenario input. It is not derived from oil, because the average oil–equity link is demand-driven and has the wrong sign for a supply shock.
+- Monthly paths are stylised: order and timing are assumptions. Gaps, convexity and liquidity spirals are not modelled. The credit factor is investment grade (Moody's Baa).
+- A multi-month scenario loss is not comparable to the 1-day ES limit. Scenario VaR is a volatility rescaling of GARCH-EVT, not a re-estimated model.
+
 ## Models
 ## Tail / EVT uncertainty
 ## Backtesting scope

@@ -87,6 +87,13 @@ def run(refresh: bool = False) -> dict:
     fred.missing_report({k: macro[k] for k in ("DTB3", "DGS10")}, prices.index).to_csv(
         config.OUTPUT_TABLES / "data_quality_fred_alignment.csv")
 
+    # T11 hypothetical stress factors (D9 v2): monthly panel, as of the ETF data end
+    for series, file in d["stress_factor_snapshots"].items():
+        path = fred.download_snapshot(series, config.DATA_EXTERNAL) if refresh else config.DATA_EXTERNAL / file
+        macro[series] = fred.load_snapshot(path)
+    results["stress_factors_monthly"] = fred.stress_factor_panel(macro, d["end"])
+    results["stress_factors_monthly"].to_csv(config.DATA_PROCESSED / "stress_factors_monthly.csv")
+
     print(f"[data] {snapshot.name}: {prices.index.min().date()} to {prices.index.max().date()}, "
           f"{len(prices)} price rows, {int(results['outlier_flags_zscore'].values.sum())} z-score flags, "
           f"{len(qc['flags'])} quality flags; "

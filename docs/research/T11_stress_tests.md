@@ -10,7 +10,7 @@
 | Taper tantrum 2013 | 2013-05-02 → 2013-06-24 | 10y yield +1 pp in 7 weeks; bond stress (D26 is 58% AGG) |
 | COVID 2020 | 2020-02-19 → 2020-03-23 | fastest crash on record; even AGG fell 4% in a day |
 | Rates and inflation 2022 | 2022-01-03 → 2022-10-12 | stocks and bonds fell together (10y +2.4 pp) |
-| **Hypothetical (D9, approved): stagflation shock** | one quarter | equities −25%, 10y yield +200 bp, 10y breakeven +100 bp |
+| **Hypothetical (D9 v2, approved): energy stagflation "Hormuz II"** + **D29 AI unwind with recession** | central and severe, 12-month path | see `T11_hypothetical_stress_design.md` (six-factor model) |
 
 **Hypothetical method:** each ETF's move comes from its betas to SPY, the 10y yield and the 10y breakeven, estimated by OLS on monthly data (2004–2026). No ETF gets a hand-picked return in the primary case, so gold and energy get no hedge credit beyond their measured betas. A variant adds a 2022-style energy rally (XLE +30%) and gold +10%.
 
@@ -50,3 +50,10 @@
 - **Keep:** passes every limit; the drawdown limit is already binding on the GFC.
 - **Inflation hedge:** raise gold toward the benchmark's 10% (D6 allows 20%). This would cut losses in 2022 and stagflation, but adds risk elsewhere and lowers CAPM expected return. To test in T4.25.
 - **No extra equity:** any further equity raises the GFC loss above 25%.
+
+## 5. Update: D9 v1 superseded by D9 v2 and D29 (2026-10-29)
+The one-quarter stagflation shock of §1–2 (D9 v1; D26 loss 16.7%) is replaced in the pipeline by the research-calibrated scenarios in `T11_hypothetical_stress_design.md`.
+- **New model:** six factors (equity, real yield, breakeven, Baa spread, Brent, USD), central and severe levels, 12-month rebalanced path, robustness tests.
+- **D26 losses:** A energy stagflation 9.0% / **19.4%**; B AI unwind with recession 9.6% / 15.5%.
+- **Unchanged:** the historical replays above, and the conclusions on inflation as the main weakness.
+- **D9 v1** numbers above are kept for comparison only.

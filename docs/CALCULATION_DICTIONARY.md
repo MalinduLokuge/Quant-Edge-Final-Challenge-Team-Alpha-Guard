@@ -74,6 +74,11 @@ All at α ∈ {90, 95, 99}%, 1-day horizon, on portfolio loss L, reported as % o
 | Expected Shortfall | E[L ∣ L ≥ VaR_α]; normal μ+σφ(z)/(1−α); t: m+s·(ν+t²)/(ν−1)·f(t)/(1−α) | ✅ |
 | EVT VaR / ES | POT-GPD: VaR = u + β/ξ·[((n/Nᵤ)(1−α))^(−ξ) − 1]; ES = (VaR + β − ξu)/(1−ξ); n/a if α ≤ q (`evt_garch.evt_table`) | ✅ |
 | GARCH(1,1)-t | σ²ₜ = ω + αε²ₜ₋₁ + βσ²ₜ₋₁; half-life ln0.5/ln(α+β); long-run σ = √(ω/(1−α−β)) (`evt_garch.fit_garch`, `garch_summary`) | ✅ |
+| Stress factor betas (D9 v2) | OLS monthly rᵢ on SPY, Δreal10, Δbreakeven10, ΔBaa spread (pp), Δln Brent, Δln USD; 2006-02 → data end; full + stress-month samples, SEs (`hypothetical.fit_betas`) | fraction per unit factor | `validation/hypothetical.py` | test_hypothetical | ✅ |
+| Hypothetical scenario move | ΔRᵢ = Σ_f βᵢ,f·shock_f (no intercept; oil/USD % → log); portfolio = Σ wᵢ ΔRᵢ = Σ contributions (`hypothetical.instant`) | fraction (negative = loss) | `validation/hypothetical.py` | test_hypothetical | ✅ |
+| Scenario path | monthly factor path = peak shock × profile; quarterly rebalance (D11), cost = 2 × one-way turnover × 10 bp × NAV (`hypothetical.path`) | NAV index | `validation/hypothetical.py` | test_hypothetical | ✅ |
+| Next-year spending (D24) | 0.7 × last spending × (1 + π) + 0.3 × 4% × NAV (`hypothetical.next_year_spending`) | USD | `validation/hypothetical.py` | test_hypothetical | ✅ |
+| Scenario 1-day VaR / ES | GARCH-EVT current VaR/ES × VIX_scenario / VIX_now (`hypothetical.scenario_var`) | fraction | `validation/hypothetical.py` | test_hypothetical | ✅ |
 | GARCH-EVT | GPD on standardised losses −(r−μ)/σₜ; loss VaR = −μ + σ·VaR_ℓ (current and long-run σ) (`evt_garch.garch_evt`) | ✅ |
 | Component VaR/ES | Euler: wᵢ·∂VaR/∂wᵢ ≈ E[−wᵢRᵢ ∣ L ≈ VaR] (band ±0.25 pp, rescaled); ES: E[−wᵢRᵢ ∣ L ≥ VaR] (exact sum); normal cross-check wᵢ(Σw)ᵢ/σ·z (`attribution.py`, test_attribution) | ✅ |
 

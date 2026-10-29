@@ -16,6 +16,8 @@
 | external/fred_CPIAUCSL_2026-10-28.csv | FRED | CPIAUCSL, CPI SA index, monthly | 2026-10-28 | none | inflation, real return |
 | raw/yahoo_close_2026-10-28.csv, raw/yahoo_dividends_2026-10-28.csv | Yahoo Finance (`auto_adjust=False, actions=True`) | 7 ETFs | 2026-10-28 | Close: split-adjusted only; cash distributions per share | income yield; see yahoo_income_2026-10-28.meta.json |
 | external/fred_T10YIE_2026-10-28.csv, external/fred_T5YIE_2026-10-28.csv | FRED | 10y / 5y breakeven inflation, daily | 2026-10-28 | none | expected inflation for D12 |
+| external/fred_{DFII10,BAA10Y,DCOILBRENTEU,DCOILWTICO,DTWEXBGS,VIXCLS,DGS2}_2026-10-29.csv | FRED | 10y real yield, Baa−10y spread, Brent, WTI, broad USD, VIX, 2y yield (daily) | 2026-10-29 | none | hypothetical stress factors (D9 v2) → `processed/stress_factors_monthly.csv` (month-end as of the ETF data end) |
+| external/fred_{BAMLH0A0HYM2,BAMLC0A0CM,FEDFUNDS,UNRATE,NFCI,T10Y2Y}_2026-10-29.csv | FRED | HY/IG OAS (3-year history only), fed funds, unemployment, NFCI, 10y−2y | 2026-10-29 | none | context for the stress research (not model inputs) |
 
 ## Regenerate
 `python run_all.py --only data` rebuilds `processed/` and `outputs/tables/adf_results.csv` from the snapshot.

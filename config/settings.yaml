@@ -15,6 +15,14 @@ data:
     CPIAUCSL: fred_CPIAUCSL_2026-10-28.csv   # CPI (monthly)
     T10YIE: fred_T10YIE_2026-10-28.csv       # 10y breakeven inflation (market expectation)
     T5YIE: fred_T5YIE_2026-10-28.csv         # 5y breakeven inflation
+  stress_factor_snapshots:                   # data/external/; T11 hypothetical stress factors (D9 v2)
+    DFII10: fred_DFII10_2026-10-29.csv       # 10y TIPS real yield
+    BAA10Y: fred_BAA10Y_2026-10-29.csv       # Moody's Baa corporate minus 10y Treasury (credit spread)
+    DCOILBRENTEU: fred_DCOILBRENTEU_2026-10-29.csv   # Brent crude, USD/bbl
+    DCOILWTICO: fred_DCOILWTICO_2026-10-29.csv       # WTI crude (context: Brent-WTI spread)
+    DTWEXBGS: fred_DTWEXBGS_2026-10-29.csv   # broad trade-weighted USD index
+    VIXCLS: fred_VIXCLS_2026-10-29.csv       # VIX (scenario-conditional VaR scaling)
+    DGS2: fred_DGS2_2026-10-29.csv           # 2y Treasury (context: policy path)
   fred_max_stale_days: 5                     # max business days to carry a FRED value forward
   outlier_z_threshold: 5.0                   # full-sample z audit (original T2 rule)
   quality:                                   # extra checks, brief p.9; flag only
@@ -63,12 +71,45 @@ stress:                         # T11
     Taper tantrum 2013: ["2013-05-02", "2013-06-24"]
     COVID 2020: ["2020-02-19", "2020-03-23"]
     Rates and inflation 2022: ["2022-01-03", "2022-10-12"]
-  hypothetical:                 # D9, APPROVED 2026-10-29: stagflation shock over one quarter
-    name: Stagflation shock
-    factor_shock: {SPY: -0.25, dgs10_pct: 2.0, breakeven_10y_pct: 1.0}   # equities -25%, 10y +200bp, breakeven +100bp
-    overrides: {}               # primary: factor betas only (hedges get no credit)
-    variant_name: Stagflation with oil and gold spike
-    variant_overrides: {XLE: 0.30, GLD: 0.10}   # sensitivity: 2022-style energy rally, gold as inflation hedge
+  hypothetical:                 # D9 v2 + D29, APPROVED 2026-10-29 (docs/research/T11_hypothetical_stress_design.md)
+    factors: [SPY, d_real10, d_be10, d_baa, oil, usd]   # equity, 10y real, 10y breakeven, Baa-10y spread, log Brent, log USD
+    estimation_start: "2006-02-28"   # first month with all six factors (broad USD index starts 2006)
+    stress_sample: {spy_quantile: 0.25, baa_change_quantile: 0.75}   # months for the stress-beta sensitivity
+    # peak cumulative factor moves (SPY, oil, usd in %; rates and spread in pp); month profiles below give the path
+    scenarios:
+      A Energy stagflation (Hormuz II):           # D9 v2, primary
+        central: {SPY: -0.15, d_real10: 0.40, d_be10: 0.20, d_baa: 0.50, oil: 0.25, usd: 0.04}
+        severe:  {SPY: -0.30, d_real10: 1.00, d_be10: 0.50, d_baa: 1.50, oil: 0.50, usd: 0.08}
+        vix: {central: 30, severe: 45}
+        inflation: {central: 0.05, severe: 0.07}  # for D24 spending indexation next year
+      B AI unwind with recession:                 # D29, secondary
+        central: {SPY: -0.25, d_real10: -0.50, d_be10: -0.30, d_baa: 1.00, oil: -0.25, usd: 0.03}
+        severe:  {SPY: -0.40, d_real10: -1.00, d_be10: -0.60, d_baa: 2.50, oil: -0.45, usd: 0.06}
+        vix: {central: 35, severe: 55}
+        inflation: {central: 0.02, severe: 0.01}
+      C Term-premium shock (sensitivity):         # sub-case of A without oil
+        central: {SPY: -0.15, d_real10: 1.25, d_be10: 0.25, d_baa: 0.50, oil: 0.0, usd: 0.02}
+        vix: {central: 28}
+        inflation: {central: 0.035}
+    profiles:                   # share of the peak move in each month 1..12 (equities peak month 6, oil month 3)
+      equity: [0.45, 0.10, 0.10, 0.10, 0.15, 0.10, 0.0, 0.0, -0.05, -0.05, -0.05, -0.05]
+      rates:  [0.30, 0.10, 0.10, 0.15, 0.15, 0.10, 0.05, 0.05, 0.0, 0.0, 0.0, 0.0]
+      oil:    [0.70, 0.20, 0.10, 0.0, 0.0, 0.0, -0.05, -0.05, -0.05, -0.05, 0.0, 0.0]
+    backcast_episodes:          # validation of the factor mapping (month ranges, inclusive)
+      GFC Q4 2008: ["2008-10", "2008-12"]
+      COVID Q1 2020: ["2020-01", "2020-03"]
+      2022 H1: ["2022-01", "2022-06"]
+      2022 Jan-Oct: ["2022-01", "2022-10"]
+      Iran war Mar 2026: ["2026-03", "2026-03"]
+      Mar-Oct 2026: ["2026-03", "2026-10"]
+    xle_oil_beta_variant: 0.50  # hedge variant: XLE oil beta implied by the 2022 / Mar 2026 supply shocks
+    gld_band: 0.10              # +/- band on GLD's scenario move (factor model unreliable for gold)
+    trading_cost: 0.0010        # one-way, on traded value at each quarterly rebalance (D11)
+    spending_rate: 0.04         # D24 policy rate; last year's spending = rate x NAV at the start
+    mc_draws: 20000             # shocks ~ triangular(0.5 x central, central, severe); betas ~ N(b, SE)
+    mc_low_multiplier: 0.5
+    mc_residual_months: 3       # residual (non-factor) noise of a 3-month episode, correlated across ETFs
+    one_at_a_time_multiplier: 1.5
 risk_limits:                    # D7, APPROVED 2026-10-28
   max_drawdown: 0.25            # historical incl. 2008 replay
   max_prob_drawdown_breach_5y: 0.05   # P(DD > 25% within 5y), block bootstrap with CAPM means

@@ -11,6 +11,7 @@ Innovation is worth 15% of the score (brief p.10). Its examples are regime-condi
 | I10 | 2026-10-28 | **Policy benchmark built from asset classes** (sector ETFs excluded, market-cap equity split, frozen in advance) | Fair IR and alpha for a conservative mandate; SAMURAI-compliant | Research doc §1 | In use (D3) |
 | I11 | 2026-10-28 | **Income cross-check**: total-return minus price-return growth vs distribution yield, within 0.1 pp | Shows that adjusted prices and the income data agree | `outputs/tables/income_crosscheck.csv` | In use |
 | I15 | 2026-10-28 | **Risk tolerance approximated as min(willingness, capacity)** with spending-aware capacity simulation and spending-rule comparison | Turns 'no number in the brief' into a defensible 25% limit with conditions; links drawdown to scholarships | Research doc §9 | In use (D7, D23, D24 approved) |
+| I16 | Research-calibrated macro stress scenarios (six-factor, back-cast validated) | Hypothetical shocks tied to current conditions (Hormuz, Fed, yields) and to data-estimated ETF sensitivities, not invented percentages | One-factor ad-hoc shock (D9 v1) | Episode back-cast (6 crises), MC over shock and beta uncertainty | **Built** (D9 v2, D29): D26 19.4% severe; equity shock decides; bond hedge fails in inflationary shocks |
 
 ## Planned
 | ID | Extension | Hypothesis | Baseline compared | Leakage-safe? | Status |

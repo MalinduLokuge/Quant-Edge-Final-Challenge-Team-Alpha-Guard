@@ -31,28 +31,6 @@ def test_contributions_sum_to_buy_and_hold_return():
     assert c.sum() == pytest.approx(bh)
 
 
-def test_factor_betas_recover_known_loadings_and_shock():
-    rng = np.random.default_rng(1)
-    days = pd.bdate_range("2005-01-01", "2020-12-31")
-    spy = rng.normal(0, 0.01, len(days))
-    y = np.cumsum(rng.normal(0, 0.05, len(days)))
-    be = np.cumsum(rng.normal(0, 0.03, len(days)))
-    simple = pd.DataFrame({"SPY": spy}, index=days)
-    rates = pd.DataFrame({"dgs10_pct": y + 3, "breakeven_10y_pct": be + 2}, index=days)
-    # bond: monthly return = -0.06 × Δyield (pp), built from the month-end yield path
-    m_y = rates["dgs10_pct"].resample(cv.MONTH_END).last()
-    bond_m = -0.06 * m_y.diff()
-    bond = pd.Series(0.0, index=days)
-    for d, v in bond_m.dropna().items():
-        bond.loc[bond.loc[:d].index[-1]] = v          # whole monthly move on the last day of the month
-    simple["BOND"] = bond
-    b = S.factor_betas(simple, rates)
-    assert b.loc["BOND", "dgs10_pct"] == pytest.approx(-0.06, abs=1e-6)
-    assert b.loc["SPY", "SPY"] == pytest.approx(1.0)
-    sh = S.hypothetical_shocks(b, {"SPY": -0.25, "dgs10_pct": 2.0, "breakeven_10y_pct": 1.0}, {"SPY": -0.3})
-    assert sh["BOND"] == pytest.approx(-0.12, abs=1e-5) and sh["SPY"] == -0.3
-
-
 def test_breach_table_flags_losses_above_limit():
     res = pd.DataFrame({"scenario_return": [-0.2, -0.3]})
     t = S.breach_table(res, {"stress_loss_max": 0.25})
