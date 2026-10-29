@@ -73,3 +73,26 @@ Bond-heavy portfolios (Min-Variance) have positive skew and the most extreme kur
 2. **Risk depends on the regime.** Today's calm market gives a 99% VaR of only 1.11%. A committee shown only today's number would be lulled; in a long-run average regime it is 1.81%, above the 1.7% D7 VaR limit. **D7 limits are therefore checked on full-cycle (unconditional) estimates, as approved, and the GARCH figure is a monitoring signal.**
 3. GARCH-EVT is the strongest candidate for out-of-sample backtesting (T10), because it reacts to volatility clustering. Christoffersen's test is designed to catch exactly that clustering.
 4. **Not done here (moved to T10):** evaluating each model on stress windows (T8.11) needs rolling out-of-sample forecasts, which the backtesting stage builds.
+
+## 6. Risk attribution: which ETF drives the risk (T9, brief §8.6) [E]
+**Reproduce:** risk stage → `p2_attribution.csv`, `outputs/figures/risk_vs_weight.png`.
+**Method:** Euler allocation. Component ES = average loss contributed by each ETF on the worst 1% of days; components add up exactly to total ES. Component VaR uses days in a narrow band around VaR. The normal-model Euler split is a cross-check.
+
+| Portfolio | Largest ES contributor | Its weight | **Its share of 99% ES** | Other notes |
+|---|---|---|---|---|
+| **D26 selected** | SPY | 36% | **75%** | AGG is 55% of capital but only 11.5% of risk; XLK 6.6% weight → 13.5% |
+| Max-Sharpe | SPY | 34% | 69% | XLK 9% weight → 19% |
+| Policy 40/50/10 | SPY | 25% | 51% | EFA 10% → 22% |
+| Min-Variance | AGG | 80% | 57% | SPY 20% → 43% |
+| Risk Parity | XLE | 6% | 17% | every ETF 10–17%: balanced by design |
+
+**Reading:** in a stock/bond portfolio, equities carry most of the tail risk however small their weight. D26 concentrates it in one fund. Capital weight is a poor guide to risk.
+
+**Cost of a cap on any ETF's share of ES** (best expected return within D6 + D7, quick test with an approximate drawdown bound):
+
+| Cap | No cap | 60% | 50% | **40%** | 30% |
+|---|---|---|---|---|---|
+| Best expected return | 6.06% | 6.06% | 6.04% | **6.03%** | 5.98% |
+| How it adapts | SPY 31 | SPY 31 | SPY 26, EFA 5 | **SPY 21, EFA 11** | SPY 15, EFA 14 |
+
+The cap is almost free: under CAPM, EFA's expected return (8.9%) is nearly SPY's (9.1%), so spreading equity risk across US and international equities costs about 0.03 pp. It also adds the international diversification D26 lacks. **D27 proposed: cap 40%.** It is implemented as an iterated linear constraint over the worst-day set and must be added to the D26 rule (re-selection with full D7 checks).

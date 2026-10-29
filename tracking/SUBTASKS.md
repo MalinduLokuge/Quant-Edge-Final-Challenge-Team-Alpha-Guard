@@ -180,12 +180,12 @@ Stage: risk · Owner: Sujan · Priority: Supporting · Target: Week 2
 
 | ID | Subtask | Expected output | Priority | Owner | Depends on | Status | Source |
 |---|---|---|---|---|---|---|---|
-| T9.01 | Define marginal and component VaR methodology | Euler allocation note | Critical | Sujan | T6.05 | Not started | PM · BR p.8 |
-| T9.02 | Estimate ETF-level marginal VaR and ES contributions | Component VaR/ES table | Critical | Sujan | T9.01 | Not started | PM |
-| T9.03 | Check contribution aggregation and approximations | Sum-to-total test | High | Sujan | T9.02 | Not started | PM |
-| T9.04 | Recommend position-size adjustments and rationale | Risk-budget recommendation | Critical | Sujan | T9.03 | Not started | PM · BR p.8 |
-| T9.05 | Risk contribution vs capital weight chart | Figure for app and report | High | Sujan | T9.02 | Not started | FJ R07 |
-| T9.06 | Set the component-ES concentration limit (draft: no ETF > 40% of ES) | Limit in D7 | High | Sujan | T9.02 | Not started | Research gap G4 |
+| T9.01 | Define marginal and component VaR methodology | risk/attribution.py: Euler, scenario-based (ES exact, VaR band) + normal cross-check | Critical | Sujan | T6.05 | Done | PM · BR p.8 |
+| T9.02 | Estimate ETF-level marginal VaR and ES contributions | outputs/tables/p2_attribution.csv (6 portfolios × 7 ETFs × 95/99%) | Critical | Sujan | T9.01 | Done | PM |
+| T9.03 | Check contribution aggregation and approximations | sum-to-total test (exact for ES/VaR); normal cross-check within 4 pp | High | Sujan | T9.02 | Done | PM |
+| T9.04 | Recommend position-size adjustments and rationale | Risk-budget recommendation | Critical | Sujan | T9.03 | In progress | PM · BR p.8 |
+| T9.05 | Risk contribution vs capital weight chart | outputs/figures/risk_vs_weight.png | High | Sujan | T9.02 | Done | FJ R07 |
+| T9.06 | Set the component-ES concentration limit (draft: no ETF > 40% of ES) | Limit in D7 | High | Sujan | T9.02 | In progress | Research gap G4 |
 
 ## T10 — Backtesting
 Stage: validation · Owner: Malindu · Priority: Core · Target: Weeks 2–3

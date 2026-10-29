@@ -75,7 +75,7 @@ All at α ∈ {90, 95, 99}%, 1-day horizon, on portfolio loss L, reported as % o
 | EVT VaR / ES | POT-GPD: VaR = u + β/ξ·[((n/Nᵤ)(1−α))^(−ξ) − 1]; ES = (VaR + β − ξu)/(1−ξ); n/a if α ≤ q (`evt_garch.evt_table`) | ✅ |
 | GARCH(1,1)-t | σ²ₜ = ω + αε²ₜ₋₁ + βσ²ₜ₋₁; half-life ln0.5/ln(α+β); long-run σ = √(ω/(1−α−β)) (`evt_garch.fit_garch`, `garch_summary`) | ✅ |
 | GARCH-EVT | GPD on standardised losses −(r−μ)/σₜ; loss VaR = −μ + σ·VaR_ℓ (current and long-run σ) (`evt_garch.garch_evt`) | ✅ |
-| Component VaR/ES | Euler: wᵢ·∂VaR/∂wᵢ ≈ E[−wᵢRᵢ ∣ L ≈ VaR]; ES: E[−wᵢRᵢ ∣ L ≥ VaR]; sums to the total | ⏳ |
+| Component VaR/ES | Euler: wᵢ·∂VaR/∂wᵢ ≈ E[−wᵢRᵢ ∣ L ≈ VaR] (band ±0.25 pp, rescaled); ES: E[−wᵢRᵢ ∣ L ≥ VaR] (exact sum); normal cross-check wᵢ(Σw)ᵢ/σ·z (`attribution.py`, test_attribution) | ✅ |
 
 ## Validation stage (brief Layer 5)
 | Quantity | Formula | Status |

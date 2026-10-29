@@ -7,10 +7,11 @@ p2_garch_evt.csv (current and long-run regime), p2_evt_thresholds.csv, p2_garch.
 """
 from __future__ import annotations
 
+import numpy as np
 import pandas as pd
 
 from quantedge.common import config
-from quantedge.risk import var_es
+from quantedge.risk import attribution, var_es
 
 
 def portfolios(settings: dict) -> dict[str, pd.Series]:
@@ -36,6 +37,9 @@ def run() -> dict:
     out = config.OUTPUT_TABLES
     pd.concat(tables).to_csv(out / "p2_var_es.csv", index=False)
     pd.DataFrame(diags).T.to_csv(out / "p2_diagnostics.csv")
+    att = pd.concat([attribution.attribution_table(simple, w).assign(portfolio=n) for n, w in portfolios(s).items()])
+    att.to_csv(config.OUTPUT_TABLES / "p2_attribution.csv", index=False)  # T9
+    _plot_attribution(att)
     evt = run_evt_garch(simple, s, portfolios(s))
     print(f"[risk] VaR/ES for {len(diags)} portfolios x {len(r['confidence_levels'])} levels x 4 methods; EVT + GARCH-EVT")
     return {"var_es": pd.concat(tables), "diagnostics": pd.DataFrame(diags).T, **evt}
@@ -96,5 +100,31 @@ def _plot_threshold(stab: pd.DataFrame) -> None:
     fig.tight_layout()
     path = config.ROOT / "outputs" / "figures" / "evt_threshold_d26.png"
     path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(path, dpi=150)
+    plt.close(fig)
+
+
+def _plot_attribution(att: pd.DataFrame) -> None:
+    """Weight vs share of 99% ES per ETF for each portfolio (T9.05)."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    a = att[att["alpha"] == 0.99]
+    names = list(dict.fromkeys(a["portfolio"]))
+    fig, axes = plt.subplots(1, len(names), figsize=(3.0 * len(names), 3.4), sharey=True)
+    for ax, n in zip(axes, names):
+        d = a[a["portfolio"] == n].set_index("etf")
+        x = np.arange(len(d))
+        ax.bar(x - 0.2, d["weight"] * 100, 0.4, label="weight")
+        ax.bar(x + 0.2, d["pct_ES"] * 100, 0.4, label="share of ES99")
+        ax.set_xticks(x, d.index, rotation=90, fontsize=7)
+        ax.set_title(n.replace("[benchmark] ", "bench: ").replace("_", " "), fontsize=8)
+        ax.grid(alpha=0.3, axis="y")
+    axes[0].set_ylabel("%")
+    axes[0].legend(fontsize=7)
+    fig.suptitle("Capital weight vs share of 99% Expected Shortfall", fontsize=10)
+    fig.tight_layout()
+    path = config.ROOT / "outputs" / "figures" / "risk_vs_weight.png"
     fig.savefig(path, dpi=150)
     plt.close(fig)
