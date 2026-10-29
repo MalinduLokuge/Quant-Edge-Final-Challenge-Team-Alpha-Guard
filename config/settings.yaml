@@ -54,9 +54,9 @@ validation:                     # T10 backtesting (D13 window above)
   mc_simulations: 20000         # per refit (rolling; full-size 100k used in the risk stage)
   evt_threshold_q: 0.90         # D8 result
   significance: 0.05            # Kupiec / Christoffersen
-  selection_rule: DECIDE        # D28: model choice on validation data only (T10.07)
-  selected_model: DECIDE        # frozen before the test period
-  test_unlocked: false          # set true only after D28 is approved; test period used once
+  selection_rule: kupiec_basel_gate_then_fz0   # D28, APPROVED 2026-10-29 (validation data only, T10.07)
+  selected_model: garch_evt     # D28 result, frozen 2026-10-29 before the test period
+  test_unlocked: true           # D28 approved; test period run once 2026-10-29
 risk_limits:                    # D7, APPROVED 2026-10-28
   max_drawdown: 0.25            # historical incl. 2008 replay
   max_prob_drawdown_breach_5y: 0.05   # P(DD > 25% within 5y), block bootstrap with CAPM means
