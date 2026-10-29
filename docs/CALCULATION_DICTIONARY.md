@@ -72,7 +72,9 @@ All at α ∈ {90, 95, 99}%, 1-day horizon, on portfolio loss L, reported as % o
 | Parametric VaR | μ_L + σ·z_α (normal); m + s·t_α(ν) (Student-t, MLE) (`var_es.normal`, `student_t`) | ✅ |
 | Monte Carlo VaR | α-quantile of 100k simulated L; t-copula (Kendall-τ correlation, ν by profile ML) + empirical marginals, seed 42 (`var_es.monte_carlo`) | ✅ |
 | Expected Shortfall | E[L ∣ L ≥ VaR_α]; normal μ+σφ(z)/(1−α); t: m+s·(ν+t²)/(ν−1)·f(t)/(1−α) | ✅ |
-| EVT VaR / ES | POT-GPD: VaR = u + β/ξ·[((n/Nᵤ)(1−α))^(−ξ) − 1]; ES = (VaR + β − ξu)/(1−ξ) | ⏳ |
+| EVT VaR / ES | POT-GPD: VaR = u + β/ξ·[((n/Nᵤ)(1−α))^(−ξ) − 1]; ES = (VaR + β − ξu)/(1−ξ); n/a if α ≤ q (`evt_garch.evt_table`) | ✅ |
+| GARCH(1,1)-t | σ²ₜ = ω + αε²ₜ₋₁ + βσ²ₜ₋₁; half-life ln0.5/ln(α+β); long-run σ = √(ω/(1−α−β)) (`evt_garch.fit_garch`, `garch_summary`) | ✅ |
+| GARCH-EVT | GPD on standardised losses −(r−μ)/σₜ; loss VaR = −μ + σ·VaR_ℓ (current and long-run σ) (`evt_garch.garch_evt`) | ✅ |
 | Component VaR/ES | Euler: wᵢ·∂VaR/∂wᵢ ≈ E[−wᵢRᵢ ∣ L ≈ VaR]; ES: E[−wᵢRᵢ ∣ L ≥ VaR]; sums to the total | ⏳ |
 
 ## Validation stage (brief Layer 5)

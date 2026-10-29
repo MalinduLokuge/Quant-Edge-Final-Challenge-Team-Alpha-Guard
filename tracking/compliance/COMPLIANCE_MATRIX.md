@@ -11,7 +11,7 @@ Status: ✅ done with evidence · 🟡 partly done or decided but not built · �
 | R4 | 7 KPIs (p.7) | portfolio | `kpis.py` (Sharpe, Sortino, Treynor, Jensen α, IR, max DD, Calmar), kpis.csv per period; 4 tests. Interpretation: research doc P1_candidates_and_kpis.md (report text pending) | ✅ | 2026-10-29 |
 | R5 | VaR ×3 at 95/99 on the same portfolio, explain disagreement (p.7) | risk | Historical, parametric (normal + t), Monte Carlo (t-copula) on identical losses; p2_var_es.csv; research doc P2_var_es_methods.md §2; 6 tests | ✅ | 2026-10-29 |
 | R6 | Expected Shortfall + rationale (p.7) | risk | ES for all 4 methods with intervals; rationale in research doc §4 (ES/VaR 1.5× at 99%) | ✅ | 2026-10-29 |
-| R7 | EVT, justified threshold (p.7) | risk | Method PROPOSED (D8); not built (T8) | ⬜ | 2026-10-28 |
+| R7 | EVT, justified threshold (p.7) | risk | POT-GPD on raw and GARCH-filtered losses; threshold by documented stability rule on 2004–2019 (figure + p2_evt_thresholds.csv); intervals; 6 tests | ✅ | 2026-10-29 |
 | R8 | Marginal/component VaR/ES → position sizing (p.8) | risk | Not built (T9); risk-budget layer reserved in D6 L4 | ⬜ | 2026-10-28 |
 | R9 | Kupiec, Christoffersen, Basel, out-of-sample (p.7) | validation | Split APPROVED (D5); tests not built (T10) | ⬜ | 2026-10-28 |
 | R10 | Stress 2008 / Mar-2020 / 2022 + hypothetical (p.8) | validation | Crisis windows computed for benchmarks (research script); hypothetical D9 OPEN (T11) | 🟡 | 2026-10-28 |
@@ -21,7 +21,7 @@ Status: ✅ done with evidence · 🟡 partly done or decided but not built · �
 | R14 | Repo + README, one-command run, 7–15 pp report, tear sheet, 1-page memo (pp.6, 8) | decision/docs | GitHub branch version-1; `run_all.py` runs data → portfolio; report/memo/tear sheet not started | 🟡 | 2026-10-29 |
 | R15 | AI disclosure (4 columns) + human validation (pp.8–9) | docs | Validation log has 9 entries, all unsigned (T18.08); disclosure drafted, team review pending (T18.07) | 🟡 | 2026-10-28 |
 | R16 | Quantify return vs risk trade-offs; diversification benefits (p.4) | portfolio | Frontier with spending $ (frontier_full.csv/.png), feasibility map; diversification metrics still pending (T4.14) | 🟡 | 2026-10-29 |
-| R17 | Confidence in risk estimates (p.5) | risk | VaR/ES bootstrap intervals + MC SE built (D26 VaR99 interval 1.33–1.72% reaches the limit); EVT intervals pending (T8.09) | 🟡 | 2026-10-29 |
-| R18 | Risk models under stressed conditions (p.7) | risk/validation | Not built (T8.11) | ⬜ | 2026-10-28 |
+| R17 | Confidence in risk estimates (p.5) | risk | Bootstrap intervals (VaR/ES/EVT), MC SE, ξ intervals; GARCH current vs long-run regime | ✅ | 2026-10-29 |
+| R18 | Risk models under stressed conditions (p.7) | risk/validation | GARCH regime contrast done (calm 1.11% vs long-run 1.81% VaR99); per-model stress-window performance needs rolling OOS forecasts (T8.11 → T10) | 🟡 | 2026-10-29 |
 | R19 | Critically assess model assumptions (p.7) | risk | Jarque–Bera, kurtosis, Ljung–Box on squared losses, t ν per portfolio (p2_diagnostics.csv); interpretation research doc §2–3 | ✅ | 2026-10-29 |
 | R20 | App confidence 90/95/99% (p.5) | risk/app | All VaR/ES methods at 90/95/99 (p2_var_es.csv); app pending | 🟡 | 2026-10-29 |

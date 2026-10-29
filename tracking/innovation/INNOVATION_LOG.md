@@ -15,11 +15,11 @@ Innovation is worth 15% of the score (brief p.10). Its examples are regime-condi
 ## Planned
 | ID | Extension | Hypothesis | Baseline compared | Leakage-safe? | Status |
 |---|---|---|---|---|---|
-| I1 | GARCH-filtered VaR / GARCH-EVT | Time-varying σ reduces exception clustering (Christoffersen) | Historical VaR | Rolling, data ≤ t−1 | Planned (T8.07) |
+| I1 | GARCH-filtered VaR / GARCH-EVT | Time-varying σ reduces exception clustering (Christoffersen) | Historical VaR | Rolling, data ≤ t−1 | **Built** (p2_garch_evt.csv): GARCH filtering removes most of the fat tail (ξ 0.18→0.02); regime contrast 1.11% vs 1.81% VaR99. Backtest pending (T10) |
 | I2 | Student-t copula Monte Carlo | Captures joint crash losses better than Gaussian | Gaussian MC | Fit on window only | Planned (D19) |
 | I3 | Wavelet multi-scale correlation | Diversification differs by horizon | Single-scale correlation | — | Recommend drop or appendix only (rec. #13, PROPOSED) |
 | I4 | Net-of-cost / ETF exit-liquidity gate | Costs and liquidity don't change the ranking | Gross returns | — | Planned (T4.13, T11.09) |
 | I5 | Robust inputs (Ledoit–Wolf on correlations, variances kept) | More stable weights out of sample | Sample covariance | Train only | **Tested: small effect** (δ 1.6% on training; min-var turnover −2.5%); kept as insurance for short windows. Estimation risk sits in expected returns, handled by CAPM + D25 |
-| I12 | Alternative EVT threshold rules (named in brief p.10) | Threshold choice changes the 99% tail estimate materially | Fixed 95th percentile | Rolling | Planned (T8.03) |
+| I12 | Alternative EVT threshold rules (named in brief p.10) | Threshold choice changes the 99% tail estimate materially | Fixed 95th percentile | Rolling | **Built**: stability rule with eligibility constraints, 7-threshold sensitivity table + figure |
 | I13 | Regime-conditioned VaR (named in brief p.10) | Stress regime needs a different risk scale | Unconditional VaR | Rolling | Candidate (T13) |
 | I14 | Conditional drawdown-at-risk (CDaR) optimisation | Optimising on drawdown directly enforces D7 better than variance | Min-Var / Min-CVaR | Train only | Candidate (T13.07) |

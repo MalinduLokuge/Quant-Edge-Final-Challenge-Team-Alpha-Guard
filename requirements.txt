@@ -5,7 +5,7 @@ scipy
 statsmodels
 yfinance
 pandas-datareader   # FRED
-arch                # GARCH
+arch==7.2.0         # GARCH; install with --no-deps to keep numpy < 2
 cvxpy>=1.5,<1.6     # constrained optimisation; 1.5.x keeps numpy < 2 (pandas 2.1 / scipy 1.11)
 matplotlib
 plotly

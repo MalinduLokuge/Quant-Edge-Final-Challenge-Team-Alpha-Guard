@@ -162,17 +162,17 @@ Stage: risk · Owner: Sujan · Priority: Core · Target: Week 2
 
 | ID | Subtask | Expected output | Priority | Owner | Depends on | Status | Source |
 |---|---|---|---|---|---|---|---|
-| T8.01 | Implement and diagnose conditional volatility (GARCH) | GARCH(1,1)-t fit + diagnostics | High | Sujan | T6.01 | Not started | PM · FJ R05 |
-| T8.02 | Select EVT/GPD exceedance threshold with justification | Threshold choice note (D8) | Critical | Sujan | T8.08 | Not started | PM · BR p.7 |
-| T8.03 | Fit tail distribution and test threshold sensitivity | ξ, β across thresholds | Critical | Sujan | T8.02 | Not started | PM · FJ R06 |
-| T8.04 | Estimate EVT VaR and ES at high confidence | EVT VaR/ES per candidate | Critical | Sujan | T8.03 | Not started | PM |
-| T8.05 | Compare GARCH/EVT and baseline estimates side by side | Comparison table | Critical | Sujan | T8.04, T6.05 | Not started | PM · BR p.5 risk dashboard |
-| T8.06 | Record instability, model assumptions and sparse-tail caveats | Limitations entries | Critical | Sujan | T8.03 | Not started | PM |
-| T8.07 | Fit EVT on GARCH-filtered residuals (i.i.d. requirement) | GARCH-EVT variant | High | Sujan | T8.01 | Not started | DEC D8 · REV |
-| T8.08 | Mean-excess and parameter-stability plots | Threshold diagnostic figures | Critical | Sujan | T6.01 | Not started | DEC D8 · FJ EVT quality gate |
-| T8.09 | Confidence intervals for ξ, β and EVT VaR/ES | Profile-likelihood or bootstrap CI | Critical | Sujan | T8.04 | Not started | BR p.5 · DEC D18 |
-| T8.10 | Rule for EVT at 90% when the quantile falls below the threshold | Documented rule + app message | High | Sujan | T8.04 | Not started | REV · BR p.5 |
-| T8.11 | Evaluate VaR/ES/EVT performance on stress windows (2008, 2020) | Stress-window comparison table | Critical | Sujan | T8.04, T6.05 | Not started | BR p.7 · R18 |
+| T8.01 | Implement and diagnose conditional volatility (GARCH) | risk/evt_garch.fit_garch (GARCH(1,1)-t, rescaled) → p2_garch.csv; persistence 0.99, half-life 68–85 days | High | Sujan | T6.01 | Done | PM · FJ R05 |
+| T8.02 | Select EVT/GPD exceedance threshold with justification | choose_threshold: ≥150 exceedances, q<95%, ξ stability; chosen on 2004–2019 → q=0.90 | Critical | Sujan | T8.08 | Done | PM · BR p.7 |
+| T8.03 | Fit tail distribution and test threshold sensitivity | threshold_stability (7 thresholds, bootstrap ξ CI) → p2_evt_thresholds.csv + figure | Critical | Sujan | T8.02 | Done | PM · FJ R06 |
+| T8.04 | Estimate EVT VaR and ES at high confidence | evt_table → p2_evt.csv (95/99/99.5%) | Critical | Sujan | T8.03 | Done | PM |
+| T8.05 | Compare GARCH/EVT and baseline estimates side by side | research doc P2 §5 (EVT vs historical vs GARCH-EVT vs normal) | Critical | Sujan | T8.04, T6.05 | Done | PM · BR p.5 risk dashboard |
+| T8.06 | Record instability, model assumptions and sparse-tail caveats | research doc §5: noise above 96%, regime dependence | Critical | Sujan | T8.03 | Done | PM |
+| T8.07 | Fit EVT on GARCH-filtered residuals (i.i.d. requirement) | garch_evt (McNeil–Frey) → p2_garch_evt.csv (current + long-run) | High | Sujan | T8.01 | Done | DEC D8 · REV |
+| T8.08 | Mean-excess and parameter-stability plots | figures/evt_threshold_d26.png (mean excess + ξ stability) | Critical | Sujan | T6.01 | Done | DEC D8 · FJ EVT quality gate |
+| T8.09 | Confidence intervals for ξ, β and EVT VaR/ES | bootstrap intervals for EVT VaR/ES (200 reps on exceedances) | Critical | Sujan | T8.04 | Done | BR p.5 · DEC D18 |
+| T8.10 | Rule for EVT at 90% when the quantile falls below the threshold | α ≤ threshold quantile → not applicable (explicit rule + test) | High | Sujan | T8.04 | Done | REV · BR p.5 |
+| T8.11 | Evaluate VaR/ES/EVT performance on stress windows (2008, 2020) | Stress-window comparison table | Critical | Sujan | T10.02 (rolling OOS forecasts) | Not started | BR p.7 · R18 · moved to validation stage |
 | T8.12 | Feasibility frontier under ERP 3–6% and a resampled frontier | Sensitivity of §4 table | Medium | Sujan | T4.11 | Not started | Research gap G7 |
 
 ## T9 — Risk budgeting
