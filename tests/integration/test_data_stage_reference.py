@@ -78,9 +78,9 @@ def test_train_and_full_hurdles_match_d12():
     rates = pd.read_csv(config.DATA_PROCESSED / "rates_daily.csv", index_col=0, parse_dates=True)
     full = ro.required_return_as_of(rates, rates.index[-1], s["mandate"])
     train = ro.required_return_as_of(rates, s["split"]["train_end"], s["mandate"])
-    # D12 with the D30 spending rate 2.8% (was 7.19% / 6.66% at 4% spending): (1.0235)(1.028)(1.005)(1.002) − 1
-    assert round(full["required_gross"], 4) == 0.0595 and round(full["required_minimum"], 4) == 0.0543
-    assert train["inflation"] == 0.0168 and round(train["required_gross"], 4) == 0.0526
+    # D12 with the D30 spending rate 2.65% (revised 2026-10-30; 7.19% / 6.66% at 4%): (1.0235)(1.0265)(1.005)(1.002) − 1
+    assert round(full["required_gross"], 4) == 0.058 and round(full["required_minimum"], 4) == 0.0527
+    assert train["inflation"] == 0.0168 and round(train["required_gross"], 4) == 0.0511
 
 
 def test_p1_candidates_meet_d6_and_d7():

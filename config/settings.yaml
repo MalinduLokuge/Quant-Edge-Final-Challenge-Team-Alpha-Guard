@@ -123,8 +123,8 @@ risk_limits:                    # D7, APPROVED 2026-10-28
   max_prob_drawdown_breach_5y: 0.05   # P(DD > 25% within 5y), block bootstrap with CAPM means
   drawdown_test:                # D7 5-year test settings (T20.10, 2026-10-29): 4,000 paths with one seed let the D26
     paths: 32000                # bisection tune itself to Monte Carlo noise; 32k paths -> s.e. about 0.12 pp at P = 5%
-    block: 63                   # approved block length (quarter)
-    sensitivity_blocks: [21, 126, 252]   # model-uncertainty report, not the test
+    block: 126                  # D32, APPROVED 2026-10-29: Politis-White block for volatility clustering 120-160 days (was 63)
+    sensitivity_blocks: [21, 63, 252]    # model-uncertainty report, not the test
   es99_1d_max: 0.025            # % NAV, full-cycle history (construction limit, binding)
   var99_1d_max: 0.017           # = ~0.67 x ES99 limit (observed VaR99/ES99 ratio 0.67-0.70), binding
   es95_1d_max: 0.0145           # reported limit, consistent with ES99
@@ -172,7 +172,7 @@ benchmarks:                     # D3, APPROVED 2026-10-28. Frozen: do not tune t
     "Equal weight 7": {SPY: 0.142857142857, EFA: 0.142857142857, EEM: 0.142857142857, AGG: 0.142857142857, GLD: 0.142857142857, XLE: 0.142857142857, XLK: 0.142857142858}
 mandate:                        # D12 inputs. Base values APPROVED 2026-10-28 (provisional); ranges = sensitivity. Change base + rerun `python run_all.py --only portfolio`
   inflation_series: breakeven_10y_pct          # FRED T10YIE on the as-of date
-  spending_rate: {base: 0.028, range: [0.026, 0.027, 0.028, 0.029, 0.04]}   # D30 (2026-10-29): flexible, policy 2.8%; 4% kept for comparison
+  spending_rate: {base: 0.0265, range: [0.025, 0.0265, 0.028, 0.029, 0.04]}   # D30 revised 2026-10-30: about 2.65% (what O6 supports); 4% kept for comparison
   real_growth: {base: 0.005, range: [0.0, 0.005, 0.01]}
   extra_costs: {base: 0.002, range: [0.001, 0.002, 0.004]}   # costs not inside ETF prices
   spending_rule:                # D24, APPROVED: smoothed (Yale-type)

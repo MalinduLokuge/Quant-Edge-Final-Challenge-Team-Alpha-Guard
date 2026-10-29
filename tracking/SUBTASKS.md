@@ -346,14 +346,14 @@ Stage: decision · Owner: All members · Priority: Core · Target: Week 3
 
 | ID | Subtask | Expected output | Priority | Owner | Depends on | Status | Source |
 |---|---|---|---|---|---|---|---|
-| T20.01 | Assemble committee evidence: six panels (allocation, return, loss limit, tail, model trust, governance) | Evidence pack | Critical | All members | T5.05, T8.05, T10.07, T11.10 | Not started | FJ VD07 · masterclass |
-| T20.02 | Suitability gate: validated and within client limits? | Pass/fail record per candidate | Critical | All members | T20.01, T3.09 | Not started | FJ VD08 |
-| T20.03 | Revise & retest loop when the gate fails | Revision log (what changed, rerun results) | High | All members | T20.02 | Not started | FJ VD09 |
-| T20.04 | Final P3 recommendation: weights, horizon, expected real return, downside | outputs/p3_decision | Critical | All members | T20.02 | Not started | FJ VD10 · BR p.8 |
-| T20.05 | Monitoring triggers and exit / de-risking rules | Trigger table | High | All members | T20.04 | Not started | FJ VD10 |
-| T20.06 | Drawdown ↔ spending trade-off table in memo and app | Memo section + app widget | High | All members | T3.19 | Not started | Research §4 |
-| T20.07 | Walk-forward (rolling-origin) validation of the selection rule (O1 vs O2), origins 2009–2021, CMA as of each origin | Rule-level OOS table (condition M7) | Critical | Malindu | T4.25 | Not started | Selection-bias precaution 2026-10-29 |
-| T20.08 | Recalibrate D23 rolling-ES99 watch trigger (fires on 26% of days at 2.0%) | Proposed trigger levels + frequency table | Medium | All members | T10.12 | Not started | Limit-stability finding 2026-10-29 |
+| T20.01 | Assemble committee evidence: six panels (allocation, return, loss limit, tail, model trust, governance) | evidence: T4_25 doc + p3_summary (allocation, return, loss limit, tail, model trust, governance) | Critical | All members | T5.05, T8.05, T10.07, T11.10 | Done | FJ VD07 · masterclass |
+| T20.02 | Suitability gate: validated and within client limits? | suitability gate: T4_25 §3 conditions; O6 passes all mandatory | Critical | All members | T20.01, T3.09 | Done | FJ VD08 |
+| T20.03 | Revise & retest loop when the gate fails | revise & retest loop: audit 2026-10-29 (D31 withdrawn → D31 v2, D32, D33) | High | All members | T20.02 | Done | FJ VD09 |
+| T20.04 | Final P3 recommendation: weights, horizon, expected real return, downside | decision stage → outputs/p3_decision (O6: AGG 61.1, SPY 18.4, XLK 10, EFA 7.2, XLE 3.0, GLD 0.4; 5.80%, $265k spending) | Critical | All members | T20.02 | Done | FJ VD10 · BR p.8 |
+| T20.05 | Monitoring triggers and exit / de-risking rules | p3_triggers.csv: D23 ladder + Basel model check + quarterly rebalance + annual review | High | All members | T20.04 | Done | FJ VD10 |
+| T20.06 | Drawdown ↔ spending trade-off table in memo and app | p3_tradeoff.csv: frontier spending vs drawdown vs P(DD), O6 marked (app widget pending T14) | High | All members | T3.19 | Done | Research §4 |
+| T20.07 | Walk-forward (rolling-origin) validation of the selection rule (O1 vs O2), origins 2009–2021, CMA as of each origin | research_walkforward_*.csv: 6 origins 2008–2023; D7 drawdown held every segment; chained 7.3%/yr, Sharpe 0.89, DD −16.4% (policy 0.75, −19.2%); D27×D7 conflict at 2008/2011 noted | Critical | Malindu | T4.25 | Done | Selection-bias precaution 2026-10-29 |
+| T20.08 | Recalibrate D23 rolling-ES99 watch trigger (fires on 26% of days at 2.0%) | p3_trigger_frequency.csv: rolling ES99 2.0% on 20% of days (4 episodes), 2.5% 9.6% (2: GFC, COVID); recalibration proposal pending team | Medium | All members | T10.12 | In progress | Limit-stability finding 2026-10-29 |
 | T20.09 | Endowment sustainability & recovery stress test: 15/20/25% falls, 1/3/5/7-year and lost-decade recoveries, D24 at 2.8%, costs, taxes, inflation; market view; bootstrap | sustainability_*.csv + research_t425_eval_sustainability_*.csv | Critical | All members | T20.10 | Done | User request 2026-10-29 |
 | T20.10 | Audit fix: 5-year drawdown test seed-tuned (4k paths) → 32k paths, block-length sensitivity; D30 2.8% propagated to hurdle and spending | Pipeline rerun, D26 re-selected | Critical | Malindu | — | Done | Audit 2026-10-29 |
 

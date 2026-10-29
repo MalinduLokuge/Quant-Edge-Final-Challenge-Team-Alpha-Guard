@@ -1,6 +1,6 @@
 # T4.25 / T20 Final portfolio selection: evaluation of O1–O6 (corrected 2026-10-29) [E]
 
-**Status:** evidence and recommendation for the team's decision. No portfolio is approved, D6 and D7 are unchanged, and the memo is not final.
+**Status: O6 APPROVED as the final portfolio** (team, 2026-10-30, D31 v2), together with D32 (126-day test), D30 revised to about 2.65% spending, and D33 (precedence when rules conflict). Walk-forward validation is in §6. D6 is unchanged. The tables below were computed at 2.8% spending; the pipeline now uses 2.65%.
 
 **Reproduce:**
 
@@ -157,3 +157,33 @@ Policy 40/50/10 for reference: real value after 10 years 1.045 with no crisis; b
 - **O6 is defined by a statistical criterion** (the Politis–White block length), not by its 2015–26 performance. Its out-of-sample numbers were computed after the rule was fixed, but O2 (very similar) had already been seen.
 - **Defensible next step:** walk-forward evaluation of the *rule*. At origins such as 2009, 2012, 2015, 2018 and 2021, use CMA as of each origin, select, and hold to the next origin. Report D7 compliance and returns across all segments.
 - **Live monitoring** (D23 triggers, the GARCH-EVT backtest) is the only truly untouched test.
+
+## 6. Walk-forward validation of the selection rule (T20.07, condition M7)
+**Reproduce:** `python scripts/research_walkforward.py` → `research_walkforward_{weights,segments,summary}.csv`.
+
+**Method:**
+- At each year-end origin (2008, 2011, 2014, 2017, 2020, 2023), the D26 rule is re-run with **only data up to that date**: CMA as of the origin, that day's breakeven for the hurdle, D6 + D7 + D27, 32k-path 5-year test.
+- The weights are then held (quarterly rebalancing) until the next origin.
+- Rules compared: **R126** (D32 → O6) and **R63** (old test → O1), plus the policy benchmark.
+
+| Origin → next 3 years | R126 (O6 rule): return / max DD / ES99 | R63 (O1 rule) | Policy 40/50/10 |
+|---|---|---|---|
+| 2008 → 2011 | 8.8% / −7.4% / 1.1% | same (min-variance fallback) | 10.6% / −12.4% / 1.9% |
+| 2011 → 2014 | 5.7% / −4.2% / 0.7% | same (min-variance fallback) | 6.7% / −6.0% / 1.2% |
+| 2014 → 2017 | 5.0% / −4.6% / 0.9% | 5.2% / −5.0% / 0.9% | 5.6% / −7.6% / 1.2% |
+| 2017 → 2020 | 9.4% / −14.8% / **2.9%** | 9.5% / −15.3% / **3.0%** | 8.8% / −16.0% / **3.1%** |
+| 2020 → 2023 | 2.9% / −16.4% / 1.7% | 2.8% / −16.4% / 1.7% | 1.3% / −19.2% / 1.7% |
+| 2023 → Oct 2026 | 12.9% / −6.4% / 1.8% | 13.7% / −6.8% / 1.9% | 11.5% / −6.4% / 1.7% |
+| **Chained 2009 → 2026** | **7.3% a year, Sharpe 0.89, max DD −16.4%, ES99 1.7%** | 7.5%, 0.88, −16.4%, 1.8% | 7.3%, 0.75, −19.2%, 1.9% |
+
+**Findings:**
+1. **The drawdown limit held in every out-of-sample segment** for both rules (worst −16.4%, 2022).
+   - The 1-day ES99 limit was exceeded only in the 2017→2020 segment, which contains COVID. It was exceeded by every portfolio, the benchmark included.
+   - ES99 is a full-cycle limit (D7). A 3-year window around COVID is not a full cycle; D23 treats such a breach as a review trigger.
+2. **The rule matched the policy benchmark's return** (7.3% a year) with lower volatility (6.7% vs 8.0%), a higher Sharpe ratio (0.89 vs 0.75) and a shallower worst drawdown (−16.4% vs −19.2%). That fits the conservative mandate.
+3. **The D32 test (R126) costs about 0.2% a year** against R63 over 2009–2026, with the same worst drawdown. The difference is small and within noise; the robustness gain is in the tail-risk test, not in realised history.
+4. **Interaction found:** at the 2008 and 2011 origins the D27 cap (≤ 40% of ES per ETF) could not be met together with D7. With the 2008 crash in the sample, AGG carried about 62% of the low-risk portfolio's ES, and adding equity to dilute it would breach the 25% drawdown. The rule fell back to capped minimum variance, which was a safe outcome.
+   - **Recommendation:** add an explicit precedence rule, "if D27 and D7 conflict, D7 wins and D27 is reported", to D27's text. This would be a documentation change, not a new parameter.
+5. **Limits of the evidence:** six segments, and the rule was chosen in 2026 after the 2015–2026 data had been examined. The rule's pass record from 2009–2014 (pre-split data) is the least biased part.
+
+**Condition M7: met**, with notes 1 and 4.

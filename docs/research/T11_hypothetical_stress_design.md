@@ -354,7 +354,7 @@ This is the 2022 regime. The current +0.44 stock–bond correlation [V] says it 
 **Model inputs are as of the ETF data end (2026-10-19, D1):** Brent $118.8, 10y 5.15%, real 2.80%, VIX 18.4. §1 shows the latest FRED values (27 Oct) as context.
 **Outputs:** `stress_hyp_betas.csv`, `stress_hyp_backcast.csv`, `stress_hyp_shocks.csv`, `stress_hyp_results.csv`, `stress_hyp_paths.csv`, `stress_hyp_sensitivity.csv`; hypothetical rows added to `stress_results.csv` and `stress_contributions.csv`.
 
-**Pipeline results, D26 selected ($10M; updated after the 2026-10-29 audit: D24 spending at the D30 rate 2.8%, D26 re-selected with the 32k-path test):**
+**Pipeline results, D26 selected ($10M; updated after the 2026-10-29 audit: D24 spending at the D30 rate 2.8%, D26 re-selected with the 32k-path test). Since 2026-10-30 the pipeline uses O6 and 2.65% spending; current values are in `stress_hyp_results.csv` and `outputs/p3_decision/`:**
 
 | Scenario | Instant loss | Stress betas | XLE hedge variant | Path worst / 12 months | Next-year spending (real) | Scenario 1-day VaR99 / ES99 |
 |---|---|---|---|---|---|---|
