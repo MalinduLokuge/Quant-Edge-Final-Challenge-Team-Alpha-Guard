@@ -77,7 +77,7 @@ Stage: mandate · Owner: Sujan · Priority: Core · Target: Week 1
 | T3.26 | Losses beyond history: severity-scaled crisis replays (GFC ×1.25, ×1.5) | Severe-scenario table; feeds D9 | High | Dewmini | T11.02 | Done | 12-factor review #11 |
 | T3.27 | Drawdown monitoring and action ladder (amber / red / limit) for memo and app | D23 approved; ladder in config risk_limits.action_ladder | Critical | All members | T3.22 | Done | 12-factor review #12 |
 | T3.28 | Re-confirm D7 (drawdown, VaR, ES limits) against tolerance and capacity results | D7 confirmed or revised | Critical | All members | T3.21–T3.27 | Done | 12-factor review |
-| T3.29 | Open question for committee: is 4% spending compulsory (fixed) or flexible? Memo shows both: fixed → disclosed real erosion ~0.6–1.2%/yr and capacity ~20%; flexible → move toward ~2.9% via D24 | Both cases in memo (T20) | Critical | All members | T4.11 | Not started | Team discussion 2026-10-29 |
+| T3.29 | Open question for committee: is 4% spending compulsory (fixed) or flexible? Memo shows both: fixed → disclosed real erosion ~0.6–1.2%/yr and capacity ~20%; flexible → move toward ~2.9% via D24 | D30 APPROVED: flexible; glide to ~2.8–2.9% via D24 (no risk-limit increase) | Critical | All members | T4.11 | Done | Team discussion 2026-10-29 |
 | T3.14 | Tax assumption: tax-exempt base case, dividend withholding as sensitivity (check interest-related dividend exemption for AGG) | Note in IPS + limitations | Medium | Sujan | T3.11 | Done | DEC D12 |
 
 ## T4 — Portfolio construction & selection
@@ -109,7 +109,7 @@ Stage: portfolio · Owner: Dewmini · Priority: Core · Target: Weeks 1–2
 | T4.22 | Decide bond expected-return method for near-zero rates (D25) and apply to both CMA sets | D25 approved; cma.expected_returns applied to both CMA sets, D12 tables, research; 1 test; research doc §8b | Critical | All members | T4.18 | Done | T4.18 finding |
 | T4.23 | Required return in training-period terms (2014 breakeven, same S/G/C) for P1-train return targets | return_objective.required_return_as_of; cma_sets_summary.csv: train 6.49% / 5.96% (breakeven 1.68%), full 7.19% / 6.66%; 2 tests | High | Dewmini | T4.18 | Done | D5 + D12 consistency |
 | T4.24 | Decide portfolio choice rule when the hurdle is infeasible (D26) | D26 approved (option b); frontier.select_highest_compliant; d26_selected in P1-train / P1-final | Critical | All members | T4.11 | Done | T4 finding 2026-10-29 |
-| T4.25 | Final-selection robustness: D26 with a 5-year-test margin, component-ES cap, or blend with Risk Parity (out-of-sample evidence) | Option table for T20 | High | Dewmini | T9.06, T10.07 | Not started | KPI findings 2026-10-29 · component-ES cap option done (D27) |
+| T4.25 | Final-selection robustness: D26 with a 5-year-test margin, component-ES cap, or blend with Risk Parity (out-of-sample evidence) | O1–O5 evaluated (research_t425_eval_*.csv, research doc T4_25): O4 gold floor not justified; O2 recommended (conditional) | High | Dewmini | T9.06, T10.07 | Done | KPI findings 2026-10-29 · component-ES cap option done (D27) |
 | T4.26 | Speed up portfolio stage (~7 min): cache solves, fewer bisection steps | run_all under ~2 min | Medium | Malindu | — | Not started | Review 2026-10-29 |
 
 ## T5 — KPIs & benchmarks
@@ -203,7 +203,7 @@ Stage: validation · Owner: Malindu · Priority: Core · Target: Weeks 2–3
 | T10.09 | Window-length sensitivity (500 vs 1000 days) | backtest_window_sensitivity.csv: 1,000 beats 500 on FZ0 for every method | Medium | Malindu | T10.04 | Done | DEC D13 |
 | T10.10 | Recompute tests for any user-selected date range (for the app) | coverage.evaluate_table(fc, start, end) | Critical | Malindu | T10.04–T10.06 | Done | BR p.5 sidebar |
 | T10.11 | ES / tail-severity check on exceptions | severity ratio + Acerbi–Szekely Z2 per model | Medium | Malindu | T10.03, T7.05 | Done | FJ VD03 |
-| T10.12 | Out-of-sample check of D7 limits (set on train, test on held-out) | Limit stability table | High | Malindu | T2.13 | Not started | Research gap G8 |
+| T10.12 | Out-of-sample check of D7 limits (set on train, test on held-out) | validation/limits.py → limit_stability.csv: P1-train portfolios keep every D7 limit in 2015–19 and 2020–26; 2026 D26 ES99 2.61% in 2020–26 alone (full-cycle 2.24%) | High | Malindu | T2.13 | Done | Research gap G8 |
 
 ## T11 — Stress testing
 Stage: validation · Owner: Dewmini · Priority: Core · Target: Weeks 2–3
@@ -352,6 +352,8 @@ Stage: decision · Owner: All members · Priority: Core · Target: Week 3
 | T20.04 | Final P3 recommendation: weights, horizon, expected real return, downside | outputs/p3_decision | Critical | All members | T20.02 | Not started | FJ VD10 · BR p.8 |
 | T20.05 | Monitoring triggers and exit / de-risking rules | Trigger table | High | All members | T20.04 | Not started | FJ VD10 |
 | T20.06 | Drawdown ↔ spending trade-off table in memo and app | Memo section + app widget | High | All members | T3.19 | Not started | Research §4 |
+| T20.07 | Walk-forward (rolling-origin) validation of the selection rule (O1 vs O2), origins 2009–2021, CMA as of each origin | Rule-level OOS table (condition M7) | Critical | Malindu | T4.25 | Not started | Selection-bias precaution 2026-10-29 |
+| T20.08 | Recalibrate D23 rolling-ES99 watch trigger (fires on 26% of days at 2.0%) | Proposed trigger levels + frequency table | Medium | All members | T10.12 | Not started | Limit-stability finding 2026-10-29 |
 
 ## T21 — Quality gates & compliance QA
 Stage: — · Owner: Malindu (coordinates) · Priority: Core · Target: Ongoing

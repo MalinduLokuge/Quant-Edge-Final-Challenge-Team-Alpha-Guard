@@ -8,14 +8,14 @@ Sources merged: Project Management Tracker (`.xlsm`, Drive "alpha guard"), FigJa
 |---|---|---|---|---|---|---|---|---|---|---|
 | T1 | Project setup & shared decisions | — | Malindu | Supporting | Week 1 | 11 | 7 | 2 | 0 | 64% |
 | T2 | Data pipeline & cleaning | data | Raveena | Core | Week 1 | 17 | 14 | 0 | 0 | 82% |
-| T3 | Client mandate (investment policy) | mandate | Sujan | Core | Week 1 | 29 | 24 | 2 | 0 | 83% |
-| T4 | Portfolio construction & selection | portfolio | Dewmini | Core | Weeks 1–2 | 26 | 17 | 0 | 0 | 65% |
+| T3 | Client mandate (investment policy) | mandate | Sujan | Core | Week 1 | 29 | 25 | 2 | 0 | 86% |
+| T4 | Portfolio construction & selection | portfolio | Dewmini | Core | Weeks 1–2 | 26 | 18 | 0 | 0 | 69% |
 | T5 | KPIs & benchmarks | portfolio | Raveena | Supporting | Week 2 | 9 | 9 | 0 | 0 | 100% |
 | T6 | VaR with 3 methods | risk | Sujan | Core | Week 2 | 13 | 11 | 0 | 0 | 85% |
 | T7 | Expected Shortfall | risk | Sujan | Core | Week 2 | 5 | 5 | 0 | 0 | 100% |
 | T8 | EVT & GARCH | risk | Sujan | Core | Week 2 | 12 | 11 | 0 | 0 | 92% |
 | T9 | Risk budgeting | risk | Sujan | Supporting | Week 2 | 6 | 6 | 0 | 0 | 100% |
-| T10 | Backtesting | validation | Malindu | Core | Weeks 2–3 | 12 | 11 | 0 | 0 | 92% |
+| T10 | Backtesting | validation | Malindu | Core | Weeks 2–3 | 12 | 12 | 0 | 0 | 100% |
 | T11 | Stress testing | validation | Dewmini | Core | Weeks 2–3 | 23 | 20 | 0 | 0 | 87% |
 | T12 | Macro & industry risk (optional) | validation | Malindu | Optional | Week 3 | 5 | 0 | 0 | 0 | 0% |
 | T13 | Innovation extension | risk/validation | Sujan | Optional | Week 3 | 7 | 0 | 0 | 0 | 0% |
@@ -25,9 +25,9 @@ Sources merged: Project Management Tracker (`.xlsm`, Drive "alpha guard"), FigJa
 | T17 | Repository & reproducibility | — | Malindu | Core | Week 3 | 9 | 2 | 1 | 0 | 22% |
 | T18 | AI disclosure & validation log | — | Malindu | Core | Ongoing | 8 | 0 | 4 | 0 | 0% |
 | T19 | Pitch & Q&A prep | — | All members | Conditional | If finalist | 4 | 0 | 0 | 0 | 0% |
-| T20 | Decision gate & final recommendation (P3) | decision | All members | Core | Week 3 | 6 | 0 | 0 | 0 | 0% |
+| T20 | Decision gate & final recommendation (P3) | decision | All members | Core | Week 3 | 8 | 0 | 0 | 0 | 0% |
 | T21 | Quality gates & compliance QA | — | Malindu (coordinates) | Core | Ongoing | 8 | 3 | 1 | 0 | 38% |
-| | **Total** | | | | | **236** | **141** | **11** | **0** | **60%** |
+| | **Total** | | | | | **238** | **144** | **11** | **0** | **61%** |
 
 Progress = share of subtasks marked Done. Recount with `python tracking/update_counts.py` after editing `SUBTASKS.md`.
 

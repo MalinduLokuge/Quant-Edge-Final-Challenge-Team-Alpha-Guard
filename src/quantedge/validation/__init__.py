@@ -7,6 +7,7 @@ chosen model is frozen in config (validation.test_unlocked). Outputs (outputs/ta
 backtest_forecasts_<period>.csv, backtest_results_<period>.csv, backtest_window_sensitivity.csv.
 Stress (T11): historical replays (stress_results.csv, stress_contributions.csv, stress_correlations.csv) and the
 D9 v2 / D29 hypothetical scenarios (stress_hyp_*.csv; rows also added to stress_results.csv).
+Limit stability (T10.12): D7 limits on train / validation / test / full periods → limit_stability.csv.
 """
 from __future__ import annotations
 
@@ -14,7 +15,7 @@ import numpy as np
 import pandas as pd
 
 from quantedge.common import config
-from quantedge.validation import backtest, coverage, hypothetical as H, stress
+from quantedge.validation import backtest, coverage, hypothetical as H, limits, stress
 
 
 def portfolios(s: dict) -> dict[str, pd.Series]:
@@ -143,11 +144,31 @@ def run_hypothetical(simple: pd.DataFrame, s: dict, ports: dict[str, pd.Series])
     return {"results": res, "contributions": pd.concat(contrib), "betas": betas}
 
 
+def run_limits(simple: pd.DataFrame, s: dict) -> pd.DataFrame:
+    """T10.12: do portfolios built on train data keep the D7 limits in the held-out periods? (P1-final for reference)"""
+    sp, d = s["split"], s["data"]
+    day = pd.Timedelta(days=1)
+    periods = {"train": (d["start"], sp["train_end"]),
+               "validation": (pd.Timestamp(sp["train_end"]) + day, sp["validation_end"]),
+               "test": (pd.Timestamp(sp["validation_end"]) + day, d["end"]), "full": (d["start"], d["end"])}
+    out = []
+    for src in ("p1_train", "p1_final"):
+        w = pd.read_csv(config.OUTPUT_TABLES / f"{src}_weights.csv", index_col=0)
+        ports = {n: w.loc[n] for n in s["risk"]["p2_portfolios"] if n in w.index}
+        b = s["benchmarks"]["primary"]
+        ports[f"[benchmark] {b['name']}"] = pd.Series(b["weights"]).reindex(simple.columns, fill_value=0.0)
+        out.append(limits.limit_table(simple, ports, periods, s["risk_limits"]).assign(weights=src))
+    t = pd.concat(out, ignore_index=True)
+    t.to_csv(config.OUTPUT_TABLES / "limit_stability.csv", index=False)
+    print(f"[validation] limit stability: {int(t['pass_all'].sum())}/{len(t)} portfolio-periods within every D7 limit")
+    return t
+
+
 def run(include_test: bool | None = None, stress_only: bool = False) -> dict:
     s = config.load_settings()
     simple = pd.read_csv(config.DATA_PROCESSED / "simple_returns.csv", index_col=0, parse_dates=True)
     if stress_only:
-        return run_stress(simple, s)
+        return run_stress(simple, s) | {"limits": run_limits(simple, s)}
     ports, out = portfolios(s), config.OUTPUT_TABLES
     names = ["validation"]
     if include_test if include_test is not None else s["validation"]["test_unlocked"]:
@@ -166,4 +187,4 @@ def run(include_test: bool | None = None, stress_only: bool = False) -> dict:
     sens = [run_period("validation", simple, s, key, w)[1].assign(window=w)
             for w in (s["risk"]["backtest_window_days"], s["risk"]["backtest_window_sensitivity_days"])]
     pd.concat(sens).to_csv(out / "backtest_window_sensitivity.csv", index=False)
-    return res | run_stress(simple, s)
+    return res | run_stress(simple, s) | {"limits": run_limits(simple, s)}
