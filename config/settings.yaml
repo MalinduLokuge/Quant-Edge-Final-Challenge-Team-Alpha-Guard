@@ -41,7 +41,10 @@ risk:
   backtest_window_days: 1000              # D13, APPROVED (sensitivity 500)
   backtest_window_sensitivity_days: 500
   mc_distribution: student_t              # D19: multivariate t or t-copula, never plain normal
-  mc_simulations: DECIDE
+  mc_simulations: 100000                  # t-copula + empirical marginals (D19); seed below
+  bootstrap_reps: 1000                    # historical / normal intervals (D18)
+  bootstrap_reps_t: 100                   # Student-t refits are slow
+  p2_portfolios: [d26_selected, min_variance, min_cvar, risk_parity, max_sharpe]  # target_return = min_variance; max_expected ≈ max_sharpe
   random_seed: 42
 risk_limits:                    # D7, APPROVED 2026-10-28
   max_drawdown: 0.25            # historical incl. 2008 replay

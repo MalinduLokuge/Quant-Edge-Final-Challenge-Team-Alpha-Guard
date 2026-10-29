@@ -132,29 +132,30 @@ Stage: risk · Owner: Sujan · Priority: Core · Target: Week 2
 
 | ID | Subtask | Expected output | Priority | Owner | Depends on | Status | Source |
 |---|---|---|---|---|---|---|---|
-| T6.01 | Fix portfolio losses convention and risk horizon | D17 applied; P1 → loss series | Critical | Sujan | T1.03, T4.16 | In progress | PM · FJ R01 · conventions done |
-| T6.02 | Implement Historical VaR at 95% and 99% | Function + test | Critical | Sujan | T6.01 | Not started | PM · BR p.7 |
-| T6.03 | Implement Parametric VaR at 95% and 99% | Normal + Student-t variants + test | Critical | Sujan | T6.01 | Not started | PM · BR p.7 |
-| T6.04 | Implement Monte Carlo VaR at 95% and 99% | Multivariate t / t-copula, fixed seed (D19) | Critical | Sujan | T6.01 | Not started | PM · BR p.7 · DEC D19 |
-| T6.05 | Compare all methods on identical portfolios and windows | VaR matrix: candidate × method × level | Critical | Sujan | T6.02–T6.04 | Not started | PM · FJ R-N01 |
-| T6.06 | Explain disagreements under calm and stressed conditions | Written comparison | Critical | Sujan | T6.05, T8.11 | Not started | PM · BR p.7 |
-| T6.07 | Add 90% level to every VaR method (app requirement) | VaR at 90/95/99 | Critical | Sujan | T6.02–T6.04 | Not started | BR p.5 · R20 |
-| T6.08 | Test model assumptions: Jarque–Bera, Ljung–Box on squared returns, QQ plots | Diagnostics table + figures | Critical | Sujan | T6.01 | Not started | BR p.7 · DEC D21 |
-| T6.09 | Uncertainty bands: bootstrap CI (historical), MC standard error | CI columns in VaR matrix | Critical | Sujan | T6.02–T6.04 | Not started | BR p.5 · DEC D18 |
+| T6.01 | Fix portfolio losses convention and risk horizon | Loss = −return, 1-day, constant target weights (risk/var_es.py) | Critical | Sujan | T1.03, T4.16 | Done | PM · FJ R01 · conventions done |
+| T6.02 | Implement Historical VaR at 95% and 99% | var_es.historical | Critical | Sujan | T6.01 | Done | PM · BR p.7 |
+| T6.03 | Implement Parametric VaR at 95% and 99% | var_es.normal + student_t (MLE) | Critical | Sujan | T6.01 | Done | PM · BR p.7 |
+| T6.04 | Implement Monte Carlo VaR at 95% and 99% | var_es.monte_carlo: t-copula + empirical marginals (D19), 100k sims, seed 42 | Critical | Sujan | T6.01 | Done | PM · BR p.7 · DEC D19 |
+| T6.05 | Compare all methods on identical portfolios and windows | outputs/tables/p2_var_es.csv: 6 portfolios × 4 methods × 3 levels | Critical | Sujan | T6.02–T6.04 | Done | PM · FJ R-N01 |
+| T6.06 | Explain disagreements under calm and stressed conditions | docs/research/P2_var_es_methods.md §2 | Critical | Sujan | T6.05, T8.11 | Done | PM · BR p.7 |
+| T6.07 | Add 90% level to every VaR method (app requirement) | 90/95/99 in every method | Critical | Sujan | T6.02–T6.04 | Done | BR p.5 · R20 |
+| T6.08 | Test model assumptions: Jarque–Bera, Ljung–Box on squared returns, QQ plots | var_es.assumption_diagnostics → p2_diagnostics.csv (JB, kurtosis, Ljung–Box², t ν) | Critical | Sujan | T6.01 | Done | BR p.7 · DEC D21 |
+| T6.09 | Uncertainty bands: bootstrap CI (historical), MC standard error | bootstrap 95% intervals; MC batch SE | Critical | Sujan | T6.02–T6.04 | Done | BR p.5 · DEC D18 |
 | T6.10 | Multi-day horizon by simulation (no silent √t) | 10-day / monthly VaR | Medium | Sujan | T6.04 | Not started | DEC D17 |
-| T6.11 | Express VaR in USD on the $10M NAV | USD columns | Critical | Sujan | T6.05 | Not started | FJ R-N01 |
+| T6.11 | Express VaR in USD on the $10M NAV | VaR_usd / ES_usd columns | Critical | Sujan | T6.05 | Done | FJ R-N01 |
 | T6.12 | Forward-looking drawdown probabilities, e.g. P(DD > 25% in 5 years), by block bootstrap | Probability table (reference + frontier portfolios; rerun for final candidates) | High | Sujan | T4.16 | Done | Research gap G1 |
+| T6.13 | Speed up risk stage (~7 min; Student-t bootstrap refits) | run under ~2 min | Medium | Sujan | — | Not started | Build 2026-10-29 |
 
 ## T7 — Expected Shortfall
 Stage: risk · Owner: Sujan · Priority: Core · Target: Week 2
 
 | ID | Subtask | Expected output | Priority | Owner | Depends on | Status | Source |
 |---|---|---|---|---|---|---|---|
-| T7.01 | Compute Historical ES at 95% and 99% | Function + test | Critical | Sujan | T6.02 | Not started | PM · BR p.7 |
-| T7.02 | Compute ES from Parametric and Monte Carlo approaches | Closed-form normal/t ES; MC ES | Critical | Sujan | T6.03, T6.04 | Not started | PM |
-| T7.03 | Compare corresponding VaR and ES outcomes | VaR vs ES table + gap | Critical | Sujan | T7.01, T7.02 | Not started | PM |
-| T7.04 | Explain expected tail losses and data limitations | Rationale for ES (coherence, tail severity) | Critical | Sujan | T7.03 | Not started | PM · BR p.7 |
-| T7.05 | ES at 90% and uncertainty bands | ES at 90/95/99 with CI | Critical | Sujan | T7.01, T7.02 | Not started | BR p.5 · DEC D18 |
+| T7.01 | Compute Historical ES at 95% and 99% | var_es.historical ES | Critical | Sujan | T6.02 | Done | PM · BR p.7 |
+| T7.02 | Compute ES from Parametric and Monte Carlo approaches | normal, Student-t (closed form) and MC ES | Critical | Sujan | T6.03, T6.04 | Done | PM |
+| T7.03 | Compare corresponding VaR and ES outcomes | ES_over_VaR column; research doc §4 | Critical | Sujan | T7.01, T7.02 | Done | PM |
+| T7.04 | Explain expected tail losses and data limitations | research doc §2, §4 | Critical | Sujan | T7.03 | Done | PM · BR p.7 |
+| T7.05 | ES at 90% and uncertainty bands | ES at 90/95/99 with intervals | Critical | Sujan | T7.01, T7.02 | Done | BR p.5 · DEC D18 |
 
 ## T8 — EVT & GARCH
 Stage: risk · Owner: Sujan · Priority: Core · Target: Week 2

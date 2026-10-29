@@ -129,3 +129,16 @@ def test_kpis_and_d26_selection_outputs():
         assert str(sel["pass_D7"]) == "True"
         assert float(sel["P(DD>limit, 5y)"]) <= s["risk_limits"]["max_prob_drawdown_breach_5y"]
         assert float(sel["expected_geo"]) >= float(d.loc["min_variance", "expected_geo"]) - 1e-9
+
+
+def test_p2_var_es_complete_and_consistent():
+    import pandas as pd
+
+    s = config.load_settings()
+    v = pd.read_csv(config.OUTPUT_TABLES / "p2_var_es.csv")
+    assert set(v["method"]) == {"historical", "normal", "student_t", "monte_carlo_t_copula"}
+    assert set(v["alpha"]) == set(s["risk"]["confidence_levels"])
+    assert (v["ES"] >= v["VaR"] - 1e-12).all()                      # ES never below VaR
+    assert ((v["VaR_ci_low"] <= v["VaR"] + 1e-12) & (v["VaR"] <= v["VaR_ci_high"] + 1e-12)).all()
+    d26 = v[(v.portfolio == "d26_selected") & (v.method == "historical") & (v.alpha == 0.99)].iloc[0]
+    assert d26["VaR"] <= s["risk_limits"]["var99_1d_max"] and d26["ES"] <= s["risk_limits"]["es99_1d_max"]

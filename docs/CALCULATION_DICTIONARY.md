@@ -68,10 +68,10 @@ Conventions: decision D17. Status ✅ = implemented and tested, ⏳ = planned.
 All at α ∈ {90, 95, 99}%, 1-day horizon, on portfolio loss L, reported as % of NAV and USD, each with an uncertainty band (D18).
 | Quantity | Formula / method | Status |
 |---|---|---|
-| Historical VaR | empirical α-quantile of L | ⏳ |
-| Parametric VaR | μ_L + σ·q_α (normal, plus Student-t variant) | ⏳ |
-| Monte Carlo VaR | α-quantile of simulated L, multivariate t / t-copula, fixed seed (D19) | ⏳ |
-| Expected Shortfall | E[L ∣ L ≥ VaR_α] | ⏳ |
+| Historical VaR | empirical α-quantile of L (`var_es.historical`) | ✅ |
+| Parametric VaR | μ_L + σ·z_α (normal); m + s·t_α(ν) (Student-t, MLE) (`var_es.normal`, `student_t`) | ✅ |
+| Monte Carlo VaR | α-quantile of 100k simulated L; t-copula (Kendall-τ correlation, ν by profile ML) + empirical marginals, seed 42 (`var_es.monte_carlo`) | ✅ |
+| Expected Shortfall | E[L ∣ L ≥ VaR_α]; normal μ+σφ(z)/(1−α); t: m+s·(ν+t²)/(ν−1)·f(t)/(1−α) | ✅ |
 | EVT VaR / ES | POT-GPD: VaR = u + β/ξ·[((n/Nᵤ)(1−α))^(−ξ) − 1]; ES = (VaR + β − ξu)/(1−ξ) | ⏳ |
 | Component VaR/ES | Euler: wᵢ·∂VaR/∂wᵢ ≈ E[−wᵢRᵢ ∣ L ≈ VaR]; ES: E[−wᵢRᵢ ∣ L ≥ VaR]; sums to the total | ⏳ |
 

@@ -11,8 +11,8 @@ Sources merged: Project Management Tracker (`.xlsm`, Drive "alpha guard"), FigJa
 | T3 | Client mandate (investment policy) | mandate | Sujan | Core | Week 1 | 29 | 24 | 2 | 0 | 83% |
 | T4 | Portfolio construction & selection | portfolio | Dewmini | Core | Weeks 1–2 | 26 | 17 | 0 | 0 | 65% |
 | T5 | KPIs & benchmarks | portfolio | Raveena | Supporting | Week 2 | 9 | 9 | 0 | 0 | 100% |
-| T6 | VaR with 3 methods | risk | Sujan | Core | Week 2 | 12 | 1 | 1 | 0 | 8% |
-| T7 | Expected Shortfall | risk | Sujan | Core | Week 2 | 5 | 0 | 0 | 0 | 0% |
+| T6 | VaR with 3 methods | risk | Sujan | Core | Week 2 | 13 | 11 | 0 | 0 | 85% |
+| T7 | Expected Shortfall | risk | Sujan | Core | Week 2 | 5 | 5 | 0 | 0 | 100% |
 | T8 | EVT & GARCH | risk | Sujan | Core | Week 2 | 12 | 0 | 0 | 0 | 0% |
 | T9 | Risk budgeting | risk | Sujan | Supporting | Week 2 | 6 | 0 | 0 | 0 | 0% |
 | T10 | Backtesting | validation | Malindu | Core | Weeks 2–3 | 12 | 0 | 0 | 0 | 0% |
@@ -27,7 +27,7 @@ Sources merged: Project Management Tracker (`.xlsm`, Drive "alpha guard"), FigJa
 | T19 | Pitch & Q&A prep | — | All members | Conditional | If finalist | 4 | 0 | 0 | 0 | 0% |
 | T20 | Decision gate & final recommendation (P3) | decision | All members | Core | Week 3 | 6 | 0 | 0 | 0 | 0% |
 | T21 | Quality gates & compliance QA | — | Malindu (coordinates) | Core | Ongoing | 8 | 3 | 1 | 0 | 38% |
-| | **Total** | | | | | **223** | **78** | **13** | **0** | **35%** |
+| | **Total** | | | | | **224** | **93** | **12** | **0** | **42%** |
 
 Progress = share of subtasks marked Done. Recount with `python tracking/update_counts.py` after editing `SUBTASKS.md`.
 
