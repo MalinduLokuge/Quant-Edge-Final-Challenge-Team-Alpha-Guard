@@ -4,7 +4,7 @@
 - The approved D9 stays in force until the proposed **D9 v2** below is approved.
 - Research scripts used: `hs_research.py`, `hs_calib.py`, `hs_path.py`. They will be turned into the pipeline module described in §8.
 
-**Data date:** FRED snapshots of 2026-10-28 (last observation 2026-10-27), ETF prices to 2026-10-19 (D5).
+**Data date:** new FRED snapshots downloaded 2026-10-29 (last observation 2026-10-27), ETF prices to 2026-10-19 (D5).
 
 **Evidence tags:**
 
@@ -331,7 +331,7 @@ This is the 2022 regime. The current +0.44 stock–bond correlation [V] says it 
 ## 10. Sources
 
 **Data (model inputs):**
-- **FRED:** DCOILBRENTEU, DCOILWTICO, DGS10, DGS2, DFII10, T10YIE, BAA10Y, BAMLH0A0HYM2 (3-year history only, context), DTWEXBGS, VIXCLS, FEDFUNDS, UNRATE, CPIAUCSL, NFCI. Downloaded 2026-10-28.
+- **FRED:** DCOILBRENTEU, DCOILWTICO, DGS10, DGS2, DFII10, T10YIE, BAA10Y, BAMLH0A0HYM2 (3-year history only, context), DTWEXBGS, VIXCLS, FEDFUNDS, UNRATE, CPIAUCSL, NFCI. Downloaded 2026-10-29.
 - **yfinance:** ETF adjusted prices.
 
 **Context:**
