@@ -212,7 +212,7 @@ Stage: validation · Owner: Dewmini · Priority: Core · Target: Weeks 2–3
 |---|---|---|---|---|---|---|---|
 | T11.01 | Define precise 2008, COVID 2020 and 2022 periods | config stress.windows: GFC, taper 2013, COVID, 2022 (S&P peak/trough dates) | Critical | Dewmini | — | Done | PM · BR p.8 · windows used in scripts/research_d3_d7.py; confirm in D9/T11 |
 | T11.02 | Recalculate portfolio performance in historical windows | stress.replay → stress_results.csv (window loss, worst day, recovery) | Critical | Dewmini | T11.01, T4.16 | Done | PM · FJ VD04 |
-| T11.03 | Design one plausible hypothetical macro/market shock | D9 PROPOSED: stagflation SPY −25%, 10y +200bp, BE +100bp (+ oil/gold variant) | Critical | Dewmini | T1.08 (D9) | In progress | PM · BR p.8 |
+| T11.03 | Design one plausible hypothetical macro/market shock | D9 APPROVED: stagflation SPY −25%, 10y +200bp, BE +100bp (+ oil/gold variant); D26 loss 16.7% | Critical | Dewmini | T1.08 (D9) | Done | PM · BR p.8 |
 | T11.04 | Estimate ETF reactions and document assumptions | stress.factor_betas (SPY, Δ10y, Δbreakeven; monthly OLS) → stress_factor_betas.csv | Critical | Dewmini | T11.03, T2.09 | Done | PM |
 | T11.05 | Summarize losses, vulnerabilities and possible adjustments | research doc T11 §2–4 (% NAV and USD) | Critical | Dewmini | T11.02, T11.04 | Done | PM · FJ VD06 |
 | T11.06 | Asset-level stress attribution: which ETFs drive the loss | stress_contributions.csv: GFC SPY −10.7pp, AGG +4.2pp; 2022 AGG −8.7pp | High | Dewmini | T11.05 | Done | FJ VD06 joint-loss |

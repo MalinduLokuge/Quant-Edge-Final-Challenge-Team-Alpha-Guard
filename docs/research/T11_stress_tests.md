@@ -10,7 +10,7 @@
 | Taper tantrum 2013 | 2013-05-02 → 2013-06-24 | 10y yield +1 pp in 7 weeks; bond stress (D26 is 58% AGG) |
 | COVID 2020 | 2020-02-19 → 2020-03-23 | fastest crash on record; even AGG fell 4% in a day |
 | Rates and inflation 2022 | 2022-01-03 → 2022-10-12 | stocks and bonds fell together (10y +2.4 pp) |
-| **Hypothetical (D9, proposed): stagflation shock** | one quarter | equities −25%, 10y yield +200 bp, 10y breakeven +100 bp |
+| **Hypothetical (D9, approved): stagflation shock** | one quarter | equities −25%, 10y yield +200 bp, 10y breakeven +100 bp |
 
 **Hypothetical method:** each ETF's move comes from its betas to SPY, the 10y yield and the 10y breakeven, estimated by OLS on monthly data (2004–2026). No ETF gets a hand-picked return in the primary case, so gold and energy get no hedge credit beyond their measured betas. A variant adds a 2022-style energy rally (XLE +30%) and gold +10%.
 
