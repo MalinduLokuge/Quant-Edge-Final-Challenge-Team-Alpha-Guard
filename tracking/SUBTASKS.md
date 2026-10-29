@@ -172,7 +172,7 @@ Stage: risk · Owner: Sujan · Priority: Core · Target: Week 2
 | T8.08 | Mean-excess and parameter-stability plots | figures/evt_threshold_d26.png (mean excess + ξ stability) | Critical | Sujan | T6.01 | Done | DEC D8 · FJ EVT quality gate |
 | T8.09 | Confidence intervals for ξ, β and EVT VaR/ES | bootstrap intervals for EVT VaR/ES (200 reps on exceedances) | Critical | Sujan | T8.04 | Done | BR p.5 · DEC D18 |
 | T8.10 | Rule for EVT at 90% when the quantile falls below the threshold | α ≤ threshold quantile → not applicable (explicit rule + test) | High | Sujan | T8.04 | Done | REV · BR p.5 |
-| T8.11 | Evaluate VaR/ES/EVT performance on stress windows (2008, 2020) | Stress-window comparison table | Critical | Sujan | T10.02 (rolling OOS forecasts) | Not started | BR p.7 · R18 · moved to validation stage |
+| T8.11 | Evaluate VaR/ES/EVT performance on stress windows (2008, 2020) | T10 doc §4: COVID 4 vs 8 exceptions, 2022 3 vs 8 (GARCH-EVT vs historical) | Critical | Sujan | T10.02 (rolling OOS forecasts) | Done | BR p.7 · R18 · moved to validation stage |
 | T8.12 | Feasibility frontier under ERP 3–6% and a resampled frontier | Sensitivity of §4 table | Medium | Sujan | T4.11 | Not started | Research gap G7 |
 
 ## T9 — Risk budgeting
@@ -198,8 +198,8 @@ Stage: validation · Owner: Malindu · Priority: Core · Target: Weeks 2–3
 | T10.04 | Perform Kupiec unconditional coverage test | coverage.kupiec (+ x = 0 case, unit test) | Critical | Malindu | T10.03 | Done | PM · BR p.7 |
 | T10.05 | Perform Christoffersen independence/coverage tests | coverage.christoffersen (n₁₁ = 0 via xlogy, unit test) | Critical | Malindu | T10.03 | Done | PM · BR p.7 |
 | T10.06 | Apply Basel traffic light only for appropriate VaR settings | coverage.basel: 99% only, every 250-day window | Critical | Malindu | T10.03 | Done | PM · BR p.7 |
-| T10.07 | Choose the model on validation data only; freeze before test | D28 proposed: GARCH-EVT on validation; test period locked | Critical | Malindu | T10.04, T10.05 | In progress | FJ OOS integrity gate |
-| T10.08 | Backtest each method and candidate, not only the chosen one | 7 methods × 6 portfolios × 95/99% (validation) | High | Malindu | T10.03 | Done | REV |
+| T10.07 | Choose the model on validation data only; freeze before test | D28 APPROVED: GARCH-EVT frozen (60e67e3) before test; test run once: 22/17.1 exc, p_cc 0.29, no red window | Critical | Malindu | T10.04, T10.05 | Done | FJ OOS integrity gate |
+| T10.08 | Backtest each method and candidate, not only the chosen one | 7 methods × 6 portfolios × 95/99%, validation and test | High | Malindu | T10.03 | Done | REV |
 | T10.09 | Window-length sensitivity (500 vs 1000 days) | backtest_window_sensitivity.csv: 1,000 beats 500 on FZ0 for every method | Medium | Malindu | T10.04 | Done | DEC D13 |
 | T10.10 | Recompute tests for any user-selected date range (for the app) | coverage.evaluate_table(fc, start, end) | Critical | Malindu | T10.04–T10.06 | Done | BR p.5 sidebar |
 | T10.11 | ES / tail-severity check on exceptions | severity ratio + Acerbi–Szekely Z2 per model | Medium | Malindu | T10.03, T7.05 | Done | FJ VD03 |

@@ -31,10 +31,43 @@ At 95%, the same five models pass Kupiec (p 0.44–0.91).
 4. **GARCH-EVT is the best overall:** the most accurate exception count (13 vs 12.6), ES within 8%, and the best joint VaR/ES score.
 5. **Window (T10.09):** 1,000 days beats 500 for every method on FZ0; for GARCH-EVT, 500 days gives 15 exceptions and p_cc 0.002. D13 (1,000) confirmed.
 
-## 3. Proposed selection rule (D28, awaiting approval)
+## 3. Selection rule (D28, APPROVED 2026-10-29)
 On validation data only, for the D26 portfolio:
 1. **Gate:** Kupiec p ≥ 0.05 at 99% and at 95%, and no red Basel window.
 2. **Rank:** lowest FZ0 score at 99% (a strictly consistent score for VaR and ES together).
 3. **Report, do not gate:** Christoffersen. No frequency-correct model passes it here (point 3), so gating on it would leave only a model that fails the frequency test.
 
 **Result:** eligible = GARCH-EVT, GARCH-t, EVT, historical, Monte Carlo → **GARCH-EVT selected**. It is then frozen and run once on the 2020–2026 test period.
+
+## 4. Test period 2020-01-02 → 2026-10-19 (run once, after the freeze; commit 60e67e3)
+**Reproduce:** `python run_all.py --only validation` (validation.test_unlocked: true) → `backtest_forecasts_test.csv`, `backtest_results_test.csv`.
+
+**D26 selected portfolio, 99% 1-day (1,708 days, 17.1 exceptions expected):**
+
+| Method | Exceptions | Kupiec p | Christoffersen ind. p | Cond. cov. p | Worst Basel window | Red windows | ES severity | FZ0 |
+|---|---|---|---|---|---|---|---|---|
+| **GARCH-EVT (selected)** | **22** | **0.25** | **0.29** | **0.29** | **8 (yellow)** | **0%** | **1.06** | **−4.08** |
+| GARCH-t | 32 | 0.001 | 0.63 | 0.005 | 9 | 0% | 1.08 | −4.01 |
+| Student-t | 16 | 0.79 | 0.14 | 0.32 | 8 | 0% | 1.04 | −3.66 |
+| EVT | 19 | 0.65 | 0.21 | 0.40 | 9 | 0% | 1.20 | −3.52 |
+| Historical | 26 | 0.044 | 0.06 | 0.023 | **11 (red)** | 3% | 0.95 | −3.53 |
+| Monte Carlo | 23 | 0.17 | 0.037 | 0.045 | **10 (red)** | 2% | 1.32 | −3.30 |
+| Normal | 30 | 0.005 | 0.002 | 0.0001 | **13 (red)** | 3% | 1.53 | −3.07 |
+
+At 95%: GARCH-EVT 95 exceptions vs 85.4 expected (Kupiec p 0.29, cond. cov. p 0.48); historical, EVT, Monte Carlo and Student-t all fail at 95% (p_cc ≤ 0.0001).
+
+**Stress windows (T8.11, R18), D26, 99%:**
+
+| Window | Days | Expected | GARCH-EVT | Historical |
+|---|---|---|---|---|
+| COVID crash (19 Feb – 30 Apr 2020) | 51 | 0.5 | 4 | 8 |
+| 2022 rate shock (Jan – Oct 2022) | 209 | 2.1 | 3 | 8 |
+
+**GARCH-EVT across all portfolios (test, 99%):** passes Kupiec and conditional coverage for D26, max-Sharpe, min-variance, risk parity (cc p 0.054) and the Policy 40/50/10 benchmark; min-CVaR is borderline (26 exceptions, p_uc 0.044). No portfolio has a red Basel window under GARCH-EVT except min-CVaR (13 at worst).
+
+**Conclusions:**
+1. **The validation choice held out of sample.** GARCH-EVT passes every test at 99% and 95% in 2020–2026, including Christoffersen, and has the best joint VaR/ES score. The selection was not tuned to the test data.
+2. **Static models break in regime changes.** Historical simulation lagged in COVID (8 exceptions in 51 days) and 2022 (8 in 209) and reached the Basel red zone. GARCH-EVT halved the stress-window exceptions because its σ rises within days.
+3. **Losses on exception days were 6% beyond the GARCH-EVT ES forecast** (severity 1.06), close to the 1.0 target. The normal model's ES was 53% too low.
+4. **Still not perfect:** 22 exceptions against 17.1 expected (not statistically significant), and the first day of a shock is still missed (e.g. 24 Feb 2020, 3–4 Apr 2025). This is why D7 limits are set on full-cycle history and the D23 action ladder reacts to drawdowns, not to VaR alone.
+5. **Monitoring model:** GARCH-EVT is the VaR model for the memo, the app's backtest page and the D23 watch triggers; historical and EVT stay as full-cycle limit checks (D7).

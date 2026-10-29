@@ -15,7 +15,7 @@ Innovation is worth 15% of the score (brief p.10). Its examples are regime-condi
 ## Planned
 | ID | Extension | Hypothesis | Baseline compared | Leakage-safe? | Status |
 |---|---|---|---|---|---|
-| I1 | GARCH-filtered VaR / GARCH-EVT | Time-varying σ reduces exception clustering (Christoffersen) | Historical VaR | Rolling, data ≤ t−1 | **Built** (p2_garch_evt.csv): GARCH filtering removes most of the fat tail (ξ 0.18→0.02); regime contrast 1.11% vs 1.81% VaR99. Backtest pending (T10) |
+| I1 | GARCH-filtered VaR / GARCH-EVT | Time-varying σ reduces exception clustering (Christoffersen) | Historical VaR | Rolling, data ≤ t−1 | **Built and backtested**: selected by D28 on validation; out-of-sample 2020–26 passes Kupiec, Christoffersen and Basel (no red window) where historical fails; stress-window exceptions halved |
 | I2 | Student-t copula Monte Carlo | Captures joint crash losses better than Gaussian | Gaussian MC | Fit on window only | Planned (D19) |
 | I3 | Wavelet multi-scale correlation | Diversification differs by horizon | Single-scale correlation | — | Recommend drop or appendix only (rec. #13, PROPOSED) |
 | I4 | Net-of-cost / ETF exit-liquidity gate | Costs and liquidity don't change the ranking | Gross returns | — | Planned (T4.13, T11.09) |
