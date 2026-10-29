@@ -46,6 +46,17 @@ risk:
   bootstrap_reps_t: 100                   # Student-t refits are slow
   p2_portfolios: [d26_selected, min_variance, min_cvar, risk_parity, max_sharpe]  # target_return = min_variance; max_expected ≈ max_sharpe
   random_seed: 42
+validation:                     # T10 backtesting (D13 window above)
+  portfolios_from: p1_train     # weights chosen with data <= 2014 only: no look-ahead in 2015-2026
+  confidence_levels: [0.95, 0.99]
+  methods: [historical, normal, student_t, evt, garch_t, garch_evt, monte_carlo]
+  refit_days: 21                # GARCH and Monte Carlo copula refit; sigma updated daily
+  mc_simulations: 20000         # per refit (rolling; full-size 100k used in the risk stage)
+  evt_threshold_q: 0.90         # D8 result
+  significance: 0.05            # Kupiec / Christoffersen
+  selection_rule: DECIDE        # D28: model choice on validation data only (T10.07)
+  selected_model: DECIDE        # frozen before the test period
+  test_unlocked: false          # set true only after D28 is approved; test period used once
 risk_limits:                    # D7, APPROVED 2026-10-28
   max_drawdown: 0.25            # historical incl. 2008 replay
   max_prob_drawdown_breach_5y: 0.05   # P(DD > 25% within 5y), block bootstrap with CAPM means

@@ -15,7 +15,7 @@ Sources merged: Project Management Tracker (`.xlsm`, Drive "alpha guard"), FigJa
 | T7 | Expected Shortfall | risk | Sujan | Core | Week 2 | 5 | 5 | 0 | 0 | 100% |
 | T8 | EVT & GARCH | risk | Sujan | Core | Week 2 | 12 | 10 | 0 | 0 | 83% |
 | T9 | Risk budgeting | risk | Sujan | Supporting | Week 2 | 6 | 6 | 0 | 0 | 100% |
-| T10 | Backtesting | validation | Malindu | Core | Weeks 2–3 | 12 | 0 | 0 | 0 | 0% |
+| T10 | Backtesting | validation | Malindu | Core | Weeks 2–3 | 12 | 10 | 1 | 0 | 83% |
 | T11 | Stress testing | validation | Dewmini | Core | Weeks 2–3 | 11 | 0 | 1 | 0 | 0% |
 | T12 | Macro & industry risk (optional) | validation | Malindu | Optional | Week 3 | 5 | 0 | 0 | 0 | 0% |
 | T13 | Innovation extension | risk/validation | Sujan | Optional | Week 3 | 7 | 0 | 0 | 0 | 0% |
@@ -27,7 +27,7 @@ Sources merged: Project Management Tracker (`.xlsm`, Drive "alpha guard"), FigJa
 | T19 | Pitch & Q&A prep | — | All members | Conditional | If finalist | 4 | 0 | 0 | 0 | 0% |
 | T20 | Decision gate & final recommendation (P3) | decision | All members | Core | Week 3 | 6 | 0 | 0 | 0 | 0% |
 | T21 | Quality gates & compliance QA | — | Malindu (coordinates) | Core | Ongoing | 8 | 3 | 1 | 0 | 38% |
-| | **Total** | | | | | **224** | **109** | **12** | **0** | **49%** |
+| | **Total** | | | | | **224** | **119** | **13** | **0** | **53%** |
 
 Progress = share of subtasks marked Done. Recount with `python tracking/update_counts.py` after editing `SUBTASKS.md`.
 

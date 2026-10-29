@@ -192,17 +192,17 @@ Stage: validation · Owner: Malindu · Priority: Core · Target: Weeks 2–3
 
 | ID | Subtask | Expected output | Priority | Owner | Depends on | Status | Source |
 |---|---|---|---|---|---|---|---|
-| T10.01 | Define chronological out-of-sample rolling window | D13 window, split from D5 | Critical | Malindu | T2.13, T1.07 | Not started | PM · FJ VD01 |
-| T10.02 | Produce date-aligned VaR forecasts without look-ahead | Rolling forecast file (data ≤ t−1) | Critical | Malindu | T10.01, T6.05 | Not started | PM · BR p.7 |
-| T10.03 | Count exceptions against the chosen confidence level | Exception series | Critical | Malindu | T10.02 | Not started | PM |
-| T10.04 | Perform Kupiec unconditional coverage test | LR, p-value | Critical | Malindu | T10.03 | Not started | PM · BR p.7 |
-| T10.05 | Perform Christoffersen independence/coverage tests | LR_ind, LR_cc, p-values (handle n₁₁ = 0) | Critical | Malindu | T10.03 | Not started | PM · BR p.7 |
-| T10.06 | Apply Basel traffic light only for appropriate VaR settings | 99%, 250-day zones | Critical | Malindu | T10.03 | Not started | PM · BR p.7 |
-| T10.07 | Choose the model on validation data only; freeze before test | Model-selection record | Critical | Malindu | T10.04, T10.05 | Not started | FJ OOS integrity gate |
-| T10.08 | Backtest each method and candidate, not only the chosen one | Backtest matrix | High | Malindu | T10.03 | Not started | REV |
-| T10.09 | Window-length sensitivity (500 vs 1000 days) | Sensitivity table | Medium | Malindu | T10.04 | Not started | DEC D13 |
-| T10.10 | Recompute tests for any user-selected date range (for the app) | Function: tests on a sliced range | Critical | Malindu | T10.04–T10.06 | Not started | BR p.5 sidebar |
-| T10.11 | ES / tail-severity check on exceptions | Average exceedance vs predicted ES | Medium | Malindu | T10.03, T7.05 | Not started | FJ VD03 |
+| T10.01 | Define chronological out-of-sample rolling window | D13 1,000-day window, forecasts from 2015-01-02 (history from 2011); validation 2015–19, test 2020 → (locked) | Critical | Malindu | T2.13, T1.07 | Done | PM · FJ VD01 |
+| T10.02 | Produce date-aligned VaR forecasts without look-ahead | validation/backtest.rolling_forecasts (data ≤ t−1; GARCH/MC refit 21d) + no-look-ahead unit test | Critical | Malindu | T10.01, T6.05 | Done | PM · BR p.7 |
+| T10.03 | Count exceptions against the chosen confidence level | coverage.evaluate (loss > VaR) → backtest_results_validation.csv | Critical | Malindu | T10.02 | Done | PM |
+| T10.04 | Perform Kupiec unconditional coverage test | coverage.kupiec (+ x = 0 case, unit test) | Critical | Malindu | T10.03 | Done | PM · BR p.7 |
+| T10.05 | Perform Christoffersen independence/coverage tests | coverage.christoffersen (n₁₁ = 0 via xlogy, unit test) | Critical | Malindu | T10.03 | Done | PM · BR p.7 |
+| T10.06 | Apply Basel traffic light only for appropriate VaR settings | coverage.basel: 99% only, every 250-day window | Critical | Malindu | T10.03 | Done | PM · BR p.7 |
+| T10.07 | Choose the model on validation data only; freeze before test | D28 proposed: GARCH-EVT on validation; test period locked | Critical | Malindu | T10.04, T10.05 | In progress | FJ OOS integrity gate |
+| T10.08 | Backtest each method and candidate, not only the chosen one | 7 methods × 6 portfolios × 95/99% (validation) | High | Malindu | T10.03 | Done | REV |
+| T10.09 | Window-length sensitivity (500 vs 1000 days) | backtest_window_sensitivity.csv: 1,000 beats 500 on FZ0 for every method | Medium | Malindu | T10.04 | Done | DEC D13 |
+| T10.10 | Recompute tests for any user-selected date range (for the app) | coverage.evaluate_table(fc, start, end) | Critical | Malindu | T10.04–T10.06 | Done | BR p.5 sidebar |
+| T10.11 | ES / tail-severity check on exceptions | severity ratio + Acerbi–Szekely Z2 per model | Medium | Malindu | T10.03, T7.05 | Done | FJ VD03 |
 | T10.12 | Out-of-sample check of D7 limits (set on train, test on held-out) | Limit stability table | High | Malindu | T2.13 | Not started | Research gap G8 |
 
 ## T11 — Stress testing
