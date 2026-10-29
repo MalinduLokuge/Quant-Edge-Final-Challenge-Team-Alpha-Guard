@@ -109,7 +109,7 @@ Stage: portfolio · Owner: Dewmini · Priority: Core · Target: Weeks 1–2
 | T4.22 | Decide bond expected-return method for near-zero rates (D25) and apply to both CMA sets | D25 approved; cma.expected_returns applied to both CMA sets, D12 tables, research; 1 test; research doc §8b | Critical | All members | T4.18 | Done | T4.18 finding |
 | T4.23 | Required return in training-period terms (2014 breakeven, same S/G/C) for P1-train return targets | return_objective.required_return_as_of; cma_sets_summary.csv: train 6.49% / 5.96% (breakeven 1.68%), full 7.19% / 6.66%; 2 tests | High | Dewmini | T4.18 | Done | D5 + D12 consistency |
 | T4.24 | Decide portfolio choice rule when the hurdle is infeasible (D26) | D26 approved (option b); frontier.select_highest_compliant; d26_selected in P1-train / P1-final | Critical | All members | T4.11 | Done | T4 finding 2026-10-29 |
-| T4.25 | Final-selection robustness: D26 with a 5-year-test margin, component-ES cap, or blend with Risk Parity (out-of-sample evidence) | Option table for T20 | High | Dewmini | T9.06, T10.07 | Not started | KPI findings 2026-10-29 |
+| T4.25 | Final-selection robustness: D26 with a 5-year-test margin, component-ES cap, or blend with Risk Parity (out-of-sample evidence) | Option table for T20 | High | Dewmini | T9.06, T10.07 | Not started | KPI findings 2026-10-29 · component-ES cap option done (D27) |
 | T4.26 | Speed up portfolio stage (~7 min): cache solves, fewer bisection steps | run_all under ~2 min | Medium | Malindu | — | Not started | Review 2026-10-29 |
 
 ## T5 — KPIs & benchmarks
@@ -183,9 +183,9 @@ Stage: risk · Owner: Sujan · Priority: Supporting · Target: Week 2
 | T9.01 | Define marginal and component VaR methodology | risk/attribution.py: Euler, scenario-based (ES exact, VaR band) + normal cross-check | Critical | Sujan | T6.05 | Done | PM · BR p.8 |
 | T9.02 | Estimate ETF-level marginal VaR and ES contributions | outputs/tables/p2_attribution.csv (6 portfolios × 7 ETFs × 95/99%) | Critical | Sujan | T9.01 | Done | PM |
 | T9.03 | Check contribution aggregation and approximations | sum-to-total test (exact for ES/VaR); normal cross-check within 4 pp | High | Sujan | T9.02 | Done | PM |
-| T9.04 | Recommend position-size adjustments and rationale | Risk-budget recommendation | Critical | Sujan | T9.03 | In progress | PM · BR p.8 |
+| T9.04 | Recommend position-size adjustments and rationale | D27 cap applied in D26 re-selection: SPY 36→20%, EFA 0→9%, XLE 3%, XLK 10% (P2 §6a) | Critical | Sujan | T9.03 | Done | PM · BR p.8 |
 | T9.05 | Risk contribution vs capital weight chart | outputs/figures/risk_vs_weight.png | High | Sujan | T9.02 | Done | FJ R07 |
-| T9.06 | Set the component-ES concentration limit (draft: no ETF > 40% of ES) | Limit in D7 | High | Sujan | T9.02 | In progress | Research gap G4 |
+| T9.06 | Set the component-ES concentration limit (draft: no ETF > 40% of ES) | D27 APPROVED 40% (config constraints.component_es_max); 5-cap study research_d27_cap.csv | High | Sujan | T9.02 | Done | Research gap G4 |
 
 ## T10 — Backtesting
 Stage: validation · Owner: Malindu · Priority: Core · Target: Weeks 2–3

@@ -113,12 +113,13 @@ def select_highest_compliant(inp, settings: dict, lo: float, hi: float, iters: i
         trial = copy.copy(inp)
         trial.hurdle = float(target)
         trial.dd_bound = float(-np.log(1 - lim["max_drawdown"]))
-        w, status = op.target_return(trial)
+        w, status = op.with_es_cap(op.target_return)(trial)
         if w is None or status.startswith("fallback"):
             return None
         d = op.diagnostics(w, trial)
         p = forward_drawdown_prob(w, daily, inp.mu, lim["max_drawdown"])
-        return (w, dict(d, **{"P(DD>limit, 5y)": p}), target) if d["pass_D7"] and p <= lim["max_prob_drawdown_breach_5y"] else None
+        cap_ok = trial.es_cap is None or d["max_ES99_share"] <= trial.es_cap + 1e-3  # D27 verified on the final tail set
+        return (w, dict(d, **{"P(DD>limit, 5y)": p}), target) if d["pass_D7"] and cap_ok and p <= lim["max_prob_drawdown_breach_5y"] else None
 
     top = check(hi)
     if top:

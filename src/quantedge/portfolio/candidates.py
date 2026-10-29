@@ -44,10 +44,14 @@ def build(label: str, simple: pd.DataFrame, settings: dict) -> tuple[pd.DataFram
                        "max_risk_contribution": max(rc.values()),
                        "max_risk_contribution_etf": max(rc, key=rc.get),
                        **{f"rc_{k}": v for k, v in rc.items()}}
-    # D26: highest-return Markowitz target-return portfolio passing every D7 test (same rule for train and full)
+    # D26: highest-return Markowitz target-return portfolio passing every D7 test (same rule for train and full),
+    # with the D27 component-ES cap (no ETF above the cap's share of 99% ES). The cap applies to the selected
+    # portfolio only; the other candidates keep their textbook definitions as comparison methods.
     if "min_variance" in weights and "max_expected_return" in weights:
+        inp.es_cap = settings["constraints"].get("component_es_max")
         sel = fr.select_highest_compliant(inp, settings, float(diags["min_variance"]["expected_geo"]),
                                           float(diags["max_expected_return"]["expected_geo"]))
+        inp.es_cap = None
         if sel:
             w, d, target = sel
             rc = d.pop("risk_contributions")

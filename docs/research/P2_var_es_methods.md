@@ -88,11 +88,40 @@ Bond-heavy portfolios (Min-Variance) have positive skew and the most extreme kur
 
 **Reading:** in a stock/bond portfolio, equities carry most of the tail risk however small their weight. D26 concentrates it in one fund. Capital weight is a poor guide to risk.
 
-**Cost of a cap on any ETF's share of ES** (best expected return within D6 + D7, quick test with an approximate drawdown bound):
+**Which cap? Full evaluation** (D26 rule re-run with every D7 check for each cap; `python scripts/research_d27_cap.py` → `research_d27_cap.csv`). 2026 inputs:
 
-| Cap | No cap | 60% | 50% | **40%** | 30% |
+| Cap on any ETF's share of 99% ES | None | 60% | 50% | **40%** | 30% |
 |---|---|---|---|---|---|
-| Best expected return | 6.06% | 6.06% | 6.04% | **6.03%** | 5.98% |
-| How it adapts | SPY 31 | SPY 31 | SPY 26, EFA 5 | **SPY 21, EFA 11** | SPY 15, EFA 14 |
+| Expected return | 5.96% | 5.93% | 5.91% | **5.89%** | 5.86% |
+| Sustainable spending | 2.80% | 2.78% | 2.76% | **2.74%** | 2.71% |
+| Effective risk contributors | 1.7 | 2.4 | 3.1 | **3.8** | 4.3 |
+| International (EFA+EEM) | 0% | 1% | 5% | **9%** | 12% |
+| Max drawdown (limit 25%) | 24.3% | 23.6% | 24.0% | **24.3%** | 24.6% |
+| P(DD>25% in 5y) (limit 5%) | 4.95% | 4.60% | 4.60% | **4.68%** | 4.73% |
+| VaR99 / ES99 (1 day) | 1.54 / 2.25% | 1.48 / 2.23% | 1.48 / 2.22% | **1.48 / 2.21%** | 1.48 / 2.21% |
+| Loss: GFC / COVID / 2022 | 23.7 / 15.2 / 19.3% | 22.7 / 15.0 / 18.6% | 22.7 / 14.9 / 18.3% | **22.7 / 14.9 / 18.0%** | 22.7 / 14.8 / 17.7% |
+| Weights | AGG 55, SPY 36, XLK 7, GLD 2 | AGG 57, SPY 29, XLK 10, XLE 2, EFA 1, GLD 1 | AGG 58, SPY 24, XLK 10, EFA 5, XLE 2, GLD 1 | **AGG 59, SPY 19, XLK 10, EFA 9, XLE 3** | AGG 59, SPY 15, EFA 12, XLK 10, XLE 4 |
 
-The cap is almost free: under CAPM, EFA's expected return (8.9%) is nearly SPY's (9.1%), so spreading equity risk across US and international equities costs about 0.03 pp. It also adds the international diversification D26 lacks. **D27 proposed: cap 40%.** It is implemented as an iterated linear constraint over the worst-day set and must be added to the D26 rule (re-selection with full D7 checks).
+**Findings:**
+1. **Cost is linear and small:** about 0.025 pp of expected return per 10-point tightening (40% costs 0.07 pp, about $7k a year of spending on $10M). The earlier quick test (0.03 pp) understated it because it used an approximate drawdown bound.
+2. **Benefit is not linear:** diversification rises fast to 40% (1.7 → 3.8 effective contributors, international 0 → 9%), then slows (30% adds only 0.5 and costs as much again).
+3. **Every cap improves tail and crisis numbers versus no cap:** VaR99 1.54 → 1.48%, GFC loss −1 pp, 2022 loss −1.3 pp at 40%. All caps pass every D7 test with more margin than no cap; 30% starts to push drawdown back toward the limit (24.6%).
+4. **Out-of-sample check cannot separate the caps:** the 2014-input portfolio already has no ETF above 26% of ES, so every cap leaves it unchanged (validation and test KPIs identical). The choice therefore rests on the 2026 evidence and on principle, not on a backtest.
+5. **Side effect:** with any cap XLK reaches its 10% D6 limit (US tech stays attractive per unit of ES). XLK+XLE stay within the 15% group limit (13% at 40%).
+
+**D27 APPROVED 2026-10-29: 40%.** It gets most of the diversification benefit, makes international equities a real position (9%), and no single fund carries close to half the tail risk. The extra cost over 50% is 0.02 pp. 50% (≈ the policy benchmark's own 51%) is the fallback if the committee prefers to stay closer to the benchmark; 30% costs more for little extra diversification and erodes drawdown headroom.
+
+### 6a. D26 re-selected with the D27 cap (pipeline, 2026-10-29)
+**Reproduce:** `python run_all.py --only portfolio` then `--only risk`.
+
+| | Before (no cap) | **After (40% cap)** |
+|---|---|---|
+| Weights | AGG 55.1, SPY 36.4, XLK 6.6, GLD 1.9 | **AGG 58.1, SPY 19.6, XLK 10.0, EFA 9.0, XLE 3.1, GLD 0.1** |
+| Expected return / spending | 5.96% / 2.80% | **5.91% / 2.76%** |
+| Largest share of 99% ES | SPY 75% | **SPY 40%** (XLK 20%, EFA 19%, AGG 12%, XLE 8%) |
+| Max drawdown / P(DD>25%, 5y) | −24.3% / 5.0% | **−24.5% / 5.0%** |
+| Historical VaR99 / ES99 (P2) | 1.56% / 2.34% | **1.52% / 2.34%** |
+| EVT VaR99 / ES99 | 1.55% / 2.34% | **1.53% / 2.31%** |
+| GARCH-EVT VaR99, current / long-run regime | 1.11% / 1.81% | **0.98% / 1.61%** |
+
+The pipeline uses 6 bisection steps (research script: 5), so it finds a slightly higher compliant target (5.91% vs 5.89%). Notable: in a long-run average volatility regime the capped portfolio's VaR99 (1.61%) is now **inside** the 1.7% D7 limit; the uncapped one (1.81%) was above it. Tables in §§2–6 above that quote D26 refer to the earlier, uncapped portfolio; the output tables now hold the capped one.

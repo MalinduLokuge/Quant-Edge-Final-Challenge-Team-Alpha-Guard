@@ -12,7 +12,7 @@ Status: ✅ done with evidence · 🟡 partly done or decided but not built · �
 | R5 | VaR ×3 at 95/99 on the same portfolio, explain disagreement (p.7) | risk | Historical, parametric (normal + t), Monte Carlo (t-copula) on identical losses; p2_var_es.csv; research doc P2_var_es_methods.md §2; 6 tests | ✅ | 2026-10-29 |
 | R6 | Expected Shortfall + rationale (p.7) | risk | ES for all 4 methods with intervals; rationale in research doc §4 (ES/VaR 1.5× at 99%) | ✅ | 2026-10-29 |
 | R7 | EVT, justified threshold (p.7) | risk | POT-GPD on raw and GARCH-filtered losses; threshold by documented stability rule on 2004–2019 (figure + p2_evt_thresholds.csv); intervals; 6 tests | ✅ | 2026-10-29 |
-| R8 | Marginal/component VaR/ES → position sizing (p.8) | risk | Euler component + marginal VaR/ES (p2_attribution.csv, figure, 3 tests); position-sizing rule = component-ES cap D27 (proposed), re-selection pending | 🟡 | 2026-10-29 |
+| R8 | Marginal/component VaR/ES → position sizing (p.8) | risk/portfolio | Euler component + marginal VaR/ES (p2_attribution.csv, figure, tests); position-sizing rule D27 (no ETF > 40% of 99% ES) applied in D26 selection: SPY 36→20%, EFA 0→9%; 5-cap evaluation (research_d27_cap.csv) | ✅ | 2026-10-29 |
 | R9 | Kupiec, Christoffersen, Basel, out-of-sample (p.7) | validation | Split APPROVED (D5); tests not built (T10) | ⬜ | 2026-10-28 |
 | R10 | Stress 2008 / Mar-2020 / 2022 + hypothetical (p.8) | validation | Crisis windows computed for benchmarks (research script); hypothetical D9 OPEN (T11) | 🟡 | 2026-10-28 |
 | R11 | Data governance + ADF (p.9) | data | `src/quantedge/data/`, data/README.md, 21+ tests, flag review | ✅ (team sign-off pending) | 2026-10-28 |

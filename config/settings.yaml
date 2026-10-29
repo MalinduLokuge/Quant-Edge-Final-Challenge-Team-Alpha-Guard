@@ -55,7 +55,7 @@ risk_limits:                    # D7, APPROVED 2026-10-28
   var95_1d_max: 0.009           # reported limit; also used for backtest monitoring
   stress_loss_max: 0.25         # each historical / hypothetical scenario
   min_agg_weight_liquidity: 0.08      # >= 2 years of 4% spending
-  component_es_max: DECIDE      # after risk stage (draft 0.40)
+  # component_es_max: see constraints (D27)
   action_ladder:                # D23, APPROVED: drawdown from peak -> action (no forced selling)
     watch: {drawdown: 0.10, rolling_es99: 0.020, action: report to committee}
     review: {drawdown: 0.15, basel_zone: yellow, action: committee check of model, stress and spending}
@@ -80,7 +80,7 @@ constraints:                    # D6 v2, APPROVED 2026-10-28 (docs/research/D3_D
     XLE: 0.10
     XLK: 0.10
   min_weight: 0.0               # no minimum weights
-  component_es_max: DECIDE      # L4, set in risk stage
+  component_es_max: 0.40        # D27, APPROVED 2026-10-29: no ETF > 40% of the D26 portfolio's 99% ES (L4)
 optimiser:                      # D22, APPROVED 2026-10-28
   es_constraint: cvar           # Rockafellar-Uryasev linear programme
   drawdown_constraint: cdar     # conditional drawdown-at-risk (Chekhlov-Uryasev-Zabarankin)

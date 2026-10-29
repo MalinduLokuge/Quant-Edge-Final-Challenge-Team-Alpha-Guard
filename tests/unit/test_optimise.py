@@ -83,3 +83,21 @@ def test_forward_drawdown_probability_bounds():
     w = np.array([0.5, 0.5])
     assert fr.forward_drawdown_prob(w, calm, np.array([0.05, 0.05]), 0.25, n_paths=300) == 0.0
     assert fr.forward_drawdown_prob(w, wild, np.array([0.0, 0.0]), 0.25, n_paths=300) > 0.5
+
+
+def test_component_es_cap_holds_and_binds():
+    # common market factor (as in real ETFs: crash days are shared); uncapped max-return is dominated by A
+    rng = np.random.default_rng(1)
+    n, vols = 1500, np.array([0.20, 0.05, 0.15])
+    mkt = rng.standard_t(4, n)[:, None]
+    z = 0.7 * mkt + 0.7 * rng.standard_t(4, (n, 3))
+    inp = _inp()
+    inp.scenarios = pd.DataFrame(z * vols / np.sqrt(252) / 1.4, columns=T, index=pd.bdate_range("2015-01-01", periods=n))
+    w0, _ = op.max_expected_return(inp)
+    assert op.component_es_shares(w0, inp).max() > 0.6
+    inp.es_cap = 0.5
+    w, st = op.with_es_cap(op.max_expected_return)(inp)
+    assert st == "optimal" and inp.tail_mask is None
+    share = op.component_es_shares(w, inp)
+    assert 0.48 <= share.max() <= 0.5 + 1e-3
+    np.testing.assert_allclose(share.sum(), 1.0, atol=1e-9)

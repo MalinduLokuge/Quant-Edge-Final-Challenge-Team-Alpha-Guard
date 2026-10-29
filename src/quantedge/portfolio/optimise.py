@@ -37,6 +37,8 @@ class Inputs:
     constraints: dict         # config['constraints']
     limits: dict              # config['risk_limits']
     dd_bound: float = field(default=None)  # summed-return drawdown bound used inside the optimiser
+    es_cap: float | None = None            # D27: max share of 99% ES from any one ETF (None = no cap)
+    tail_mask: list | None = None          # worst-day sets the cap is linearised on (set by with_es_cap)
 
     def __post_init__(self):
         if self.dd_bound is None:
@@ -72,7 +74,16 @@ def _drawdown(w, kappa, inp: Inputs) -> list:
 
 def _risk_limits(w, kappa, inp: Inputs) -> list:
     es, cons = _cvar(w, inp, 0.99)
-    return cons + [es <= kappa * inp.limits["es99_1d_max"]] + _drawdown(w, kappa, inp)
+    cons = cons + [es <= kappa * inp.limits["es99_1d_max"]] + _drawdown(w, kappa, inp)
+    if inp.es_cap is not None and inp.tail_mask is not None:
+        # component ES_i = mean over worst days of −w_i·r_i ≤ cap × mean over the same days of −rᵀw (linear for a
+        # fixed worst-day set; with_es_cap adds the new solution's worst-day set each round until the cap holds)
+        R = inp.scenarios[inp.tickers].to_numpy()
+        for mask in inp.tail_mask:
+            Rt = R[mask]
+            total = cp.sum(-(Rt @ w)) / len(Rt)
+            cons += [cp.sum(cp.multiply(-Rt[:, i], w[i])) / len(Rt) <= inp.es_cap * total for i in range(len(inp.tickers))]
+    return cons
 
 
 def _expected_geo(w, inp: Inputs):
@@ -152,6 +163,31 @@ def max_expected_return(inp: Inputs) -> tuple[np.ndarray, str]:
     return (_clean(w.value), "optimal") if st == "optimal" else (None, st)
 
 
+def with_es_cap(fn, max_iter: int = 8, tol: float = 1e-3):
+    """Wrap an optimiser so the D27 component-ES cap holds: solve, take the solution's worst 1% of days, constrain
+    each ETF's average loss on those days to ≤ cap × the portfolio's, re-solve on the new solution's worst days
+    until its own shares are within the cap. If the worst-day set keeps flipping (possible when assets have no
+    common crash days), the status says so and callers reject the solution."""
+    def wrapped(inp: Inputs):
+        if inp.es_cap is None:
+            return fn(inp)
+        inp.tail_mask = []
+        w, status = fn(inp)
+        R = inp.scenarios[inp.tickers].to_numpy()
+        for _ in range(max_iter):
+            if w is None or component_es_shares(w, inp).max() <= inp.es_cap + tol:
+                break
+            loss = -(R @ w)
+            inp.tail_mask = [loss >= np.quantile(loss, 0.99)]
+            w, status = fn(inp)
+        else:
+            if w is not None and component_es_shares(w, inp).max() > inp.es_cap + tol:
+                status = "fallback: component-ES cap not met"
+        inp.tail_mask = None
+        return w, status
+    return wrapped
+
+
 CANDIDATES = {"min_variance": min_variance, "risk_parity": risk_parity, "max_sharpe": max_sharpe,
               "min_cvar": min_cvar, "target_return": target_return}
 
@@ -174,7 +210,17 @@ def diagnostics(w: np.ndarray, inp: Inputs, rebalance: str = "quarterly") -> dic
     rc = w * (inp.sigma @ w) / (w @ inp.sigma @ w)
     out["risk_contributions"] = dict(zip(inp.tickers, rc))
     out["equity_weight"] = float(ws[[t for t in inp.constraints["groups"]["equity"]["tickers"]]].sum())
+    share = component_es_shares(w, inp)  # D27: each ETF's share of daily 99% ES (worst 1% of days)
+    out["max_ES99_share"], out["max_ES99_share_etf"] = float(share.max()), inp.tickers[int(share.argmax())]
     return out
+
+
+def component_es_shares(w: np.ndarray, inp: Inputs, alpha: float = 0.99) -> np.ndarray:
+    """Euler share of ES per ETF on the portfolio's own worst (1 − alpha) days (the quantity D27 caps)."""
+    R = inp.scenarios[inp.tickers].to_numpy()
+    loss = -(R @ w)
+    tail = loss >= np.quantile(loss, alpha)
+    return (-(R[tail] * w)).mean(axis=0) / loss[tail].mean()
 
 
 def summed_drawdown(w: np.ndarray, inp: Inputs) -> float:
