@@ -210,16 +210,16 @@ Stage: validation · Owner: Dewmini · Priority: Core · Target: Weeks 2–3
 
 | ID | Subtask | Expected output | Priority | Owner | Depends on | Status | Source |
 |---|---|---|---|---|---|---|---|
-| T11.01 | Define precise 2008, COVID 2020 and 2022 periods | Dated windows with sources | Critical | Dewmini | — | In progress | PM · BR p.8 · windows used in scripts/research_d3_d7.py; confirm in D9/T11 |
-| T11.02 | Recalculate portfolio performance in historical windows | Replay P&L, max loss, recovery | Critical | Dewmini | T11.01, T4.16 | Not started | PM · FJ VD04 |
-| T11.03 | Design one plausible hypothetical macro/market shock | Scenario spec (D9) | Critical | Dewmini | T1.08 (D9) | Not started | PM · BR p.8 |
-| T11.04 | Estimate ETF reactions and document assumptions | Factor betas (SPY, DGS10) → ETF shocks | Critical | Dewmini | T11.03, T2.09 | Not started | PM |
-| T11.05 | Summarize losses, vulnerabilities and possible adjustments | Stress summary in USD/% NAV | Critical | Dewmini | T11.02, T11.04 | Not started | PM · FJ VD06 |
-| T11.06 | Asset-level stress attribution: which ETFs drive the loss | Stress contribution table | High | Dewmini | T11.05 | Not started | FJ VD06 joint-loss |
-| T11.07 | Correlation / joint losses under stress vs calm | Crisis correlation matrix | High | Dewmini | T11.02 | Not started | FJ joint-loss stress |
-| T11.08 | AGG rate sensitivity estimated from DGS10 (no external duration data) | Empirical rate beta | Medium | Dewmini | T2.09 | Not started | FJ AGG rate-risk · REV |
-| T11.09 | ETF liquidity under stress (e.g. AGG −7.1% on 2008-10-10) | Liquidity note for memo | Medium | Dewmini | T2.11 | Not started | FJ exit gate · REV |
-| T11.10 | Check every scenario against client risk limits | Breach table | Critical | Dewmini | T11.05, T3.04 | Not started | FJ VD06 |
+| T11.01 | Define precise 2008, COVID 2020 and 2022 periods | config stress.windows: GFC, taper 2013, COVID, 2022 (S&P peak/trough dates) | Critical | Dewmini | — | Done | PM · BR p.8 · windows used in scripts/research_d3_d7.py; confirm in D9/T11 |
+| T11.02 | Recalculate portfolio performance in historical windows | stress.replay → stress_results.csv (window loss, worst day, recovery) | Critical | Dewmini | T11.01, T4.16 | Done | PM · FJ VD04 |
+| T11.03 | Design one plausible hypothetical macro/market shock | D9 PROPOSED: stagflation SPY −25%, 10y +200bp, BE +100bp (+ oil/gold variant) | Critical | Dewmini | T1.08 (D9) | In progress | PM · BR p.8 |
+| T11.04 | Estimate ETF reactions and document assumptions | stress.factor_betas (SPY, Δ10y, Δbreakeven; monthly OLS) → stress_factor_betas.csv | Critical | Dewmini | T11.03, T2.09 | Done | PM |
+| T11.05 | Summarize losses, vulnerabilities and possible adjustments | research doc T11 §2–4 (% NAV and USD) | Critical | Dewmini | T11.02, T11.04 | Done | PM · FJ VD06 |
+| T11.06 | Asset-level stress attribution: which ETFs drive the loss | stress_contributions.csv: GFC SPY −10.7pp, AGG +4.2pp; 2022 AGG −8.7pp | High | Dewmini | T11.05 | Done | FJ VD06 joint-loss |
+| T11.07 | Correlation / joint losses under stress vs calm | stress_correlations.csv: SPY–EFA 0.85→0.93, SPY–AGG −0.05→+0.06 | High | Dewmini | T11.02 | Done | FJ joint-loss stress |
+| T11.08 | AGG rate sensitivity estimated from DGS10 (no external duration data) | AGG β to 10y = −0.049/pp (≈5y duration) | Medium | Dewmini | T2.09 | Done | FJ AGG rate-risk · REV |
+| T11.09 | ETF liquidity under stress (e.g. AGG −7.1% on 2008-10-10) | AGG −6.8% 2008-10-10, −4.0% 2020-03-12: liquidity note in T11 §3 | Medium | Dewmini | T2.11 | Done | FJ exit gate · REV |
+| T11.10 | Check every scenario against client risk limits | breach_table: no breach; GFC binding (24.5% vs 25%) | Critical | Dewmini | T11.05, T3.04 | Done | FJ VD06 |
 | T11.11 | Optional: longer-history crises via disclosed proxies (2000–02, 1994) | Proxy scenario losses | Low | Dewmini | T11.02 | Not started | Research gap G2 |
 
 ## T12 — Macro & industry risk (optional)

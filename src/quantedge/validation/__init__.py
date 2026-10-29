@@ -11,7 +11,7 @@ from __future__ import annotations
 import pandas as pd
 
 from quantedge.common import config
-from quantedge.validation import backtest, coverage
+from quantedge.validation import backtest, coverage, stress
 
 
 def portfolios(s: dict) -> dict[str, pd.Series]:
@@ -38,9 +38,47 @@ def run_period(name: str, simple: pd.DataFrame, s: dict, ports: dict, window: in
     return fc, coverage.evaluate_table(fc)
 
 
-def run(include_test: bool | None = None) -> dict:
+def run_stress(simple: pd.DataFrame, s: dict) -> dict:
+    """T11: historical replays and the D9 hypothetical shock on the P1-final (recommended) weights and benchmark."""
+    rates = pd.read_csv(config.DATA_PROCESSED / "rates_daily.csv", index_col=0, parse_dates=True)
+    w = pd.read_csv(config.OUTPUT_TABLES / "p1_final_weights.csv", index_col=0)
+    ports = {n: w.loc[n] for n in s["risk"]["p2_portfolios"] if n in w.index}
+    b = s["benchmarks"]["primary"]
+    ports[f"[benchmark] {b['name']}"] = pd.Series(b["weights"]).reindex(simple.columns, fill_value=0.0)
+    st, nav, out = s["stress"], s["portfolio_value_usd"], config.OUTPUT_TABLES
+    rows, contrib = [], []
+    for name, wt in ports.items():
+        for scen, (a, z) in st["windows"].items():
+            r = stress.replay(simple, wt, a, z)
+            rows.append({"portfolio": name, "scenario": scen, "type": "historical", "start": a, "end": z,
+                         "scenario_return": r["max_drawdown_in_window"], **r})
+            contrib.append(stress.contributions(simple, wt, a, z).rename("contribution").to_frame()
+                           .assign(portfolio=name, scenario=scen))
+    betas = stress.factor_betas(simple, rates)
+    h = st["hypothetical"]
+    shocks = {h["name"]: stress.hypothetical_shocks(betas, h["factor_shock"], h["overrides"]),
+              h["variant_name"]: stress.hypothetical_shocks(betas, h["factor_shock"], h["variant_overrides"])}
+    for name, wt in ports.items():
+        for scen, sh in shocks.items():
+            c = wt.reindex(sh.index, fill_value=0.0) * sh
+            rows.append({"portfolio": name, "scenario": scen, "type": "hypothetical", "scenario_return": float(c.sum())})
+            contrib.append(c.rename("contribution").to_frame().assign(portfolio=name, scenario=scen))
+    res = stress.breach_table(pd.DataFrame(rows), s["risk_limits"])
+    res["loss_usd"] = res["loss"] * nav
+    res.to_csv(out / "stress_results.csv", index=False)
+    pd.concat(contrib).rename_axis("etf").reset_index().to_csv(out / "stress_contributions.csv", index=False)
+    betas.assign(**{f"shock: {k}": v for k, v in shocks.items()}).to_csv(out / "stress_factor_betas.csv")
+    crisis, calm = stress.stress_correlations(simple, st["windows"])
+    pd.concat([crisis.assign(regime="stress"), calm.assign(regime="calm")]).to_csv(out / "stress_correlations.csv")
+    print(f"[validation] stress: {len(st['windows'])} historical + {len(shocks)} hypothetical x {len(ports)} portfolios")
+    return {"stress": res}
+
+
+def run(include_test: bool | None = None, stress_only: bool = False) -> dict:
     s = config.load_settings()
     simple = pd.read_csv(config.DATA_PROCESSED / "simple_returns.csv", index_col=0, parse_dates=True)
+    if stress_only:
+        return run_stress(simple, s)
     ports, out = portfolios(s), config.OUTPUT_TABLES
     names = ["validation"]
     if include_test if include_test is not None else s["validation"]["test_unlocked"]:
@@ -59,4 +97,4 @@ def run(include_test: bool | None = None) -> dict:
     sens = [run_period("validation", simple, s, key, w)[1].assign(window=w)
             for w in (s["risk"]["backtest_window_days"], s["risk"]["backtest_window_sensitivity_days"])]
     pd.concat(sens).to_csv(out / "backtest_window_sensitivity.csv", index=False)
-    return res
+    return res | run_stress(simple, s)

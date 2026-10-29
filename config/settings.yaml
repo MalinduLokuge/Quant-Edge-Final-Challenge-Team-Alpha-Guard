@@ -57,6 +57,18 @@ validation:                     # T10 backtesting (D13 window above)
   selection_rule: kupiec_basel_gate_then_fz0   # D28, APPROVED 2026-10-29 (validation data only, T10.07)
   selected_model: garch_evt     # D28 result, frozen 2026-10-29 before the test period
   test_unlocked: true           # D28 approved; test period run once 2026-10-29
+stress:                         # T11
+  windows:                      # S&P 500 peak-to-trough dates (T11.01); taper tantrum = 10y yield jump
+    GFC 2007-09: ["2007-10-09", "2009-03-09"]
+    Taper tantrum 2013: ["2013-05-02", "2013-06-24"]
+    COVID 2020: ["2020-02-19", "2020-03-23"]
+    Rates and inflation 2022: ["2022-01-03", "2022-10-12"]
+  hypothetical:                 # D9, PROPOSED 2026-10-29: stagflation shock over one quarter
+    name: Stagflation shock
+    factor_shock: {SPY: -0.25, dgs10_pct: 2.0, breakeven_10y_pct: 1.0}   # equities -25%, 10y +200bp, breakeven +100bp
+    overrides: {}               # primary: factor betas only (hedges get no credit)
+    variant_name: Stagflation with oil and gold spike
+    variant_overrides: {XLE: 0.30, GLD: 0.10}   # sensitivity: 2022-style energy rally, gold as inflation hedge
 risk_limits:                    # D7, APPROVED 2026-10-28
   max_drawdown: 0.25            # historical incl. 2008 replay
   max_prob_drawdown_breach_5y: 0.05   # P(DD > 25% within 5y), block bootstrap with CAPM means
