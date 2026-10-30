@@ -10,7 +10,7 @@
 ---
 
 ### Recommendation: **ACCEPT the mandate as proposed**, with the risk limits unchanged and spending set at about 2.65% a year
-*[Team to confirm the verdict wording: accept / adjust the risk limit / reject (D14).]*
+*Verdict confirmed by the team on 2026-10-30 (D34), in the brief's wording (D14).*
 
 **What we propose.** Invest the $10M in seven exchange-traded funds and rebalance back to these weights every quarter:
 

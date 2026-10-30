@@ -297,7 +297,7 @@ Stage: decision/docs · Owner: Raveena · Priority: Core · Target: Week 3
 | T16.01 | Outline 7–15 page technical report based on actual results | docs/deliverables/report/technical_report.md: 11 sections + appendix (draft, team review) | Critical | Raveena | T1.07 | In progress | PM · BR p.6 |
 | T16.02 | Complete methods, evidence, tests and limitations writeup | report draft: methods, evidence, tests, limitations (team to edit and own) | Critical | Raveena | T20.04 | In progress | PM |
 | T16.03 | Create concise one-page portfolio tear sheet | docs/deliverables/tear_sheet/tear_sheet.md (draft, team review) | Critical | Raveena | T20.04 | In progress | PM · BR p.6 |
-| T16.04 | Write one-page investment committee decision memo | docs/deliverables/memo/investment_committee_memo.md: verdict ACCEPT drafted, team to confirm (D14) | Critical | Raveena | T20.04 | In progress | PM · BR p.8 |
+| T16.04 | Write one-page investment committee decision memo | memo drafted; verdict ACCEPT confirmed by team (D34); wording to be finalised by team | Critical | Raveena | T20.04 | Done | PM · BR p.8 |
 | T16.05 | Cross-check all numbers between report, memo and app | scripts/check_deliverables.py: 30 figures vs outputs, 0 mismatches (caught one rounding error) | Critical | Raveena | T16.02–T16.04, T14.* | Done | PM · FJ calculation audit |
 | T16.06 | Data sources and cleaning steps section | report §3 data sources and cleaning (draft) | Critical | Raveena | T2.11 | In progress | BR p.6 |
 | T16.07 | Report sections: return objective & sustainable spending; benchmark and risk-limit research (appendix) | report §2, §4.4 return objective, spending and risk-limit research (draft) | High | Raveena | T20.04 | In progress | DEC D3, D7, D12 |
@@ -322,13 +322,13 @@ Stage: — · Owner: Malindu · Priority: Core · Target: Ongoing
 
 | ID | Subtask | Expected output | Priority | Owner | Depends on | Status | Source |
 |---|---|---|---|---|---|---|---|
-| T18.01 | Keep a running list of AI tools and their purposes | AI_DISCLOSURE.md rows | Critical | Malindu | — | In progress | PM · BR p.8 |
-| T18.02 | Record which code, figures or text used AI assistance | Material components column | Critical | Malindu | — | In progress | PM · BR p.8 |
+| T18.01 | Keep a running list of AI tools and their purposes | docs/AI_DISCLOSURE.md: 11 rows covering all stages (2026-10-30) | Critical | Malindu | — | Done | PM · BR p.8 |
+| T18.02 | Record which code, figures or text used AI assistance | material components column filled per stage | Critical | Malindu | — | Done | PM · BR p.8 |
 | T18.03 | Document manual verification, corrections and tests | HUMAN_VALIDATION_LOG.md | Critical | Malindu | — | In progress | PM · BR p.8 |
 | T18.04 | Review completeness of the log before submission | Signed-off log | Critical | Malindu | T18.01–T18.03 | Not started | PM |
-| T18.05 | Use the brief's four disclosure columns exactly | Tool · Purpose · Human validation · Material components | High | Malindu | — | Not started | BR p.8 |
+| T18.05 | Use the brief's four disclosure columns exactly | brief's four columns used exactly | High | Malindu | — | Done | BR p.8 |
 | T18.06 | Every member can explain each module (judging rule) | Walk-through sessions per stage | High | All members | each stage | Not started | BR p.9 |
-| T18.07 | Record Claude Code use to date in the brief's four columns (tool, purpose, human validation, material components) | AI_DISCLOSURE.md entries (team to review) | Critical | Malindu | — | In progress | BR p.8 · Review |
+| T18.07 | Record Claude Code use to date in the brief's four columns (tool, purpose, human validation, material components) | Claude Code use recorded to 2026-10-30 | Critical | Malindu | — | Done | BR p.8 · Review |
 | T18.08 | Team sign-off of every HUMAN_VALIDATION_LOG entry (9 unsigned on 2026-10-28) | Signed log | Critical | All members | — | Not started | BR p.8–9 |
 
 ## T19 — Pitch & Q&A prep
