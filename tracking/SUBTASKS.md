@@ -231,7 +231,7 @@ Stage: validation · Owner: Dewmini · Priority: Core · Target: Weeks 2–3
 | T11.19 | 12-month scenario path: quarterly rebalancing, costs, D24 spending, liquidity | stress_hyp_paths.csv: A severe worst −19.3%, spending $399k (−6.7% real), AGG 12 yrs of spending | High | Dewmini | T11.18 | Done | Prototype in design report §6.2 |
 | T11.20 | Robustness: Monte Carlo over shock ranges and beta SEs; one-at-a-time; XLE/GLD variants | stress_hyp_sensitivity.csv: MC 99th pct 16.1%; SPY ×1.5 → 25.7% (only breach) | High | Dewmini | T11.18 | Done | Prototype in design report §7 |
 | T11.21 | Scenario-conditional VaR (GARCH-EVT scaled by stressed volatility) vs D7/D23 triggers | scenario VaR99 2.38% (A severe) > 1.7% → D23 review; explained vs multi-month loss | Medium | Dewmini | T11.18, T10.07 | Done | Design report §6.3 |
-| T11.22 | Stress page: scenario/severity selector, factor sliders, contribution waterfall, path chart | App stress panel | High | Dewmini | T11.18, T14 | Not started | BR pp.5–6 |
+| T11.22 | Stress page: scenario/severity selector, factor sliders, contribution waterfall, path chart | pages/4_Stress: scenario/severity selector, factor sliders, waterfall, path chart | High | Dewmini | T11.18, T14 | Done | BR pp.5–6 |
 | T11.23 | Feed severe-scenario loss and headroom into memo and T20 decision (gold/XLE hedge test in T4.25) | Memo stress section | Critical | Dewmini | T11.20, T20 | Not started | Decision 30% |
 
 ## T12 — Macro & industry risk (optional)
@@ -263,19 +263,19 @@ Stage: app · Owner: Malindu · Priority: Core · Target: Weeks 2–3
 
 | ID | Subtask | Expected output | Priority | Owner | Depends on | Status | Source |
 |---|---|---|---|---|---|---|---|
-| T14.01 | Build sidebar: confidence 90/95/99, method and backtest dates | Sidebar wired to outputs | Critical | Malindu | T6.07, T10.10 | Not started | PM · BR p.5 |
-| T14.02 | Build ETF weights and cumulative return portfolio panel | Portfolio page | Critical | Malindu | T4.16 | Not started | PM · BR p.5 |
-| T14.03 | Add drawdown figure and KPI section | Drawdown + KPI panel | Critical | Malindu | T5.05 | Not started | PM · BR p.5 |
-| T14.04 | Create VaR/ES/EVT side-by-side risk dashboard | Risk page, same confidence, gap visible | Critical | Malindu | T8.05 | Not started | PM · BR p.5 |
-| T14.05 | Build backtesting results and traffic-light panel | Backtest page | Critical | Malindu | T10.06 | Not started | PM · BR p.5 |
-| T14.06 | Build historical/hypothetical stress visualization | Stress page | Critical | Malindu | T11.05 | Not started | PM · BR p.6 |
-| T14.07 | Add Assumptions page and test app interactions | Assumptions page + UI tests | Critical | Malindu | T15.05 | Not started | PM · BR p.6 |
-| T14.08 | Shared loader: app reads outputs only, cached; no model code in UI | app/components/data.py | High | Malindu | T4.16 | Not started | FJ app 03 · AGENTS.md |
-| T14.09 | Decision & tear-sheet page (P3, limits, monitoring triggers) | Decision page | High | Malindu | T20.04 | Not started | FJ app 08 |
-| T14.10 | AI disclosure & sources page | Disclosure page | Medium | Malindu | T18.05 | Not started | FJ app 10 |
-| T14.11 | Export & reproducibility page (CSV/figures download) | Export page | Low | Malindu | T14.02–T14.06 | Not started | FJ app 11 |
-| T14.12 | Plain-language labels for a non-technical committee (units, horizon on every number) | UI copy review | High | Malindu | T14.01–T14.07 | Not started | BR p.5 · masterclass |
-| T14.13 | What-if sliders on decision page: spending, growth, costs, ERP → required return, gap, sustainable spending | Decision page widget | Medium | Malindu | T4.21 | Not started | Team request 2026-10-28 |
+| T14.01 | Build sidebar: confidence 90/95/99, method and backtest dates | app/components/ui.py sidebar: confidence 90/95/99, VaR method, backtest dates (session state) | Critical | Malindu | T6.07, T10.10 | Done | PM · BR p.5 |
+| T14.02 | Build ETF weights and cumulative return portfolio panel | pages/1_Portfolio: weights, growth of $10M vs benchmarks | Critical | Malindu | T4.16 | Done | PM · BR p.5 |
+| T14.03 | Add drawdown figure and KPI section | pages/1_Portfolio: drawdown chart with D7 line, KPI table by period | Critical | Malindu | T5.05 | Done | PM · BR p.5 |
+| T14.04 | Create VaR/ES/EVT side-by-side risk dashboard | pages/2_Risk: VaR/ES/EVT/GARCH-EVT side by side at chosen confidence, CIs, component ES vs D27 | Critical | Malindu | T8.05 | Done | PM · BR p.5 |
+| T14.05 | Build backtesting results and traffic-light panel | pages/3_Backtest: Kupiec, Christoffersen, Basel recomputed on any date range; exception chart | Critical | Malindu | T10.06 | Done | PM · BR p.5 |
+| T14.06 | Build historical/hypothetical stress visualization | pages/4_Stress: scenario table, contribution waterfall, 12-month paths, factor sliders | Critical | Malindu | T11.05 | Done | PM · BR p.6 |
+| T14.07 | Add Assumptions page and test app interactions | pages/7_Assumptions from docs/ASSUMPTIONS_LIMITATIONS.md; tests/integration/test_app.py (9 pages run) | Critical | Malindu | T15.05 | Done | PM · BR p.6 |
+| T14.08 | Shared loader: app reads outputs only, cached; no model code in UI | app/components/data.py: cached loaders, outputs only | High | Malindu | T4.16 | Done | FJ app 03 · AGENTS.md |
+| T14.09 | Decision & tear-sheet page (P3, limits, monitoring triggers) | pages/6_Decision: P3, suitability gate, validation, triggers | High | Malindu | T20.04 | Done | FJ app 08 |
+| T14.10 | AI disclosure & sources page | pages/8_Disclosure: AI disclosure, data sources, decision log | Medium | Malindu | T18.05 | Done | FJ app 10 |
+| T14.11 | Export & reproducibility page (CSV/figures download) | download buttons on Decision page (CSV / Markdown) | Low | Malindu | T14.02–T14.06 | Done | FJ app 11 |
+| T14.12 | Plain-language labels for a non-technical committee (units, horizon on every number) | UI copy review | High | Malindu | T14.01–T14.07 | In progress | BR p.5 · masterclass |
+| T14.13 | What-if sliders on decision page: spending, growth, costs, ERP → required return, gap, sustainable spending | pages/5_Sustainability: what-if sliders (spending, growth, costs, inflation, ERP) + trade-off + recovery | Medium | Malindu | T4.21 | Done | Team request 2026-10-28 |
 
 ## T15 — Assumptions & Limitations
 Stage: docs/app · Owner: Raveena + Dewmini · Priority: Core · Target: Week 3
@@ -353,7 +353,7 @@ Stage: decision · Owner: All members · Priority: Core · Target: Week 3
 | T20.05 | Monitoring triggers and exit / de-risking rules | p3_triggers.csv: D23 ladder + Basel model check + quarterly rebalance + annual review | High | All members | T20.04 | Done | FJ VD10 |
 | T20.06 | Drawdown ↔ spending trade-off table in memo and app | p3_tradeoff.csv: frontier spending vs drawdown vs P(DD), O6 marked (app widget pending T14) | High | All members | T3.19 | Done | Research §4 |
 | T20.07 | Walk-forward (rolling-origin) validation of the selection rule (O1 vs O2), origins 2009–2021, CMA as of each origin | research_walkforward_*.csv: 6 origins 2008–2023; D7 drawdown held every segment; chained 7.3%/yr, Sharpe 0.89, DD −16.4% (policy 0.75, −19.2%); D27×D7 conflict at 2008/2011 noted | Critical | Malindu | T4.25 | Done | Selection-bias precaution 2026-10-29 |
-| T20.08 | Recalibrate D23 rolling-ES99 watch trigger (fires on 26% of days at 2.0%) | p3_trigger_frequency.csv: rolling ES99 2.0% on 20% of days (4 episodes), 2.5% 9.6% (2: GFC, COVID); recalibration proposal pending team | Medium | All members | T10.12 | In progress | Limit-stability finding 2026-10-29 |
+| T20.08 | Recalibrate D23 rolling-ES99 watch trigger (fires on 26% of days at 2.0%) | Approved 2026-10-30: watch rolling ES99 2.5% (was 2.0%; 20% → 9.6% of days) | Medium | All members | T10.12 | Done | Limit-stability finding 2026-10-29 |
 | T20.09 | Endowment sustainability & recovery stress test: 15/20/25% falls, 1/3/5/7-year and lost-decade recoveries, D24 at 2.8%, costs, taxes, inflation; market view; bootstrap | sustainability_*.csv + research_t425_eval_sustainability_*.csv | Critical | All members | T20.10 | Done | User request 2026-10-29 |
 | T20.10 | Audit fix: 5-year drawdown test seed-tuned (4k paths) → 32k paths, block-length sensitivity; D30 2.8% propagated to hurdle and spending | Pipeline rerun, D26 re-selected | Critical | Malindu | — | Done | Audit 2026-10-29 |
 

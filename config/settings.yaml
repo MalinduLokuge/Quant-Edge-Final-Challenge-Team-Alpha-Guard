@@ -133,10 +133,10 @@ risk_limits:                    # D7, APPROVED 2026-10-28
   min_agg_weight_liquidity: 0.08      # >= 2 years of 4% spending
   # component_es_max: see constraints (D27)
   action_ladder:                # D23, APPROVED: drawdown from peak -> action (no forced selling)
-    watch: {drawdown: 0.10, rolling_es99: 0.020, action: report to committee}
-    review: {drawdown: 0.15, basel_zone: yellow, action: committee check of model, stress and spending}
-    act: {drawdown: 0.20, rolling_es99: 0.025, action: formal decision - keep / reduce risk at next rebalance / adjust spending}
-    limit: {drawdown: 0.25, basel_zone: red, action: mandatory decision - accept / adjust risk limit / reject}
+    watch: {drawdown: 0.10, rolling_es99: 0.025, action: "report to committee"}   # rolling ES raised 2.0% -> 2.5% (T20.08, 2026-10-30): fired on 20% of days
+    review: {drawdown: 0.15, basel_zone: yellow, action: "committee check of model, stress and spending"}
+    act: {drawdown: 0.20, rolling_es99: 0.025, action: "formal decision - keep / reduce risk at next rebalance / adjust spending"}
+    limit: {drawdown: 0.25, basel_zone: red, action: "mandatory decision - accept / adjust risk limit / reject"}
   monitoring:                   # review triggers, not forced sales
     rolling_es_window: 250
     basel_zones_review: [yellow, red]

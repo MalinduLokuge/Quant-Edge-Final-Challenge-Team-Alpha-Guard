@@ -8,8 +8,9 @@ pandas-datareader   # FRED
 arch==7.2.0         # GARCH; install with --no-deps to keep numpy < 2
 cvxpy>=1.5,<1.6     # constrained optimisation; 1.5.x keeps numpy < 2 (pandas 2.1 / scipy 1.11)
 matplotlib
-plotly
-streamlit
+plotly==7.1.0
+streamlit==1.66.1
+pyarrow==19.0.1     # Streamlit tables; pyarrow >= 21 needs numpy 2 (we pin numpy < 2 for cvxpy)
 pyyaml
 openpyxl           # tracker Excel exports
 pytest
