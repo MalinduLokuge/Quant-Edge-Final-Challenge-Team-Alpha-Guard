@@ -23,6 +23,8 @@ def main() -> int:
     o6 = st[st.portfolio == "d26_selected"].set_index("scenario")["loss"]
     pol = st[st.portfolio == "[benchmark] Policy 40/50/10"].set_index("scenario")["loss"]
     k = pd.read_csv(T / "kpis.csv").set_index(["portfolio", "period"])
+    dv = pd.read_csv(T / "p2_diversification.csv")
+    dv = dv[(dv.portfolio == "d26_selected") & (dv.alpha == 0.99)].iloc[0]
     f = lambda x, d=1: f"{float(x):.{d}%}"
     checks = {
         "tear_sheet/tear_sheet.md": [f(summ["Expected return (nominal, compound)"], 2), f(summ["Spending the portfolio supports"], 2),
@@ -31,12 +33,14 @@ def main() -> int:
                                      f(o6["GFC 2007-09"]), f(pol["GFC 2007-09"]), f(o6["COVID 2020"]), f(o6["Rates and inflation 2022"]),
                                      f(o6["A Energy stagflation (Hormuz II) (severe)"]), f(o6["B AI unwind with recession (severe)"]),
                                      f(k.loc[("d26_selected", "validation"), "CAGR"]), f(k.loc[("d26_selected", "test"), "CAGR"]),
-                                     f"${port.loc['AGG', 'usd']:,.0f}", f"${port.loc['SPY', 'usd']:,.0f}"],
+                                     f"${port.loc['AGG', 'usd']:,.0f}", f"${port.loc['SPY', 'usd']:,.0f}",
+                                     f(dv["VaR_benefit"]), f(dv["ES_benefit"])],
         "memo/investment_committee_memo.md": ["2.65%", "$265,000", "5.8%", "1.4%", "2.2%"],
         "report/technical_report.md": [f(summ["Expected return (nominal, compound)"], 2), f(o6["GFC 2007-09"]), f(o6["Taper tantrum 2013"]),
                                        f(o6["A Energy stagflation (Hormuz II) (central)"]), f(o6["A Energy stagflation (Hormuz II) (severe)"]),
                                        f(o6["B AI unwind with recession (central)"]), f(o6["B AI unwind with recession (severe)"]),
-                                       f(summ["1-day VaR 95% historical"], 2), f(summ["1-day ES 99% historical"], 2)],
+                                       f(summ["1-day VaR 95% historical"], 2), f(summ["1-day ES 99% historical"], 2),
+                                       f(dv["VaR_benefit"]), f(dv["ES_benefit"]), f(dv["VaR_undiversified"], 2), f(dv["ES_undiversified"], 2)],
     }
     bad = 0
     for doc, values in checks.items():

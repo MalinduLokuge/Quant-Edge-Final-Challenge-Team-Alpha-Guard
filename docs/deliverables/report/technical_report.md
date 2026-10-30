@@ -140,6 +140,19 @@
 - **GARCH:** persistence 0.989 and a volatility half-life of 65 days. Today's calm regime gives a 99% VaR of 0.94%, against 1.48% in an average regime. This is why D7 is checked on full-cycle history.
 - **Attribution:** SPY carries 40% of the 99% ES, XLK 22%, EFA 16% and AGG 14%. Bonds are 61% of the capital but a small part of the tail risk.
 
+**Diversification benefit** (brief p.4; `p2_diversification.csv`). The undiversified risk is each ETF's own VaR or ES, weighted and added up, as if all holdings had their worst days together.
+
+| 1-day, 99% | Portfolio | Undiversified | Benefit |
+|---|---|---|---|
+| O6 VaR | 1.39% | 1.95% | 28.8% |
+| O6 ES | 2.20% | 2.91% | 24.5% |
+| Policy 40/50/10 VaR / ES | 1.51% / 2.30% | 2.18% / 3.29% | 30.9% / 30.0% |
+| Risk parity VaR / ES | 1.36% / 2.09% | 2.17% / 3.23% | 37.4% / 35.4% |
+
+- **O6 diversification ratio:** 1.38. The weighted average volatility is 38% above the portfolio's own.
+- **Diversification shrinks in crises.** It is smaller in the tail (ES) than at the VaR level, because correlations rise in stress (T11 §3).
+- **O6 diversifies less than risk parity.** It gives up some diversification for a higher expected return within the same limits; the D27 cap stops any single fund from dominating the tail.
+
 ## 6. Out-of-sample backtesting (T10; `backtest_*.csv`)
 **Setup:**
 - Rolling 1,000-day window (D13), re-estimated daily on data up to t−1, for 7 methods × 6 portfolios.

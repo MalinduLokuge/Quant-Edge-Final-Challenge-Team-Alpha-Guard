@@ -94,6 +94,11 @@ def run() -> dict:
         b = bt.iloc[0]
         rows.append(("Backtest 2020–26, GARCH-EVT 99%: exceptions / expected / Kupiec p / worst Basel count",
                      f"{int(b['exceptions'])} / {b['expected']:.1f} / {b['p_uc']:.2f} / {int(b['basel_worst_count'])}", "", "T10, D28"))
+    dv = _get(pd.read_csv(t / "p2_diversification.csv"), portfolio=name, alpha=0.99).iloc[0]
+    rows += [("1-day VaR / ES 99% if holdings were not diversified (sum of parts)",
+              f"{dv['VaR_undiversified']:.2%} / {dv['ES_undiversified']:.2%}", "", "QA-02, brief p.4"),
+             ("Diversification benefit: VaR 99% / ES 99% reduction", f"{dv['VaR_benefit']:.1%} / {dv['ES_benefit']:.1%}", "", "QA-02"),
+             ("Diversification ratio (Σ wσ / σ_p)", dv["diversification_ratio"], "", "QA-02")]
     worst = st.loc[st["loss"].idxmax()]
     rows += [("Worst stress loss", f"{worst['loss']:.2%} ({worst['scenario']})", "", "T11, D9 v2 / D29"),
              ("Stress limit", lim["stress_loss_max"], "fraction", "D7")]

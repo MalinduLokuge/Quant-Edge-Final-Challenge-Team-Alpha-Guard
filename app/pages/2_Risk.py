@@ -71,3 +71,16 @@ fig.update_layout(height=320, yaxis_tickformat=".0%", margin=dict(t=10, b=10))
 st.plotly_chart(fig, use_container_width=True)
 st.caption("Euler allocation: each ETF's average contribution to losses on the worst days; contributions add up to total ES. "
            "Bonds are most of the capital but a small part of the tail risk.")
+
+st.subheader("Diversification benefit")
+dv = D.table("p2_diversification")
+dv = dv[np.isclose(dv.alpha, 0.99 if conf > 0.97 else 0.95)].assign(Portfolio=lambda d: d["portfolio"].map(D.label))
+st.dataframe(dv[["Portfolio", "VaR", "VaR_undiversified", "VaR_benefit", "ES", "ES_undiversified", "ES_benefit", "diversification_ratio"]]
+             .rename(columns={"VaR_undiversified": "VaR if not diversified", "VaR_benefit": "VaR saved", "ES_undiversified": "ES if not diversified",
+                              "ES_benefit": "ES saved", "diversification_ratio": "Diversification ratio"})
+             .style.format({"VaR": "{:.2%}", "VaR if not diversified": "{:.2%}", "VaR saved": "{:.0%}", "ES": "{:.2%}",
+                            "ES if not diversified": "{:.2%}", "ES saved": "{:.0%}", "Diversification ratio": "{:.2f}"}),
+             hide_index=True, use_container_width=True)
+st.caption("'If not diversified' adds up each ETF's own VaR or ES, weighted, as if every holding had its worst days together. "
+           "The saving is what holding different assets buys. Diversification ratio = weighted average volatility ÷ portfolio volatility. "
+           "Risk parity diversifies most; the recommended portfolio trades some diversification for a higher return within the limits.")

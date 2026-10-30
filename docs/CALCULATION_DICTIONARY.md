@@ -74,6 +74,7 @@ All at α ∈ {90, 95, 99}%, 1-day horizon, on portfolio loss L, reported as % o
 | Expected Shortfall | E[L ∣ L ≥ VaR_α]; normal μ+σφ(z)/(1−α); t: m+s·(ν+t²)/(ν−1)·f(t)/(1−α) | ✅ |
 | EVT VaR / ES | POT-GPD: VaR = u + β/ξ·[((n/Nᵤ)(1−α))^(−ξ) − 1]; ES = (VaR + β − ξu)/(1−ξ); n/a if α ≤ q (`evt_garch.evt_table`) | ✅ |
 | GARCH(1,1)-t | σ²ₜ = ω + αε²ₜ₋₁ + βσ²ₜ₋₁; half-life ln0.5/ln(α+β); long-run σ = √(ω/(1−α−β)) (`evt_garch.fit_garch`, `garch_summary`) | ✅ |
+| Diversification benefit | 1 − portfolio VaR (ES) / Σ wᵢ·VaRᵢ (ESᵢ) of each ETF alone; diversification ratio Σ wᵢσᵢ / σ_p (`attribution.diversification_table`) | fraction | `risk/attribution.py` | test_attribution | ✅ |
 | P(DD > 25% in 5 years) | Moving-block bootstrap (63-day blocks), each ETF's mean reset to its CMA expected return; 32,000 paths in batches of 4,000 (seed 7 + k, common random numbers); s.e. = √(p(1−p)/n) (`frontier.forward_drawdown_prob`, `mc_se`) | probability | `portfolio/frontier.py` | test_optimise | ✅ |
 | Recovery path (D24) | NAVₜ = NAVₜ₋₁(1+gₜ)(1−costs−tax) − Sₜ; S₁ = rate·NAV₀, Sₜ = 0.7Sₜ₋₁(1+πₜ₋₁) + 0.3·rate·NAVₜ₋₁; real = nominal / Π(1+π); recovery gₜ = (1/(1−d))^(1/R) − 1 (`sustainability.d24_path`, `recovery_returns`) | NAV index | `validation/sustainability.py` | test_sustainability | ✅ |
 | Market-view recovery | year return = w·B·f + carry, carry = μ_p − β_p,SPY·μ_SPY; f scaled to SPY = −d, reverting over R years (`sustainability.market_returns`) | fraction | `validation/sustainability.py` | test_sustainability | ✅ |

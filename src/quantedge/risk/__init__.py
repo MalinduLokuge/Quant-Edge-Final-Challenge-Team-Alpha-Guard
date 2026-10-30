@@ -39,6 +39,8 @@ def run() -> dict:
     pd.DataFrame(diags).T.to_csv(out / "p2_diagnostics.csv")
     att = pd.concat([attribution.attribution_table(simple, w).assign(portfolio=n) for n, w in portfolios(s).items()])
     att.to_csv(config.OUTPUT_TABLES / "p2_attribution.csv", index=False)  # T9
+    pd.concat([attribution.diversification_table(simple, w).assign(portfolio=n) for n, w in portfolios(s).items()]).to_csv(
+        config.OUTPUT_TABLES / "p2_diversification.csv", index=False)  # QA-02, brief p.4
     _plot_attribution(att)
     evt = run_evt_garch(simple, s, portfolios(s))
     print(f"[risk] VaR/ES for {len(diags)} portfolios x {len(r['confidence_levels'])} levels x 4 methods; EVT + GARCH-EVT")

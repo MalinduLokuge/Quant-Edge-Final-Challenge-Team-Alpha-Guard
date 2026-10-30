@@ -5,6 +5,9 @@ Euler allocation (VaR and ES are homogeneous of degree 1 in the weights, so comp
     component VaR_i = E[ −w_i·r_i | L ≈ VaR_α ]          (scenarios in a narrow band around VaR; rescaled to sum)
     parametric (normal) cross-check: component VaR_i = w_i·(Σw)_i/σ_p·z_α  (+ w_i·μ_L,i)
     marginal X_i    = component X_i / w_i                 (risk added per unit of weight)
+Diversification benefit (brief p.4, QA-02): undiversified risk = Σ wᵢ·(ETF i's own VaR or ES), i.e. the risk if all
+holdings had their bad days together; benefit = 1 − portfolio risk / undiversified risk. Diversification ratio =
+Σ wᵢσᵢ / σ_p (1 = no diversification).
 """
 from __future__ import annotations
 
@@ -52,3 +55,27 @@ def attribution_table(returns: pd.DataFrame, weights: pd.Series, alphas=(0.95, 0
         sc["pct_VaR_normal"] = sc["component_VaR_normal"] / sc["component_VaR_normal"].sum()
         rows.append(sc.assign(alpha=a, VaR=sc.attrs["VaR"], ES=sc.attrs["ES"]).rename_axis("etf").reset_index())
     return pd.concat(rows, ignore_index=True)
+
+
+def diversification_table(returns: pd.DataFrame, weights: pd.Series, alphas=(0.95, 0.99)) -> pd.DataFrame:
+    """Portfolio vs undiversified (weighted sum of standalone) historical VaR / ES, and the diversification ratio."""
+    w = weights.reindex(returns.columns, fill_value=0.0)
+    loss = -(returns @ w).to_numpy()
+    rows = []
+    for a in alphas:
+        v = float(np.quantile(loss, a))
+        es = float(loss[loss >= v].mean())
+        sv = se = 0.0
+        for t in returns.columns:
+            if w[t] == 0:
+                continue
+            li = -returns[t].to_numpy()
+            vi = float(np.quantile(li, a))
+            sv += w[t] * vi
+            se += w[t] * float(li[li >= vi].mean())
+        rows.append({"alpha": a, "VaR": v, "ES": es, "VaR_undiversified": sv, "ES_undiversified": se,
+                     "VaR_benefit": 1 - v / sv, "ES_benefit": 1 - es / se})
+    out = pd.DataFrame(rows)
+    sd = returns.std()
+    out["diversification_ratio"] = float((w * sd).sum() / (returns @ w).std())
+    return out

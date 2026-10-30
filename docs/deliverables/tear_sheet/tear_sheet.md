@@ -2,6 +2,8 @@
 
 > **DRAFT for team review (2026-10-30).** Data to 2026-10-19 · USD 10,000,000 · quarterly rebalancing · sources: `outputs/p3_decision/`, `outputs/tables/`
 
+**Recommendation: ACCEPT the mandate as proposed** (D34): invest as below with the risk limits unchanged, rebalance quarterly, and set spending at about 2.65% of fund value through the smoothed rule.
+
 **Objective.** Preserve and grow capital in real terms while paying the university about **2.65% a year**, with a **25% maximum drawdown** tolerance. The horizon is 5 years with annual review.
 
 | Holding | Weight | USD | Role |
@@ -31,6 +33,7 @@
 | 1-day VaR / ES 99% | 1.39% / 2.20% ($139k / $220k) | VaR 1.7% / ES 2.5% |
 | 1-day VaR / ES 95% | 0.71% / 1.20% | VaR 0.9% / ES 1.45% |
 | Largest single-fund share of tail risk | SPY 40% | 40% |
+| Diversification benefit, 99% VaR / ES (vs the sum of the holdings' own risks) | 28.8% / 24.5% lower | — |
 
 **Stress tests: loss of the $10M**
 
