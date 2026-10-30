@@ -1,16 +1,17 @@
-# Pin exact versions once the environment is frozen (T1.02 / T17.02).
-numpy
-pandas
-scipy
-statsmodels
-yfinance
-pandas-datareader   # FRED
-arch==7.2.0         # GARCH; install with --no-deps to keep numpy < 2
-cvxpy>=1.5,<1.6     # constrained optimisation; 1.5.x keeps numpy < 2 (pandas 2.1 / scipy 1.11)
-matplotlib
+# Exact versions of the environment that produced the results (T17.02, frozen 2026-10-30). Python 3.12.
+# numpy stays < 2: cvxpy 1.5.x and pyarrow 19 are built for it.
+numpy==1.26.2
+pandas==2.1.4
+scipy==1.11.4
+statsmodels==0.14.6
+arch==7.2.0          # GARCH
+cvxpy==1.5.4         # constrained optimisation (CVaR / CDaR, D22)
+clarabel==0.11.1     # cvxpy solver used by the optimiser
+yfinance==1.7.0      # only for --refresh-data (prices are committed snapshots)
+matplotlib==3.10.0
 plotly==7.1.0
 streamlit==1.66.1
-pyarrow==19.0.1     # Streamlit tables; pyarrow >= 21 needs numpy 2 (we pin numpy < 2 for cvxpy)
-pyyaml
-openpyxl           # tracker Excel exports
-pytest
+pyarrow==19.0.1      # Streamlit tables; pyarrow >= 21 needs numpy 2
+pyyaml==6.0.1
+openpyxl==3.1.5      # tracker Excel exports
+pytest==9.0.1
