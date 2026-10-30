@@ -6,7 +6,7 @@ Sources merged: Project Management Tracker (`.xlsm`, Drive "alpha guard"), FigJa
 
 | ID | Task | Stage | Owner | Priority | Target | Subtasks | Done | In progress | Blocked | Progress |
 |---|---|---|---|---|---|---|---|---|---|---|
-| T1 | Project setup & shared decisions | — | Malindu | Supporting | Week 1 | 11 | 7 | 3 | 0 | 64% |
+| T1 | Project setup & shared decisions | — | Malindu | Supporting | Week 1 | 11 | 8 | 2 | 0 | 73% |
 | T2 | Data pipeline & cleaning | data | Raveena | Core | Week 1 | 17 | 14 | 0 | 0 | 82% |
 | T3 | Client mandate (investment policy) | mandate | Sujan | Core | Week 1 | 29 | 27 | 1 | 0 | 93% |
 | T4 | Portfolio construction & selection | portfolio | Dewmini | Core | Weeks 1–2 | 26 | 25 | 0 | 0 | 96% |
@@ -22,12 +22,12 @@ Sources merged: Project Management Tracker (`.xlsm`, Drive "alpha guard"), FigJa
 | T14 | Streamlit app | app | Malindu | Core | Weeks 2–3 | 13 | 12 | 1 | 0 | 92% |
 | T15 | Assumptions & Limitations | docs/app | Raveena + Dewmini | Core | Week 3 | 6 | 5 | 1 | 0 | 83% |
 | T16 | Written deliverables | decision/docs | Raveena | Core | Week 3 | 7 | 2 | 5 | 0 | 29% |
-| T17 | Repository & reproducibility | — | Malindu | Core | Week 3 | 9 | 3 | 2 | 0 | 33% |
+| T17 | Repository & reproducibility | — | Malindu | Core | Week 3 | 9 | 4 | 1 | 0 | 44% |
 | T18 | AI disclosure & validation log | — | Malindu | Core | Ongoing | 8 | 4 | 1 | 0 | 50% |
 | T19 | Pitch & Q&A prep | — | All members | Conditional | If finalist | 4 | 0 | 0 | 0 | 0% |
 | T20 | Decision gate & final recommendation (P3) | decision | All members | Core | Week 3 | 10 | 10 | 0 | 0 | 100% |
-| T21 | Quality gates & compliance QA | — | Malindu (coordinates) | Core | Ongoing | 17 | 8 | 4 | 0 | 47% |
-| | **Total** | | | | | **249** | **200** | **20** | **0** | **80%** |
+| T21 | Quality gates & compliance QA | — | Malindu (coordinates) | Core | Ongoing | 17 | 9 | 4 | 0 | 53% |
+| | **Total** | | | | | **249** | **203** | **18** | **0** | **82%** |
 
 Progress = share of subtasks marked Done. Recount with `python tracking/update_counts.py` after editing `SUBTASKS.md`.
 
