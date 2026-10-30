@@ -17,7 +17,7 @@ Stage: — · Owner: Malindu · Priority: Supporting · Target: Week 1
 | T1.05 | Record decisions, responsibility owners and review process | DECISIONS.md, AGENTS.md, review rules | High | Malindu | — | Done | PM |
 | T1.06 | Map brief Layers 1–5 to code stages; keep the vocabularies separate | PROJECT_KNOWLEDGE.md §1 | High | Malindu | — | Done | REV |
 | T1.07 | Settle blocking decisions D3, D5, D6, D7, D12 before portfolio stage | All five APPROVED in DECISIONS.md | Critical | All members | T3.01–T3.04 | Done | DEC |
-| T1.08 | Settle remaining decisions D1, D4, D8, D9, D11, D13, D16 | APPROVED in DECISIONS.md | High | All members | T1.07 | Not started | DEC |
+| T1.08 | Settle remaining decisions D1, D4, D8, D9, D11, D13, D16 | all decisions settled except D16 deployment (QA-05) | High | All members | T1.07 | In progress | DEC · QA 2026-10-30 |
 | T1.09 | Upload missing Batch04 explainer (slides 61–80); remove duplicate Batch02 | docs/references/explainers complete | Low | Malindu | — | Not started | REV |
 | T1.10 | Approve decisions already implied by approved work: D4 5-year horizon (D7 uses it), D11 quarterly (D3 uses it), D13 1,000-day window, D1 full sample, D2 DTB3, D8 EVT method | APPROVED rows in DECISIONS.md | Critical | All members | — | Done | Review 2026-10-28 (all approved 2026-10-28) |
 | T1.11 | Approve optimiser design for drawdown limit (CVaR constraint + CDaR or post-check) | Decision D22 | Critical | All members | T4.20 | Done | Review 2026-10-28 |
@@ -54,11 +54,11 @@ Stage: mandate · Owner: Sujan · Priority: Core · Target: Week 1
 | T3.02 | Propose justified return and inflation-protection objectives | Return objective D12 (CPI + x%) with evidence | Critical | Sujan | T2.09 | Done | PM · DEC D12 APPROVED (provisional) |
 | T3.03 | Set no-short-selling, allocation caps and risk-budget rules | Constraints D6 in config | Critical | Sujan | T3.01 | Done | PM · FJ M02 · BR p.4 |
 | T3.04 | Propose VaR, ES and drawdown tolerances | Risk limits D7 (USD and % NAV) | Critical | Sujan | T3.01 | Done | PM · FJ M02 · BR p.4 |
-| T3.05 | Document assumptions and secure team agreement | docs/IPS.md consolidating D4, D6, D7, D10, D12 (one source for report + app) | Critical | Sujan | T3.01–T3.08 | Not started | PM |
-| T3.06 | Spending rule and cost assumptions (spending rate, turnover cost; ETF fees already in prices) | Cost/spending section in IPS | High | Sujan | T3.02 | In progress | FJ M-N02 · D12 S/C approved; IPS write-up pending |
+| T3.05 | Document assumptions and secure team agreement | assumptions documented except 4 empty sections in ASSUMPTIONS_LIMITATIONS.md (QA-01) | Critical | Sujan | T3.01–T3.08 | In progress | PM · QA 2026-10-30 |
+| T3.06 | Spending rule and cost assumptions (spending rate, turnover cost; ETF fees already in prices) | D24 + D30 (2.65%), D12 costs 0.2%, D11 turnover (config mandate) | High | Sujan | T3.02 | Done | FJ M-N02 · D12 S/C approved; IPS write-up pending · QA 2026-10-30 |
 | T3.07 | Rebalancing policy (frequency, drift band) | D11 approved; config | High | Sujan | T3.01 | Done | DEC D11 PROPOSED quarterly (used by D3 benchmark) |
 | T3.08 | Choose benchmarks: CAPM market proxy and policy benchmark | D3 approved; config | Critical | Sujan | — | Done | DEC D3 · BR p.7 |
-| T3.09 | Define suitability criteria used by the decision gate | Checklist: return hurdle, ES/DD limits, validation pass | High | Sujan | T3.02, T3.04 | In progress | FJ VD08 · D7 + D12 define criteria; checklist pending |
+| T3.09 | Define suitability criteria used by the decision gate | suitability conditions T4_25 §3; Decision page gate (app/pages/6_Decision.py) | High | Sujan | T3.02, T3.04 | Done | FJ VD08 · D7 + D12 define criteria; checklist pending · QA 2026-10-30 |
 | T3.10 | Confirm no cash sleeve / derivatives; spending liquidity from AGG | D10 in IPS | High | Sujan | — | Done | DEC D10 |
 | T3.11 | Required-vs-expected return table (breakeven inflation, CAPM, income yield, history; ERP and withholding sensitivity) | outputs/tables/required_return_grid.csv, cma_assets.csv, required_vs_expected.csv | Critical | Sujan | T2.09, T2.14 | Done | DEC D12 |
 | T3.12 | Choose base ERP and risk-free assumption for expected returns (own-data ERP 9.7%, CI 3.5–15.8%, too wide to use alone) | ERP base + rf choice in DECISIONS.md | Critical | Sujan | T3.11 | Done | DEC D12 |
@@ -85,27 +85,27 @@ Stage: portfolio · Owner: Dewmini · Priority: Core · Target: Weeks 1–2
 
 | ID | Subtask | Expected output | Priority | Owner | Depends on | Status | Source |
 |---|---|---|---|---|---|---|---|
-| T4.01 | Estimate training returns, covariance matrix and correlations | Training-window μ, Σ, ρ tables | Critical | Dewmini | T2.13 | Not started | PM · FJ PM01 |
+| T4.01 | Estimate training returns, covariance matrix and correlations | cma.estimate_as_of → cma_train.csv, cma_train_cov(_shrunk).csv (data ≤ 2014-12-31) | Critical | Dewmini | T2.13 | Done | PM · FJ PM01 · QA 2026-10-30 |
 | T4.02 | Implement constrained minimum-variance allocation | p1_*: min_variance | Critical | Dewmini | T4.08, T3.03 | Done | PM · FJ PM02 |
 | T4.03 | Implement risk-parity allocation | p1_*: risk_parity (ERC moved ≤ 1% to meet limits) | Critical | Dewmini | T4.08 | Done | PM · FJ PM03 |
 | T4.04 | Implement capped maximum-Sharpe allocation | p1_*: max_sharpe (homogenised) | Critical | Dewmini | T4.08, T3.03 | Done | PM · FJ PM04 |
-| T4.05 | Document Markowitz/CAPM concepts and benchmark assumptions | Methods section draft | Critical | Dewmini | T4.11 | Not started | PM · BR p.7 |
+| T4.05 | Document Markowitz/CAPM concepts and benchmark assumptions | research doc P1_candidates_and_kpis.md + report §4 (draft) | Critical | Dewmini | T4.11 | Done | PM · BR p.7 · QA 2026-10-30 |
 | T4.06 | Compare diversification, concentration and feasible weights | p1_*_diagnostics (risk contributions, equity weight) + research doc P1_candidates_and_kpis.md | Critical | Dewmini | T4.02–T4.10 | Done | PM · FJ PM07 |
-| T4.07 | Provide candidate and proposed final weights with justification | Recommendation input for T20 | Critical | Dewmini | T4.06, T5.05 | Not started | PM |
+| T4.07 | Provide candidate and proposed final weights with justification | p1_final/p1_train weights + T4_25 doc + outputs/p3_decision/p3_portfolio.csv | Critical | Dewmini | T4.06, T5.05 | Done | PM · QA 2026-10-30 |
 | T4.08 | Robust inputs: shrinkage covariance (Ledoit–Wolf), cautious expected returns | cma.shrunk_covariance (Ledoit–Wolf on correlations); cma_*_cov_shrunk.csv; δ train 1.6% / full 0.8% / 1y 7% / 3m 18%; stability test (--shrink): turnover 1.61% → 1.57% a month; 2 tests | High | Dewmini | T4.01 | Done | FJ PM01/robust frontier · REV |
 | T4.09 | Implement minimum-CVaR allocation (Rockafellar–Uryasev) | p1_*: min_cvar (CVaR LP) | High | Dewmini | T4.08 | Done | DEC D20 |
 | T4.10 | Implement target-return Markowitz at the D12 hurdle (minimum 6.66% / target 7.19%) with fallback to lowest-risk feasible portfolio | p1_*: target_return (fallback per D12) | High | Dewmini | T4.08, T4.18 | Done | FJ PM05 |
 | T4.11 | Efficient frontier with candidates and benchmarks plotted; trade-off table | outputs/tables/frontier_full.csv (9 points: return, DD, ES, VaR, P(DD>25%), spending $), outputs/figures/frontier_full.png | Critical | Dewmini | T4.02–T4.10 | Done | BR p.4 #5 · R16 |
 | T4.12 | Feasibility filters: D6 v2 layers (equity 20–45%, GLD ≤ 20%, ≤ 2× benchmark, sector tilts) + D7 limits | D6 v2 + D7 in optimiser; post-check on compounded quarterly NAV | Critical | Dewmini | T4.02–T4.10 | Done | FJ PM06 |
-| T4.13 | Net-of-cost and turnover test under chosen rebalancing | Turnover, cost drag per candidate | Medium | Dewmini | T3.06, T3.07 | Not started | FJ PM-N03 |
-| T4.14 | Diversification metrics: diversification ratio, risk contribution vs weight | Diversification table | High | Dewmini | T4.12 | Not started | BR p.4 'diversification benefits' |
-| T4.15 | Weight sensitivity to input changes (sub-period / bootstrap re-estimation) | Weight stability table | Medium | Dewmini | T4.12 | Not started | FJ robust frontier |
+| T4.13 | Net-of-cost and turnover test under chosen rebalancing | turnover 7.0%/yr, rebalancing cost < 0.02%/yr at 10 bp (research_t425_eval_summary.csv, stress_hyp path costs) | Medium | Dewmini | T3.06, T3.07 | Done | FJ PM-N03 · QA 2026-10-30 |
+| T4.14 | Diversification metrics: diversification ratio, risk contribution vs weight | Diversification table | High | Dewmini | T4.12 | Not started | BR p.4 'diversification benefits' · QA-02: diversification benefit not quantified anywhere (brief p.4) |
+| T4.15 | Weight sensitivity to input changes (sub-period / bootstrap re-estimation) | weight shift 2014→2026 inputs (research_t425_eval_summary.csv) + walk-forward weights at 6 origins (research_walkforward_weights.csv) | Medium | Dewmini | T4.12 | Done | FJ robust frontier · QA 2026-10-30 |
 | T4.16 | Freeze P1 handoff: candidate weights + metadata file | outputs/tables/p1_*_weights.csv (regenerated by run_all) | Critical | Dewmini | T4.12 | Done | FJ PM08 |
 | T4.17 | Unit tests for all optimisers (constraints respected, known solutions) | tests/unit/test_optimise.py (7) + integration | Critical | Dewmini | T4.02–T4.10 | Done | BR p.6 software |
 | T4.18 | Capital market assumptions estimated on the training window only, for out-of-sample candidates | cma.estimate_as_of; outputs/tables/cma_train*.csv, cma_full*.csv, cma_sets_summary.csv; 4 tests incl. leakage | Critical | Dewmini | T2.13 | Done | Review: current CMA uses full sample |
 | T4.19 | Produce two P1 sets: P1-train (frozen, for OOS backtests) and P1-final (full-sample re-fit, same frozen method) | p1_train_* and p1_final_* | Critical | Dewmini | T4.16, T4.18 | Done | DEC D5 protocol |
 | T4.20 | Optimiser design meeting D6 v2 + D7 (ES as CVaR constraint; drawdown via CDaR or post-check) | portfolio/optimise.py: CVaR LP + CDaR(β→1) + bisection post-check | Critical | Dewmini | T4.12 | Done | Review 2026-10-28 |
-| T4.21 | Add every candidate to the required-vs-expected table with sustainable spending | Extended return_objective_summary.md | High | Dewmini | T4.16 | Not started | DEC D12 |
+| T4.21 | Add every candidate to the required-vs-expected table with sustainable spending | p1_final/p1_train_diagnostics.csv: sustainable_spending + hurdle for every candidate | High | Dewmini | T4.16 | Done | DEC D12 · QA 2026-10-30 |
 | T4.22 | Decide bond expected-return method for near-zero rates (D25) and apply to both CMA sets | D25 approved; cma.expected_returns applied to both CMA sets, D12 tables, research; 1 test; research doc §8b | Critical | All members | T4.18 | Done | T4.18 finding |
 | T4.23 | Required return in training-period terms (2014 breakeven, same S/G/C) for P1-train return targets | return_objective.required_return_as_of; cma_sets_summary.csv: train 6.49% / 5.96% (breakeven 1.68%), full 7.19% / 6.66%; 2 tests | High | Dewmini | T4.18 | Done | D5 + D12 consistency |
 | T4.24 | Decide portfolio choice rule when the hurdle is infeasible (D26) | D26 approved (option b); frontier.select_highest_compliant; d26_selected in P1-train / P1-final | Critical | All members | T4.11 | Done | T4 finding 2026-10-29 |
@@ -232,18 +232,18 @@ Stage: validation · Owner: Dewmini · Priority: Core · Target: Weeks 2–3
 | T11.20 | Robustness: Monte Carlo over shock ranges and beta SEs; one-at-a-time; XLE/GLD variants | stress_hyp_sensitivity.csv: MC 99th pct 16.1%; SPY ×1.5 → 25.7% (only breach) | High | Dewmini | T11.18 | Done | Prototype in design report §7 |
 | T11.21 | Scenario-conditional VaR (GARCH-EVT scaled by stressed volatility) vs D7/D23 triggers | scenario VaR99 2.38% (A severe) > 1.7% → D23 review; explained vs multi-month loss | Medium | Dewmini | T11.18, T10.07 | Done | Design report §6.3 |
 | T11.22 | Stress page: scenario/severity selector, factor sliders, contribution waterfall, path chart | pages/4_Stress: scenario/severity selector, factor sliders, waterfall, path chart | High | Dewmini | T11.18, T14 | Done | BR pp.5–6 |
-| T11.23 | Feed severe-scenario loss and headroom into memo and T20 decision (gold/XLE hedge test in T4.25) | Memo stress section | Critical | Dewmini | T11.20, T20 | Not started | Decision 30% |
+| T11.23 | Feed severe-scenario loss and headroom into memo and T20 decision (gold/XLE hedge test in T4.25) | memo + tear sheet + report §7 report severe losses and headroom; gold/XLE hedge tested as O4 (rejected, T4_25 §2) | Critical | Dewmini | T11.20, T20 | Done | Decision 30% · QA 2026-10-30 |
 
 ## T12 — Macro & industry risk (optional)
 Stage: validation · Owner: Malindu · Priority: Optional · Target: Week 3
 
 | ID | Subtask | Expected output | Priority | Owner | Depends on | Status | Source |
 |---|---|---|---|---|---|---|---|
-| T12.01 | Identify the important rates, inflation, oil and geopolitical exposures | Exposure list | Medium | Malindu | — | Not started | PM · BR p.4 #9 |
-| T12.02 | Research ETF sensitivity to recession and policy shocks | Sensitivity notes | Medium | Malindu | T12.01 | Not started | PM |
-| T12.03 | Connect industry exposures with the chosen shock scenario | Input to T11.03 | Medium | Malindu | T12.02 | Not started | PM |
-| T12.04 | Write macro-risk notes for the report and stress test | Report section | Medium | Malindu | T12.03 | Not started | PM · BR p.10 counts in decision score |
-| T12.05 | Macro context from World Bank / IMF open data only | Cited figures in memo | Low | Malindu | T12.04 | Not started | BR p.9 |
+| T12.01 | Identify the important rates, inflation, oil and geopolitical exposures | T11_hypothetical_stress_design.md §1 (rates, inflation, oil, geopolitics) | Medium | Malindu | — | Done | PM · BR p.4 #9 · QA 2026-10-30 |
+| T12.02 | Research ETF sensitivity to recession and policy shocks | six-factor betas full + stress samples (stress_hyp_betas.csv) | Medium | Malindu | T12.01 | Done | PM · QA 2026-10-30 |
+| T12.03 | Connect industry exposures with the chosen shock scenario | scenarios A/B/C → ETF moves (stress_hyp_shocks.csv) | Medium | Malindu | T12.02 | Done | PM · QA 2026-10-30 |
+| T12.04 | Write macro-risk notes for the report and stress test | design report written; report §7 summary; macro-risk notes to finalise with team | Medium | Malindu | T12.03 | In progress | PM · BR p.10 counts in decision score · QA 2026-10-30 |
+| T12.05 | Macro context from World Bank / IMF open data only | Partial: context cites IEA/EIA/Fed/news besides IMF/World Bank (brief 9.1) → QA-07 | Low | Malindu | T12.04 | In progress | BR p.9 · QA 2026-10-30 |
 
 ## T13 — Innovation extension
 Stage: risk/validation · Owner: Sujan · Priority: Optional · Target: Week 3
@@ -252,11 +252,11 @@ Stage: risk/validation · Owner: Sujan · Priority: Optional · Target: Week 3
 |---|---|---|---|---|---|---|---|
 | T13.01 | Choose one additional model and state a testable hypothesis | Entry in INNOVATION_LOG.md | Medium | Sujan | T6.05 | Not started | PM |
 | T13.02 | Specify the method and baseline comparison fairly | Method note | Medium | Sujan | T13.01 | Not started | PM |
-| T13.03 | Implement innovation without future-data leakage | Code + tests | Medium | Sujan | T13.02 | Not started | PM |
-| T13.04 | Backtest innovation and compare standalone methods | Backtest comparison | Medium | Sujan | T13.03, T10.04 | Not started | PM |
-| T13.05 | Report gains, failures, limitations and overfitting concerns | Report section | Medium | Sujan | T13.04 | Not started | PM |
+| T13.03 | Implement innovation without future-data leakage | GARCH-EVT, t-copula MC, EVT threshold rule, regime VaR built without leakage (rolling data ≤ t−1, test_validation no-look-ahead) | Medium | Sujan | T13.02 | Done | PM · QA 2026-10-30 |
+| T13.04 | Backtest innovation and compare standalone methods | GARCH-EVT backtested vs 6 standalone methods (backtest_results_*.csv, T10 doc) | Medium | Sujan | T13.03, T10.04 | Done | PM · QA 2026-10-30 |
+| T13.05 | Report gains, failures, limitations and overfitting concerns | INNOVATION_LOG.md I1, I12–I16 with results and failures; audit corrections T4_25 §0 | Medium | Sujan | T13.04 | Done | PM · QA 2026-10-30 |
 | T13.06 | Agree the innovation set (rec. #12) and wavelets decision (rec. #13) | Approved list in DECISIONS.md | Medium | All members | — | Not started | REV |
-| T13.07 | Evaluate conditional drawdown-at-risk (CDaR) optimisation as innovation | Innovation log entry + comparison | Medium | Sujan | T4.20 | Not started | Review 2026-10-28 |
+| T13.07 | Evaluate conditional drawdown-at-risk (CDaR) optimisation as innovation | CDaR constraint in optimise.py (D22), INNOVATION_LOG I14 | Medium | Sujan | T4.20 | Done | Review 2026-10-28 · QA 2026-10-30 |
 
 ## T14 — Streamlit app
 Stage: app · Owner: Malindu · Priority: Core · Target: Weeks 2–3
@@ -283,10 +283,10 @@ Stage: docs/app · Owner: Raveena + Dewmini · Priority: Core · Target: Week 3
 | ID | Subtask | Expected output | Priority | Owner | Depends on | Status | Source |
 |---|---|---|---|---|---|---|---|
 | T15.01 | Document data universe, dates, sourcing and limitations | Data section | Critical | Raveena + Dewmini | T2.11 | In progress | PM · FRED notes written |
-| T15.02 | Explain distribution, volatility and dependence assumptions | Model section | Critical | Raveena + Dewmini | T6.08 | Not started | PM |
-| T15.03 | Explain unseen shocks, low liquidity and tail-data scarcity | Tail / liquidity section | Critical | Raveena + Dewmini | T8.06, T11.09 | Not started | PM |
-| T15.04 | Clarify what backtesting can and cannot establish | Backtest section | Critical | Raveena + Dewmini | T10.07 | Not started | PM |
-| T15.05 | Ensure app and report state identical assumptions | App page generated from ASSUMPTIONS_LIMITATIONS.md | Critical | Raveena + Dewmini | T15.01–T15.04 | Not started | PM · FJ limitations audit |
+| T15.02 | Explain distribution, volatility and dependence assumptions | Model section | Critical | Raveena + Dewmini | T6.08 | Not started | PM · QA-01: section '## Models' empty |
+| T15.03 | Explain unseen shocks, low liquidity and tail-data scarcity | Tail / liquidity section | Critical | Raveena + Dewmini | T8.06, T11.09 | Not started | PM · QA-01: sections '## Tail / EVT uncertainty', '## Not captured' empty |
+| T15.04 | Clarify what backtesting can and cannot establish | Backtest section | Critical | Raveena + Dewmini | T10.07 | Not started | PM · QA-01: section '## Backtesting scope' empty |
+| T15.05 | Ensure app and report state identical assumptions | app/pages/7_Assumptions.py renders docs/ASSUMPTIONS_LIMITATIONS.md (same text as report) | Critical | Raveena + Dewmini | T15.01–T15.04 | Done | PM · FJ limitations audit · QA 2026-10-30 |
 | T15.06 | Add return-objective, benchmark and risk-limit assumptions (CAPM gold, rf level, ERP, USD spending, tax, in-sample calibration) | docs/ASSUMPTIONS_LIMITATIONS.md updated | High | Raveena + Dewmini | — | Done | Review 2026-10-28 |
 
 ## T16 — Written deliverables
@@ -308,9 +308,9 @@ Stage: — · Owner: Malindu · Priority: Core · Target: Week 3
 | ID | Subtask | Expected output | Priority | Owner | Depends on | Status | Source |
 |---|---|---|---|---|---|---|---|
 | T17.01 | Finalize organized, documented GitHub repository | Public / judge-accessible repo | Critical | Malindu | T1.01 | Not started | PM · BR p.6 |
-| T17.02 | Pin package versions and supply reproducible setup | Pinned requirements | Critical | Malindu | T1.02 | Not started | PM |
+| T17.02 | Pin package versions and supply reproducible setup | requirements.txt exact pins (916105a); clean venv install from GitHub OK 2026-10-30 | Critical | Malindu | T1.02 | Done | PM · QA 2026-10-30 |
 | T17.03 | Provide one-command Streamlit run instructions | `python run_all.py --app` in README | Critical | Malindu | T14.* | In progress | PM · BR p.6 · entry point exists |
-| T17.04 | Test clean installation and reproduce key results | Clean-machine test record | Critical | Malindu | T17.02 | Not started | PM |
+| T17.04 | Test clean installation and reproduce key results | clean clone + venv OK; full run_all in clean copy running (C:\Users\user\qe) | Critical | Malindu | T17.02 | In progress | PM · QA 2026-10-30 |
 | T17.05 | Log reproducibility evidence and known environment issues | Reproducibility log | High | Malindu | T17.04 | Not started | PM |
 | T17.06 | Decide which reference files to publish (third-party decks) | .gitignore rule: decks kept local, removed from history | Medium | Malindu | — | Done | REV |
 | T17.07 | Optional: deploy to Streamlit Community Cloud | Public app URL (D16) | Low | Malindu | T17.04 | Not started | BR p.6 · DEC D16 |
@@ -363,10 +363,19 @@ Stage: — · Owner: Malindu (coordinates) · Priority: Core · Target: Ongoing
 | ID | Subtask | Expected output | Priority | Owner | Depends on | Status | Source |
 |---|---|---|---|---|---|---|---|
 | T21.01 | Compliance check after every stage (R1–R20) | COMPLIANCE_MATRIX.md updated | Critical | Malindu (coordinates) | each stage | In progress | FJ N01 governance · REV |
-| T21.02 | Out-of-sample integrity gate: no leakage, frozen test, trial log | Leakage tests + trial log | Critical | Malindu (coordinates) | T2.13 | Not started | FJ OOS integrity gate |
-| T21.03 | Calculation audit: units, signs, horizon consistent across stages | Audit checklist vs CALCULATION_DICTIONARY.md | Critical | Malindu (coordinates) | each stage | Not started | FJ calculation audit |
-| T21.04 | App / code QA: required panels, one-command run, tests green | QA checklist | Critical | Malindu (coordinates) | T14.* | Not started | FJ app/code QA |
+| T21.02 | Out-of-sample integrity gate: no leakage, frozen test, trial log | D5 split, as-of CMA, rolling forecasts data ≤ t−1 (unit test), D28 rule frozen in commit 60e67e3 before test run, walk-forward | Critical | Malindu (coordinates) | T2.13 | Done | FJ OOS integrity gate · QA 2026-10-30 |
+| T21.03 | Calculation audit: units, signs, horizon consistent across stages | QA independent recomputation: returns, VaR/ES, drawdown, CAPM, required return, Kupiec, Basel, look-ahead all match (QA report §3) | Critical | Malindu (coordinates) | each stage | Done | FJ calculation audit · QA 2026-10-30 |
+| T21.04 | App / code QA: required panels, one-command run, tests green | 9 pages run (test_app.py); sidebar 90/95/99 + method + dates; backtest 90% falls back to 99% (QA-09); README stale (QA-03) | Critical | Malindu (coordinates) | T14.* | In progress | FJ app/code QA · QA 2026-10-30 |
 | T21.05 | Update FigJam board to match approved decisions (edit list in docs/research/PROJECT_REVIEW_2026-10-28.md §4) | Board matches MODEL_DESIGN.md | High | Malindu (coordinates) | — | Not started | DEC D14, D20 |
+| T21.06 | QA-01 Fill the four empty Assumptions & Limitations sections and update stale text (63-day blocks → D32 126; 2.8% → 2.65%) | docs/ASSUMPTIONS_LIMITATIONS.md complete; app page re-checked | Critical | All members | T15.02–T15.04 | Not started | QA audit 2026-10-30 |
+| T21.07 | QA-02 Quantify diversification benefit: undiversified vs portfolio VaR/ES (QA estimate O6: −29% VaR99, −25% ES99), diversification ratio, risk vs weight; add to report, tear sheet, app Risk page | table + report §5 + app | Critical | Dewmini | T4.14 | Not started | QA audit 2026-10-30 |
+| T21.08 | QA-03 Update README: status, app pages, run time (~2 h full pipeline), quick start, troubleshooting (Windows path length, numpy < 2) | README.md | High | Malindu | T17.03 | Not started | QA audit 2026-10-30 |
+| T21.09 | QA-04 Judge quick start: decide whether to ship a results snapshot so the app opens without the 2-hour pipeline (outputs/ is gitignored) | Decision + README | High | All members | D16 | Not started | QA audit 2026-10-30 |
+| T21.10 | QA-06 Tear sheet: add the recommendation (ACCEPT, D34) and fit one page; memo fit one page (709 words now) | PDF page check | High | Raveena | T16.03, T16.04 | Not started | QA audit 2026-10-30 |
+| T21.11 | QA-07 Data-source compliance: macro context in memo/report from IMF/World Bank; IEA/EIA/Fed/news kept as disclosed background in research docs only | memo/report/README wording | Medium | Raveena | T12.05 | Not started | QA audit 2026-10-30 |
+| T21.12 | QA-08 Report: convert to PDF, verify 7–15 pages, rerun scripts/check_deliverables.py after edits | report PDF | Critical | Raveena | T16.02 | Not started | QA audit 2026-10-30 |
+| T21.13 | QA-09 Optional: backtest forecasts at 90% so the sidebar 90% applies to the backtest panel | backtest_forecasts_* with 0.90 | Low | Malindu | T10 | Not started | QA audit 2026-10-30 |
+| T21.14 | QA-10 Record clean-install reproducibility result (diff of key outputs vs original) in a reproducibility log | tracking/validation/REPRODUCIBILITY.md | High | Malindu | T17.04 | In progress | QA audit 2026-10-30 |
 | T21.06 | Add R16–R20 to compliance matrix; update every status with evidence | COMPLIANCE_MATRIX.md | Critical | Malindu | — | Done | Review 2026-10-28 |
 | T21.07 | Record innovations to date in the innovation log | INNOVATION_LOG.md | High | Sujan | — | Done | Review 2026-10-28 |
 | T21.08 | Generate both Excel trackers from the repo tracker (tracking/export_excel.py) | tracking/exports/*.xlsm | High | Malindu | — | Done | Review 2026-10-28 |
