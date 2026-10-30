@@ -50,13 +50,13 @@ python run_all.py --app
 
 | Page | What it shows |
 |---|---|
-| Home | The recommendation at a glance |
-| Portfolio | Weights, growth of $10M vs benchmarks, drawdown vs the 25% limit, KPIs (Sharpe, Sortino, Treynor, Jensen α, IR, Calmar) by period |
+| Home | The recommendation at a glance; monitoring status (D23 step as of the data snapshot end) |
+| Portfolio | Weights, growth of $10M vs benchmarks, drawdown vs the D23 watch / review / act levels and the 25% limit, KPIs (Sharpe, Sortino, Treynor, Jensen α, IR, Calmar) by period |
 | Risk | VaR, ES, EVT and GARCH-EVT side by side at the chosen confidence, with intervals; which ETF drives the tail; diversification benefit |
 | Backtest | Kupiec, Christoffersen and the Basel traffic light, recomputed for any date range; exception chart |
 | Stress | 2008, 2013, COVID and 2022 replays plus designed scenarios (energy stagflation, AI unwind / recession); loss drivers; 12-month paths; sliders for your own scenario |
 | Sustainability | Spending vs drawdown trade-off; what-if sliders (spending, growth, costs, inflation, equity premium); recovery after 15–25% falls |
-| Decision | Recommendation, pass/fail against every limit, validation summary, monitoring triggers, downloads |
+| Decision | Recommendation, pass/fail against every limit, validation summary, current monitoring status and triggers, downloads |
 | Assumptions & Limitations | What the model does and does not capture (same text as the report) |
 | Disclosure | AI use, data sources, decision log |
 

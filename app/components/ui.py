@@ -23,6 +23,21 @@ def page(title: str, caption: str | None = None) -> dict:
     return sidebar()
 
 
+def ladder_status() -> None:
+    """D23 'you are here' panel: current step, its action and the three signals behind it."""
+    L = D.ladder_status()
+    name = L["step"].title() if L["step"] else "Normal"
+    st.markdown(f"#### {D.LADDER_ICON[L['step']]} Monitoring status: **{name}** (as of {L['date']})")
+    st.caption(f"Action: {L['action']}. D23 steps: watch −10%, review −15%, act −20%, limit −25% drawdown (no forced selling).")
+    c = st.columns(3)
+    nxt = next((k for k, v in L["levels"].items() if L["drawdown"] < v), None)
+    c[0].metric("Drawdown from peak", D.pct(L["drawdown"], 1),
+                f"{D.pct(L['levels'][nxt] - L['drawdown'], 1)} to {nxt}" if nxt else "beyond limit", delta_color="off")
+    c[1].metric("Rolling 250-day ES99", D.pct(L["rolling_es99"], 2), f"trigger {D.pct(L['es_trigger'], 1)}", delta_color="off")
+    c[2].metric("Basel zone (99% backtest)", f"{D.LADDER_ICON[{'green': None, 'yellow': 'review', 'red': 'limit'}[L['basel']]]} {L['basel']}"
+                if L["basel"] else "n/a", "yellow → review, red → limit", delta_color="off")
+
+
 def sidebar() -> dict:
     s = D.settings()
     sb = st.sidebar

@@ -24,6 +24,18 @@ def rolling_es(loss: pd.Series, window: int = 250, alpha: float = 0.99) -> pd.Se
     return loss.rolling(window).apply(es, raw=True)
 
 
+def ladder_step(drawdown: float, rolling_es99: float, basel_zone: str | None, ladder: dict) -> str | None:
+    """Highest D23 step that fires (None = normal). drawdown is a positive fraction. A step fires on its drawdown or
+    Basel zone; rolling ES fires only the first step that uses it (watch and act share 2.5%, so act needs the drawdown)."""
+    steps = list(ladder)
+    fired = {k for k in steps if drawdown >= ladder[k].get("drawdown", np.inf)
+             or (basel_zone and basel_zone == ladder[k].get("basel_zone"))}
+    es_step = next((k for k in steps if "rolling_es99" in ladder[k]), None)
+    if es_step and rolling_es99 > ladder[es_step]["rolling_es99"]:
+        fired.add(es_step)
+    return max(fired, key=steps.index) if fired else None
+
+
 def period_metrics(rp: pd.Series, watch: float, act: float, window: int = 250) -> dict:
     loss = -rp.to_numpy()
     out = {"days": len(rp), "max_drawdown": float(cv.drawdown(rp).min())}

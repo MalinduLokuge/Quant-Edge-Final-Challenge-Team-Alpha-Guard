@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src"))
 from quantedge.common import config  # noqa: E402
 from quantedge.common import conventions as cv  # noqa: E402
+from quantedge.validation import coverage, limits  # noqa: E402
 
 TABLES = config.OUTPUT_TABLES
 P3 = TABLES.parent / "p3_decision"
@@ -83,6 +84,28 @@ def paths(start=None, end=None) -> pd.DataFrame:
 @st.cache_data
 def forecasts(period: str) -> pd.DataFrame:
     return pd.read_csv(TABLES / f"backtest_forecasts_{period}.csv", parse_dates=["date"])
+
+
+LADDER_ICON = {None: "🟢", "watch": "🔵", "review": "🟡", "act": "🟠", "limit": "🔴"}
+
+
+@st.cache_data
+def ladder_status() -> dict:
+    """D23 action-ladder step of the final portfolio on the last data day. Signals: drawdown from peak (full path),
+    rolling 250-day ES99 and the Basel zone of the GARCH-EVT 99% test backtest; step rule in validation.limits.ladder_step."""
+    s = settings()
+    lad, steps = s["risk_limits"]["action_ladder"], list(s["risk_limits"]["action_ladder"])
+    rp = paths()[label(FINAL)]
+    dd = -float(cv.drawdown(rp).iloc[-1])
+    es = float(limits.rolling_es(-rp, s["risk_limits"]["monitoring"]["rolling_es_window"]).iloc[-1])
+    fc = forecasts("test")
+    one = fc[(fc.portfolio == FINAL) & (fc.method == s["validation"]["selected_model"]) & (fc.alpha.round(2) == 0.99)].sort_values("date")
+    zone = coverage.basel((one["loss"] > one["VaR"]).to_numpy())["basel_last"]
+    es_step = next(k for k in steps if "rolling_es99" in lad[k])
+    step = limits.ladder_step(dd, es, zone, lad)
+    return {"date": rp.index[-1].date(), "step": step, "action": lad[step]["action"] if step else "no action; normal monitoring",
+            "drawdown": dd, "rolling_es99": es, "es_trigger": lad[es_step]["rolling_es99"], "basel": zone,
+            "levels": {k: lad[k]["drawdown"] for k in steps}}
 
 
 def pct(x, d: int = 1) -> str:

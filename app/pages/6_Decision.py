@@ -61,6 +61,7 @@ st.markdown("""
   (research doc T4.25, corrections table).""")
 
 st.subheader("Monitoring and action rules (D23, no forced selling)")
+ui.ladder_status()
 trig = D.p3("p3_triggers").fillna("")
 for c in ("drawdown", "rolling_es99"):
     trig[c] = trig[c].apply(lambda x: f"{float(x):.1%}" if x != "" else "")

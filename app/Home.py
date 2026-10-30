@@ -31,6 +31,8 @@ c[3].metric("Chance of a >25% fall in 5 years", D.pct(float(val("P(drawdown > 25
             "limit 5%", delta_color="off")
 c[4].metric("Worst stress loss", str(val("Worst stress loss")).split(" ")[0], "limit 25%", delta_color="off")
 
+ui.ladder_status()
+
 left, right = st.columns([1, 1.3])
 with left:
     st.subheader("Allocation")
