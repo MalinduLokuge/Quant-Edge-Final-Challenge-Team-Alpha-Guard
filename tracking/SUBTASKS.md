@@ -276,7 +276,7 @@ Stage: app · Owner: Malindu · Priority: Core · Target: Weeks 2–3
 | T14.11 | Export & reproducibility page (CSV/figures download) | download buttons on Decision page (CSV / Markdown) | Low | Malindu | T14.02–T14.06 | Done | FJ app 11 |
 | T14.12 | Plain-language labels for a non-technical committee (units, horizon on every number) | UI copy review | High | Malindu | T14.01–T14.07 | In progress | BR p.5 · masterclass |
 | T14.13 | What-if sliders on decision page: spending, growth, costs, ERP → required return, gap, sustainable spending | pages/5_Sustainability: what-if sliders (spending, growth, costs, inflation, ERP) + trade-off + recovery | Medium | Malindu | T4.21 | Done | Team request 2026-10-28 |
-| T14.14 | D23 monitoring status in the app: current step + drawdown, rolling ES99, Basel zone (as of snapshot end); watch / review / act lines on the drawdown chart | Home + Decision panel, Portfolio chart; `limits.ladder_step` + 9 unit tests; signals recomputed independently (DD 1.69%, ES99 1.40%, Basel green) | Medium | Malindu | T20.05 | Done (D35 rule PROPOSED) | User request 2026-10-30 |
+| T14.14 | D23 monitoring status in the app: current step + drawdown, rolling ES99, Basel zone (as of snapshot end); watch / review / act lines on the drawdown chart | Home + Decision panel, Portfolio chart; `limits.ladder_step` + 9 unit tests; signals recomputed independently (DD 1.69%, ES99 1.40%, Basel green); GARCH-EVT VaR99 next-day tile (0.94% vs 1.7%, shown not a trigger) and Basel relabelled as model check (P1-train weights) | Medium | Malindu | T20.05 | Done (D38 rule PROPOSED) | User request 2026-10-30 |
 
 ## T15 — Assumptions & Limitations
 Stage: docs/app · Owner: Raveena + Dewmini · Priority: Core · Target: Week 3

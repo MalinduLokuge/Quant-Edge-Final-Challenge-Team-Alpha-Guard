@@ -92,7 +92,8 @@ LADDER_ICON = {None: "🟢", "watch": "🔵", "review": "🟡", "act": "🟠", "
 @st.cache_data
 def ladder_status() -> dict:
     """D23 action-ladder step of the final portfolio on the last data day. Signals: drawdown from peak (full path),
-    rolling 250-day ES99 and the Basel zone of the GARCH-EVT 99% test backtest; step rule in validation.limits.ladder_step."""
+    rolling 250-day ES99 and the Basel zone of the GARCH-EVT 99% test backtest (a model check on the P1-train weights);
+    step rule in validation.limits.ladder_step. GARCH-EVT VaR99 (today's volatility, risk stage) is shown, not a trigger."""
     s = settings()
     lad, steps = s["risk_limits"]["action_ladder"], list(s["risk_limits"]["action_ladder"])
     rp = paths()[label(FINAL)]
@@ -103,8 +104,11 @@ def ladder_status() -> dict:
     zone = coverage.basel((one["loss"] > one["VaR"]).to_numpy())["basel_last"]
     es_step = next(k for k in steps if "rolling_es99" in lad[k])
     step = limits.ladder_step(dd, es, zone, lad)
+    g = table("p2_garch_evt")
+    g = g[(g.portfolio == FINAL) & (g.regime == "current") & (g.alpha.round(3) == 0.99)]
     return {"date": rp.index[-1].date(), "step": step, "action": lad[step]["action"] if step else "no action; normal monitoring",
             "drawdown": dd, "rolling_es99": es, "es_trigger": lad[es_step]["rolling_es99"], "basel": zone,
+            "garch_var99": float(g["VaR"].iloc[0]) if len(g) else float("nan"), "var99_limit": s["risk_limits"]["var99_1d_max"],
             "levels": {k: lad[k]["drawdown"] for k in steps}}
 
 
