@@ -22,12 +22,12 @@ Sources merged: Project Management Tracker (`.xlsm`, Drive "alpha guard"), FigJa
 | T14 | Streamlit app | app | Malindu | Core | Weeks 2–3 | 13 | 12 | 1 | 0 | 92% |
 | T15 | Assumptions & Limitations | docs/app | Raveena + Dewmini | Core | Week 3 | 6 | 5 | 1 | 0 | 83% |
 | T16 | Written deliverables | decision/docs | Raveena | Core | Week 3 | 7 | 2 | 5 | 0 | 29% |
-| T17 | Repository & reproducibility | — | Malindu | Core | Week 3 | 9 | 4 | 1 | 0 | 44% |
+| T17 | Repository & reproducibility | — | Malindu | Core | Week 3 | 9 | 6 | 0 | 0 | 67% |
 | T18 | AI disclosure & validation log | — | Malindu | Core | Ongoing | 8 | 4 | 1 | 0 | 50% |
 | T19 | Pitch & Q&A prep | — | All members | Conditional | If finalist | 4 | 0 | 0 | 0 | 0% |
 | T20 | Decision gate & final recommendation (P3) | decision | All members | Core | Week 3 | 10 | 10 | 0 | 0 | 100% |
-| T21 | Quality gates & compliance QA | — | Malindu (coordinates) | Core | Ongoing | 17 | 9 | 4 | 0 | 53% |
-| | **Total** | | | | | **249** | **203** | **18** | **0** | **82%** |
+| T21 | Quality gates & compliance QA | — | Malindu (coordinates) | Core | Ongoing | 17 | 11 | 2 | 0 | 65% |
+| | **Total** | | | | | **249** | **207** | **15** | **0** | **83%** |
 
 Progress = share of subtasks marked Done. Recount with `python tracking/update_counts.py` after editing `SUBTASKS.md`.
 
