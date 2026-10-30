@@ -1,0 +1,6 @@
+option,train P block63,train P block126,train P block252
+O1 D26 + D27 (current),0.0485625,0.06209375,0.06353125
+"O2 D26, 5-year test margin (4%)",0.0393125,0.05040625,0.0521875
+O3 50/50 D26 + Risk Parity,0.04984375,0.0624375,0.0616875
+O4 D26 + gold floor 5%,0.04940625,0.06275,0.06425
+O5 Risk Parity,0.05590625,0.07259375,0.07196875

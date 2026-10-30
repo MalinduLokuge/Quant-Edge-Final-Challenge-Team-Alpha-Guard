@@ -18,8 +18,16 @@ A Python and Streamlit tool that recommends how to invest a conservative **USD 1
 
 **Requirements:** Python 3.12, about 3 GB free disk. Everything is free and open source.
 
+**Quick start: open the app on the committed results (about 1 minute).**
+
 ```bash
 pip install -r requirements.txt
+streamlit run app/Home.py
+```
+
+**Full reproduction: regenerate every result, then open the app.**
+
+```bash
 python run_all.py --app
 ```
 
@@ -27,7 +35,7 @@ python run_all.py --app
   - The full run takes **about 1.5–2 hours** on a laptop, mostly the daily rolling backtests (2015–2026, 7 methods × 6 portfolios).
 - **`python run_all.py`** regenerates the results without opening the app.
 - **`python run_all.py --only risk`** re-runs one stage. The stages are data, portfolio, risk, validation and decision; each reads only what the stage before it saved.
-- **`streamlit run app/Home.py`** opens the app on results that already exist in `outputs/`.
+- **`streamlit run app/Home.py`** opens the app on the results in `outputs/`. They are committed as a snapshot (D16), so this works right after cloning.
 - **`python -m pytest -q`** runs the tests: unit tests plus integration tests, one of which runs every app page.
 - **`python scripts/check_deliverables.py`** checks that the numbers in the memo, tear sheet and report match the outputs.
 

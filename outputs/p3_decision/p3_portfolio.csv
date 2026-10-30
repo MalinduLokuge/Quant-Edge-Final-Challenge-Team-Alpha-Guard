@@ -1,0 +1,7 @@
+etf,weight,usd,role
+AGG,0.6105205872965904,6105205.872965904,"income and ballast (bond yield, liquidity for spending)"
+SPY,0.1842204325338348,1842204.325338348,core growth (US equities)
+XLK,0.0999999999781573,999999.999781573,"growth tilt (technology, capped 10%)"
+EFA,0.0717200300185384,717200.300185384,international diversification
+XLE,0.0296838319736538,296838.319736538,inflation / energy hedge
+GLD,0.0038551181992251,38551.181992251,crisis and inflation hedge

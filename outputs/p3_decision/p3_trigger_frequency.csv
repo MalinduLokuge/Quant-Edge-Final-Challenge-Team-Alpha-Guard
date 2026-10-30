@@ -1,0 +1,9 @@
+trigger,share_of_days,episodes
+rolling 250-day ES99 above 2.0%,0.19912597377921337,4
+rolling 250-day ES99 above 2.5%,0.0963328899866996,2
+rolling 250-day ES99 above 3.0%,0.09538286148584457,2
+rolling 250-day ES99 above 3.5%,0.09443283298498956,2
+drawdown beyond 10.0%,0.07347605224963716,17
+drawdown beyond 15.0%,0.027757619738751814,9
+drawdown beyond 20.0%,0.00272133526850508,4
+drawdown beyond 25.0%,0.0,0

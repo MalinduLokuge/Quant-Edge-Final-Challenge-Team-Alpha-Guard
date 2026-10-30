@@ -1,0 +1,361 @@
+month,nav,portfolio,scenario,severity
+1,0.9639915765903629,d26_selected,A Energy stagflation (Hormuz II),central
+2,0.955387317043408,d26_selected,A Energy stagflation (Hormuz II),central
+3,0.946812398951072,d26_selected,A Energy stagflation (Hormuz II),central
+4,0.9367685634378402,d26_selected,A Energy stagflation (Hormuz II),central
+5,0.9239350707002043,d26_selected,A Energy stagflation (Hormuz II),central
+6,0.9155033727118571,d26_selected,A Energy stagflation (Hormuz II),central
+7,0.9141849131807989,d26_selected,A Energy stagflation (Hormuz II),central
+8,0.9128695574122677,d26_selected,A Energy stagflation (Hormuz II),central
+9,0.9157864198482845,d26_selected,A Energy stagflation (Hormuz II),central
+10,0.9187103655921182,d26_selected,A Energy stagflation (Hormuz II),central
+11,0.9216759672775939,d26_selected,A Energy stagflation (Hormuz II),central
+12,0.9246549759569779,d26_selected,A Energy stagflation (Hormuz II),central
+1,0.9736440549294345,min_variance,A Energy stagflation (Hormuz II),central
+2,0.9668219147511697,min_variance,A Energy stagflation (Hormuz II),central
+3,0.9601098829082861,min_variance,A Energy stagflation (Hormuz II),central
+4,0.9518015146136007,min_variance,A Energy stagflation (Hormuz II),central
+5,0.9418933560831169,min_variance,A Energy stagflation (Hormuz II),central
+6,0.9353612574328797,min_variance,A Energy stagflation (Hormuz II),central
+7,0.9338202054402001,min_variance,A Energy stagflation (Hormuz II),central
+8,0.9322823526435535,min_variance,A Energy stagflation (Hormuz II),central
+9,0.9340180810234262,min_variance,A Energy stagflation (Hormuz II),central
+10,0.9357557091085177,min_variance,A Energy stagflation (Hormuz II),central
+11,0.9374737672484512,min_variance,A Energy stagflation (Hormuz II),central
+12,0.9391973084069891,min_variance,A Energy stagflation (Hormuz II),central
+1,0.9631486648453277,min_cvar,A Energy stagflation (Hormuz II),central
+2,0.9543216908187779,min_cvar,A Energy stagflation (Hormuz II),central
+3,0.945673098032961,min_cvar,A Energy stagflation (Hormuz II),central
+4,0.9356938361894738,min_cvar,A Energy stagflation (Hormuz II),central
+5,0.9229428555260705,min_cvar,A Energy stagflation (Hormuz II),central
+6,0.9145671787207539,min_cvar,A Energy stagflation (Hormuz II),central
+7,0.9133237675321555,min_cvar,A Energy stagflation (Hormuz II),central
+8,0.9120838459384657,min_cvar,A Energy stagflation (Hormuz II),central
+9,0.915051615408352,min_cvar,A Energy stagflation (Hormuz II),central
+10,0.9180241781179499,min_cvar,A Energy stagflation (Hormuz II),central
+11,0.92097410559451,min_cvar,A Energy stagflation (Hormuz II),central
+12,0.9239395180672408,min_cvar,A Energy stagflation (Hormuz II),central
+1,0.9717539127582067,risk_parity,A Energy stagflation (Hormuz II),central
+2,0.964440879850855,risk_parity,A Energy stagflation (Hormuz II),central
+3,0.95701510292187,risk_parity,A Energy stagflation (Hormuz II),central
+4,0.9473535622715242,risk_parity,A Energy stagflation (Hormuz II),central
+5,0.9360138190300096,risk_parity,A Energy stagflation (Hormuz II),central
+6,0.9285582479372236,risk_parity,A Energy stagflation (Hormuz II),central
+7,0.9265573912003089,risk_parity,A Energy stagflation (Hormuz II),central
+8,0.9245626416852281,risk_parity,A Energy stagflation (Hormuz II),central
+9,0.9263046313443897,risk_parity,A Energy stagflation (Hormuz II),central
+10,0.9280466476398458,risk_parity,A Energy stagflation (Hormuz II),central
+11,0.9298813671392419,risk_parity,A Energy stagflation (Hormuz II),central
+12,0.9317241772112462,risk_parity,A Energy stagflation (Hormuz II),central
+1,0.9594347075747331,max_sharpe,A Energy stagflation (Hormuz II),central
+2,0.9500042609851684,max_sharpe,A Energy stagflation (Hormuz II),central
+3,0.9407160501490797,max_sharpe,A Energy stagflation (Hormuz II),central
+4,0.9303256724623312,max_sharpe,A Energy stagflation (Hormuz II),central
+5,0.9165964128997727,max_sharpe,A Energy stagflation (Hormuz II),central
+6,0.9075821427196942,max_sharpe,A Energy stagflation (Hormuz II),central
+7,0.9065680451714205,max_sharpe,A Energy stagflation (Hormuz II),central
+8,0.9055563998042673,max_sharpe,A Energy stagflation (Hormuz II),central
+9,0.9090715797548936,max_sharpe,A Energy stagflation (Hormuz II),central
+10,0.9125971158636695,max_sharpe,A Energy stagflation (Hormuz II),central
+11,0.9161250336037136,max_sharpe,A Energy stagflation (Hormuz II),central
+12,0.9196713630111566,max_sharpe,A Energy stagflation (Hormuz II),central
+1,0.9648071168787331,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),central
+2,0.9559630227893754,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),central
+3,0.9472724146566408,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),central
+4,0.9366875354427012,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),central
+5,0.9238709351148253,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),central
+6,0.9154543873974408,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),central
+7,0.9136598030375112,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),central
+8,0.9118704812895781,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),central
+9,0.9142969635815851,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),central
+10,0.9167273932172659,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),central
+11,0.919141021493376,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),central
+12,0.9215648190685944,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),central
+1,0.9208027971445758,d26_selected,A Energy stagflation (Hormuz II),severe
+2,0.9024174022371104,d26_selected,A Energy stagflation (Hormuz II),severe
+3,0.8843745046665791,d26_selected,A Energy stagflation (Hormuz II),severe
+4,0.8627455119890023,d26_selected,A Energy stagflation (Hormuz II),severe
+5,0.8360066126310424,d26_selected,A Energy stagflation (Hormuz II),severe
+6,0.8187847735750772,d26_selected,A Energy stagflation (Hormuz II),severe
+7,0.8158456898014476,d26_selected,A Energy stagflation (Hormuz II),severe
+8,0.8129230771250022,d26_selected,A Energy stagflation (Hormuz II),severe
+9,0.8186778055184457,d26_selected,A Energy stagflation (Hormuz II),severe
+10,0.8244488419482398,d26_selected,A Energy stagflation (Hormuz II),severe
+11,0.8303506200878509,d26_selected,A Energy stagflation (Hormuz II),severe
+12,0.8363353795986583,d26_selected,A Energy stagflation (Hormuz II),severe
+1,0.9403120789828887,min_variance,A Energy stagflation (Hormuz II),severe
+2,0.9250794898765229,min_variance,A Energy stagflation (Hormuz II),severe
+3,0.9102395102215928,min_variance,A Energy stagflation (Hormuz II),severe
+4,0.8914382560283876,min_variance,A Energy stagflation (Hormuz II),severe
+5,0.8697129603258434,min_variance,A Energy stagflation (Hormuz II),severe
+6,0.8556159250898846,min_variance,A Energy stagflation (Hormuz II),severe
+7,0.8520148782985486,min_variance,A Energy stagflation (Hormuz II),severe
+8,0.8484328568341089,min_variance,A Energy stagflation (Hormuz II),severe
+9,0.8519200973405011,min_variance,A Energy stagflation (Hormuz II),severe
+10,0.8554040038432735,min_variance,A Energy stagflation (Hormuz II),severe
+11,0.8588903018323139,min_variance,A Energy stagflation (Hormuz II),severe
+12,0.8624186392079912,min_variance,A Energy stagflation (Hormuz II),severe
+1,0.9193984023428793,min_cvar,A Energy stagflation (Hormuz II),severe
+2,0.9007135151752494,min_cvar,A Energy stagflation (Hormuz II),severe
+3,0.8826439989404622,min_cvar,A Energy stagflation (Hormuz II),severe
+4,0.861193740763477,min_cvar,A Energy stagflation (Hormuz II),severe
+5,0.834668023969734,min_cvar,A Energy stagflation (Hormuz II),severe
+6,0.817595004960382,min_cvar,A Energy stagflation (Hormuz II),severe
+7,0.814790951458202,min_cvar,A Energy stagflation (Hormuz II),severe
+8,0.8120049776370912,min_cvar,A Energy stagflation (Hormuz II),severe
+9,0.8178429446801214,min_cvar,A Energy stagflation (Hormuz II),severe
+10,0.8236849180002676,min_cvar,A Energy stagflation (Hormuz II),severe
+11,0.8295632664309014,min_cvar,A Energy stagflation (Hormuz II),severe
+12,0.8355370133748158,min_cvar,A Energy stagflation (Hormuz II),severe
+1,0.9370985549752832,risk_parity,A Energy stagflation (Hormuz II),severe
+2,0.9212934946778336,risk_parity,A Energy stagflation (Hormuz II),severe
+3,0.9055160196620499,risk_parity,A Energy stagflation (Hormuz II),severe
+4,0.884605677319701,risk_parity,A Energy stagflation (Hormuz II),severe
+5,0.8607041419761564,risk_parity,A Energy stagflation (Hormuz II),severe
+6,0.8452853553681589,risk_parity,A Energy stagflation (Hormuz II),severe
+7,0.8410275208900411,risk_parity,A Energy stagflation (Hormuz II),severe
+8,0.8367988526048675,risk_parity,A Energy stagflation (Hormuz II),severe
+9,0.840321375711764,risk_parity,A Energy stagflation (Hormuz II),severe
+10,0.8438335019163262,risk_parity,A Energy stagflation (Hormuz II),severe
+11,0.8475436495387778,risk_parity,A Energy stagflation (Hormuz II),severe
+12,0.8513111039949198,risk_parity,A Energy stagflation (Hormuz II),severe
+1,0.9117099714302721,max_sharpe,A Energy stagflation (Hormuz II),severe
+2,0.8918522912083666,max_sharpe,A Energy stagflation (Hormuz II),severe
+3,0.8725765664050077,max_sharpe,A Energy stagflation (Hormuz II),severe
+4,0.8504821341491621,max_sharpe,A Energy stagflation (Hormuz II),severe
+5,0.8222562975606844,max_sharpe,A Energy stagflation (Hormuz II),severe
+6,0.804103060450374,max_sharpe,A Energy stagflation (Hormuz II),severe
+7,0.8017895093078965,max_sharpe,A Energy stagflation (Hormuz II),severe
+8,0.7994893746765638,max_sharpe,A Energy stagflation (Hormuz II),severe
+9,0.8063491118888387,max_sharpe,A Energy stagflation (Hormuz II),severe
+10,0.8132362832168775,max_sharpe,A Energy stagflation (Hormuz II),severe
+11,0.8202071509223973,max_sharpe,A Energy stagflation (Hormuz II),severe
+12,0.8272851639484003,max_sharpe,A Energy stagflation (Hormuz II),severe
+1,0.9230956972397045,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),severe
+2,0.9044157783883657,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),severe
+3,0.8863058801657355,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),severe
+4,0.8637981763339514,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),severe
+5,0.8372996490126405,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),severe
+6,0.8202487364681759,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),severe
+7,0.8164392574955338,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),severe
+8,0.8126550874145131,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),severe
+9,0.817430825877459,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),severe
+10,0.8222102542949055,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),severe
+11,0.8270161808589663,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),severe
+12,0.8318899002146012,[benchmark] Policy 40/50/10,A Energy stagflation (Hormuz II),severe
+1,0.9550941561904127,d26_selected,B AI unwind with recession,central
+2,0.9463125087609233,d26_selected,B AI unwind with recession,central
+3,0.9377658577712704,d26_selected,B AI unwind with recession,central
+4,0.9288302800762315,d26_selected,B AI unwind with recession,central
+5,0.9152190400606028,d26_selected,B AI unwind with recession,central
+6,0.9064571342116398,d26_selected,B AI unwind with recession,central
+7,0.90697602520375,d26_selected,B AI unwind with recession,central
+8,0.907496084816473,d26_selected,B AI unwind with recession,central
+9,0.9126860723997899,d26_selected,B AI unwind with recession,central
+10,0.9179171695539785,d26_selected,B AI unwind with recession,central
+11,0.9231978541489635,d26_selected,B AI unwind with recession,central
+12,0.9285346080825467,d26_selected,B AI unwind with recession,central
+1,0.9788800436815376,min_variance,B AI unwind with recession,central
+2,0.9752178729090888,min_variance,B AI unwind with recession,central
+3,0.9715535447956738,min_variance,B AI unwind with recession,central
+4,0.9680277907603803,min_variance,B AI unwind with recession,central
+5,0.9617222453664531,min_variance,B AI unwind with recession,central
+6,0.9576730273050175,min_variance,B AI unwind with recession,central
+7,0.9584981285319318,min_variance,B AI unwind with recession,central
+8,0.9593241279411354,min_variance,B AI unwind with recession,central
+9,0.9623839243863378,min_variance,B AI unwind with recession,central
+10,0.9654617546180421,min_variance,B AI unwind with recession,central
+11,0.9686229110681951,min_variance,B AI unwind with recession,central
+12,0.971812151500322,min_variance,B AI unwind with recession,central
+1,0.9573993193415234,min_cvar,B AI unwind with recession,central
+2,0.9493344944179484,min_cvar,B AI unwind with recession,central
+3,0.9413456797680114,min_cvar,B AI unwind with recession,central
+4,0.9327589822492063,min_cvar,B AI unwind with recession,central
+5,0.9195378582292818,min_cvar,B AI unwind with recession,central
+6,0.9110708671169194,min_cvar,B AI unwind with recession,central
+7,0.911608803502271,min_cvar,B AI unwind with recession,central
+8,0.9121473464233855,min_cvar,B AI unwind with recession,central
+9,0.9172470404747041,min_cvar,B AI unwind with recession,central
+10,0.9223858051501841,min_cvar,B AI unwind with recession,central
+11,0.9276723144548182,min_cvar,B AI unwind with recession,central
+12,0.9330239776937103,min_cvar,B AI unwind with recession,central
+1,0.9701202117722707,risk_parity,B AI unwind with recession,central
+2,0.9643181757645132,risk_parity,B AI unwind with recession,central
+3,0.9588479829169199,risk_parity,B AI unwind with recession,central
+4,0.9527023557889537,risk_parity,B AI unwind with recession,central
+5,0.9437275586578027,risk_parity,B AI unwind with recession,central
+6,0.9380039172514764,risk_parity,B AI unwind with recession,central
+7,0.9382332518971969,risk_parity,B AI unwind with recession,central
+8,0.9384651496563615,risk_parity,B AI unwind with recession,central
+9,0.9418282631050917,risk_parity,B AI unwind with recession,central
+10,0.945211798131707,risk_parity,B AI unwind with recession,central
+11,0.9485500265270196,risk_parity,B AI unwind with recession,central
+12,0.9519262410383698,risk_parity,B AI unwind with recession,central
+1,0.9471978419351463,max_sharpe,B AI unwind with recession,central
+2,0.9369266142668113,max_sharpe,B AI unwind with recession,central
+3,0.9268240437417883,max_sharpe,B AI unwind with recession,central
+4,0.9162483941893321,max_sharpe,B AI unwind with recession,central
+5,0.9001372312043374,max_sharpe,B AI unwind with recession,central
+6,0.8897783203553892,max_sharpe,B AI unwind with recession,central
+7,0.8903266936812043,max_sharpe,B AI unwind with recession,central
+8,0.8908756724759507,max_sharpe,B AI unwind with recession,central
+9,0.8969173657430628,max_sharpe,B AI unwind with recession,central
+10,0.9030116948089124,max_sharpe,B AI unwind with recession,central
+11,0.9092319506604714,max_sharpe,B AI unwind with recession,central
+12,0.915525261333767,max_sharpe,B AI unwind with recession,central
+1,0.9620604576811318,[benchmark] Policy 40/50/10,B AI unwind with recession,central
+2,0.9545032203293718,[benchmark] Policy 40/50/10,B AI unwind with recession,central
+3,0.9470268135934063,[benchmark] Policy 40/50/10,B AI unwind with recession,central
+4,0.9385530120168982,[benchmark] Policy 40/50/10,B AI unwind with recession,central
+5,0.9263003161130918,[benchmark] Policy 40/50/10,B AI unwind with recession,central
+6,0.9184358349604975,[benchmark] Policy 40/50/10,B AI unwind with recession,central
+7,0.9184351484122573,[benchmark] Policy 40/50/10,B AI unwind with recession,central
+8,0.9184367873312506,[benchmark] Policy 40/50/10,B AI unwind with recession,central
+9,0.9226480262661289,[benchmark] Policy 40/50/10,B AI unwind with recession,central
+10,0.9268900651799942,[benchmark] Policy 40/50/10,B AI unwind with recession,central
+11,0.9312422329911447,[benchmark] Policy 40/50/10,B AI unwind with recession,central
+12,0.9356404616569605,[benchmark] Policy 40/50/10,B AI unwind with recession,central
+1,0.923409935238283,d26_selected,B AI unwind with recession,severe
+2,0.9094915928736,d26_selected,B AI unwind with recession,severe
+3,0.8962748274408278,d26_selected,B AI unwind with recession,severe
+4,0.8809573166736329,d26_selected,B AI unwind with recession,severe
+5,0.8585142471177934,d26_selected,B AI unwind with recession,severe
+6,0.8445121051388159,d26_selected,B AI unwind with recession,severe
+7,0.8452676092841817,d26_selected,B AI unwind with recession,severe
+8,0.8460270622121036,d26_selected,B AI unwind with recession,severe
+9,0.8546661752069611,d26_selected,B AI unwind with recession,severe
+10,0.8634196866215604,d26_selected,B AI unwind with recession,severe
+11,0.8723461693979397,d26_selected,B AI unwind with recession,severe
+12,0.8814660665799957,d26_selected,B AI unwind with recession,severe
+1,0.9644063495864006,min_variance,B AI unwind with recession,severe
+2,0.9587204536919656,min_variance,B AI unwind with recession,severe
+3,0.9531556991983383,min_variance,B AI unwind with recession,severe
+4,0.9468588572639467,min_variance,B AI unwind with recession,severe
+5,0.9361630411708222,min_variance,B AI unwind with recession,severe
+6,0.9295249888007446,min_variance,B AI unwind with recession,severe
+7,0.9308457440198727,min_variance,B AI unwind with recession,severe
+8,0.9321688744081578,min_variance,B AI unwind with recession,severe
+9,0.937460558839163,min_variance,B AI unwind with recession,severe
+10,0.9428019349004613,min_variance,B AI unwind with recession,severe
+11,0.9483559763428259,min_variance,B AI unwind with recession,severe
+12,0.954016433300294,min_variance,B AI unwind with recession,severe
+1,0.928230064955011,min_cvar,B AI unwind with recession,severe
+2,0.9157548384343108,min_cvar,B AI unwind with recession,severe
+3,0.9036941728156146,min_cvar,B AI unwind with recession,severe
+4,0.8890571216729922,min_cvar,B AI unwind with recession,severe
+5,0.8673505206619516,min_cvar,B AI unwind with recession,severe
+6,0.8539342403508347,min_cvar,B AI unwind with recession,severe
+7,0.85474969281433,min_cvar,B AI unwind with recession,severe
+8,0.8555667077602015,min_cvar,B AI unwind with recession,severe
+9,0.8640856816016655,min_cvar,B AI unwind with recession,severe
+10,0.8727121336032693,min_cvar,B AI unwind with recession,severe
+11,0.88171505883926,min_cvar,B AI unwind with recession,severe
+12,0.8909432057534243,min_cvar,B AI unwind with recession,severe
+1,0.9475823483020601,risk_parity,B AI unwind with recession,severe
+2,0.9384131632112056,risk_parity,B AI unwind with recession,severe
+3,0.9300937958967864,risk_parity,B AI unwind with recession,severe
+4,0.918992463621523,risk_parity,B AI unwind with recession,severe
+5,0.9036840352552074,risk_parity,B AI unwind with recession,severe
+6,0.8943198550612728,risk_parity,B AI unwind with recession,severe
+7,0.8945317051399215,risk_parity,B AI unwind with recession,severe
+8,0.8947539972771454,risk_parity,B AI unwind with recession,severe
+9,0.9005040088085773,risk_parity,B AI unwind with recession,severe
+10,0.9063086917162668,risk_parity,B AI unwind with recession,severe
+11,0.912082344881315,risk_parity,B AI unwind with recession,severe
+12,0.9179951899693746,risk_parity,B AI unwind with recession,severe
+1,0.910861316393448,max_sharpe,B AI unwind with recession,severe
+2,0.894755704533094,max_sharpe,B AI unwind with recession,severe
+3,0.8792724474345337,max_sharpe,B AI unwind with recession,severe
+4,0.8615212495103701,max_sharpe,B AI unwind with recession,severe
+5,0.8353727586566009,max_sharpe,B AI unwind with recession,severe
+6,0.8190811127329674,max_sharpe,B AI unwind with recession,severe
+7,0.8199163459203601,max_sharpe,B AI unwind with recession,severe
+8,0.8207531792239234,max_sharpe,B AI unwind with recession,severe
+9,0.8306767661479653,max_sharpe,B AI unwind with recession,severe
+10,0.8407458984522987,max_sharpe,B AI unwind with recession,severe
+11,0.8511511515332243,max_sharpe,B AI unwind with recession,severe
+12,0.8618008766309521,max_sharpe,B AI unwind with recession,severe
+1,0.9346004809864714,[benchmark] Policy 40/50/10,B AI unwind with recession,severe
+2,0.9224892773552806,[benchmark] Policy 40/50/10,B AI unwind with recession,severe
+3,0.9108047265142653,[benchmark] Policy 40/50/10,B AI unwind with recession,severe
+4,0.8957948523354412,[benchmark] Policy 40/50/10,B AI unwind with recession,severe
+5,0.8751327287927563,[benchmark] Policy 40/50/10,B AI unwind with recession,severe
+6,0.862332350497152,[benchmark] Policy 40/50/10,B AI unwind with recession,severe
+7,0.8620965258609008,[benchmark] Policy 40/50/10,B AI unwind with recession,severe
+8,0.8618698880898794,[benchmark] Policy 40/50/10,B AI unwind with recession,severe
+9,0.8689036266556832,[benchmark] Policy 40/50/10,B AI unwind with recession,severe
+10,0.8760239928460407,[benchmark] Policy 40/50/10,B AI unwind with recession,severe
+11,0.8834252287970058,[benchmark] Policy 40/50/10,B AI unwind with recession,severe
+12,0.8909893807107033,[benchmark] Policy 40/50/10,B AI unwind with recession,severe
+1,0.9559850106750835,d26_selected,C Term-premium shock (sensitivity),central
+2,0.9448270826341504,d26_selected,C Term-premium shock (sensitivity),central
+3,0.9337878133839694,d26_selected,C Term-premium shock (sensitivity),central
+4,0.9202762199493346,d26_selected,C Term-premium shock (sensitivity),central
+5,0.9040877738130858,d26_selected,C Term-premium shock (sensitivity),central
+6,0.8934740876640459,d26_selected,C Term-premium shock (sensitivity),central
+7,0.8910553541700534,d26_selected,C Term-premium shock (sensitivity),central
+8,0.8886471174475103,d26_selected,C Term-premium shock (sensitivity),central
+9,0.891509315658989,d26_selected,C Term-premium shock (sensitivity),central
+10,0.8943737922398194,d26_selected,C Term-premium shock (sensitivity),central
+11,0.8972609107743722,d26_selected,C Term-premium shock (sensitivity),central
+12,0.9001610110962056,d26_selected,C Term-premium shock (sensitivity),central
+1,0.963568065878426,min_variance,C Term-premium shock (sensitivity),central
+2,0.9535076757233695,min_variance,C Term-premium shock (sensitivity),central
+3,0.9435422492147518,min_variance,C Term-premium shock (sensitivity),central
+4,0.9303966639319715,min_variance,C Term-premium shock (sensitivity),central
+5,0.9157805464943338,min_variance,C Term-premium shock (sensitivity),central
+6,0.9061812573399901,min_variance,C Term-premium shock (sensitivity),central
+7,0.9030626754240729,min_variance,C Term-premium shock (sensitivity),central
+8,0.8999575304646454,min_variance,C Term-premium shock (sensitivity),central
+9,0.9016059893489737,min_variance,C Term-premium shock (sensitivity),central
+10,0.9032523279226585,min_variance,C Term-premium shock (sensitivity),central
+11,0.90491075856997,min_variance,C Term-premium shock (sensitivity),central
+12,0.9065744695598763,min_variance,C Term-premium shock (sensitivity),central
+1,0.9553050828606157,min_cvar,C Term-premium shock (sensitivity),central
+2,0.9439372830466093,min_cvar,C Term-premium shock (sensitivity),central
+3,0.9326916778067771,min_cvar,C Term-premium shock (sensitivity),central
+4,0.9188379134664676,min_cvar,C Term-premium shock (sensitivity),central
+5,0.9023374523657343,min_cvar,C Term-premium shock (sensitivity),central
+6,0.8915253509209239,min_cvar,C Term-premium shock (sensitivity),central
+7,0.8889868278990408,min_cvar,C Term-premium shock (sensitivity),central
+8,0.8864600659187247,min_cvar,C Term-premium shock (sensitivity),central
+9,0.8893015558906784,min_cvar,C Term-premium shock (sensitivity),central
+10,0.8921422955195146,min_cvar,C Term-premium shock (sensitivity),central
+11,0.8950089537363797,min_cvar,C Term-premium shock (sensitivity),central
+12,0.8978906742162932,min_cvar,C Term-premium shock (sensitivity),central
+1,0.9631305365271616,risk_parity,C Term-premium shock (sensitivity),central
+2,0.9530775810388512,risk_parity,C Term-premium shock (sensitivity),central
+3,0.9431208179025761,risk_parity,C Term-premium shock (sensitivity),central
+4,0.9300783152455597,risk_parity,C Term-premium shock (sensitivity),central
+5,0.9154457925187409,risk_parity,C Term-premium shock (sensitivity),central
+6,0.905840189697224,risk_parity,C Term-premium shock (sensitivity),central
+7,0.9028357473503508,risk_parity,C Term-premium shock (sensitivity),central
+8,0.8998462824123057,risk_parity,C Term-premium shock (sensitivity),central
+9,0.9016212214853134,risk_parity,C Term-premium shock (sensitivity),central
+10,0.9033912780278794,risk_parity,C Term-premium shock (sensitivity),central
+11,0.9051776383534442,risk_parity,C Term-premium shock (sensitivity),central
+12,0.9069717259540807,risk_parity,C Term-premium shock (sensitivity),central
+1,0.9521611658335053,max_sharpe,C Term-premium shock (sensitivity),central
+2,0.9403911181457526,max_sharpe,C Term-premium shock (sensitivity),central
+3,0.9287528321824354,max_sharpe,C Term-premium shock (sensitivity),central
+4,0.9149223481403564,max_sharpe,C Term-premium shock (sensitivity),central
+5,0.89787372722091,max_sharpe,C Term-premium shock (sensitivity),central
+6,0.886704660218241,max_sharpe,C Term-premium shock (sensitivity),central
+7,0.8845505138205468,max_sharpe,C Term-premium shock (sensitivity),central
+8,0.8824058769128105,max_sharpe,C Term-premium shock (sensitivity),central
+9,0.8858100718357586,max_sharpe,C Term-premium shock (sensitivity),central
+10,0.8892188837895787,max_sharpe,C Term-premium shock (sensitivity),central
+11,0.8926563951222688,max_sharpe,C Term-premium shock (sensitivity),central
+12,0.896111833240574,max_sharpe,C Term-premium shock (sensitivity),central
+1,0.9589192565126325,[benchmark] Policy 40/50/10,C Term-premium shock (sensitivity),central
+2,0.9481284222823047,[benchmark] Policy 40/50/10,C Term-premium shock (sensitivity),central
+3,0.9374452370219031,[benchmark] Policy 40/50/10,C Term-premium shock (sensitivity),central
+4,0.9239479380603361,[benchmark] Policy 40/50/10,C Term-premium shock (sensitivity),central
+5,0.9082895299863155,[benchmark] Policy 40/50/10,C Term-premium shock (sensitivity),central
+6,0.8980154746239607,[benchmark] Policy 40/50/10,C Term-premium shock (sensitivity),central
+7,0.8952541222360582,[benchmark] Policy 40/50/10,C Term-premium shock (sensitivity),central
+8,0.8925053913886272,[benchmark] Policy 40/50/10,C Term-premium shock (sensitivity),central
+9,0.8948503187799908,[benchmark] Policy 40/50/10,C Term-premium shock (sensitivity),central
+10,0.8971932642883417,[benchmark] Policy 40/50/10,C Term-premium shock (sensitivity),central
+11,0.8995554950473219,[benchmark] Policy 40/50/10,C Term-premium shock (sensitivity),central
+12,0.9019276792163912,[benchmark] Policy 40/50/10,C Term-premium shock (sensitivity),central

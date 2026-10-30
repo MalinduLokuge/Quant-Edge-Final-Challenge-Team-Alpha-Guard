@@ -1,0 +1,4 @@
+segment,start,end,observations
+train,2004-11-19,2014-12-31,2546
+validation,2015-01-02,2019-12-31,1258
+test,2020-01-02,2026-10-19,1708

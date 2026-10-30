@@ -1,0 +1,5 @@
+requirement,D6_caps,n,lowest_MDD_needed,lowest_ES99_needed
+minimum 6.66%,False,11439,-0.35384291487655173,0.03343313314473299
+minimum 6.66%,True,0,,
+target 7.19%,False,815,-0.4684374155352745,0.04481795911224575
+target 7.19%,True,0,,

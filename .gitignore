@@ -5,8 +5,9 @@ venv/
 .ipynb_checkpoints/
 .pytest_cache/
 .env
-# generated — regenerate with `python run_all.py`
-outputs/**
+# outputs/ is committed as a results snapshot (D16, 2026-10-30) so the app opens right after cloning;
+# `python run_all.py` regenerates it. Logs stay local.
+outputs/logs/**
 !outputs/**/.gitkeep
 data/interim/**
 !data/interim/.gitkeep

@@ -1,0 +1,28 @@
+item,value,unit,source
+Horizon,"5-year strategic, annual review (D4)",,D4
+"Expected return (nominal, compound)",0.0579755698736185,fraction/yr,"CMA full, ERP 5% (D12, D25)"
+Expected real return,0.03368399596836191,fraction/yr,minus 10y breakeven
+Required return at the D30 spending rate,0.057987615477499865,fraction/yr,D12 / D30
+Spending the portfolio supports,0.026488312894968002,fraction of NAV,D12 inverted
+Spending in USD (year 1),264883.12894968,USD,× $10M
+Policy spending rate (D24 / D30),0.0265,fraction of NAV,D30
+Volatility,0.0818996534556176,fraction/yr,shrunk covariance
+Max drawdown incl. 2008 replay (limit 25%),-0.2347534830275203,fraction,D7
+P(drawdown > 25% within 5 years) (limit 5%),0.049375,probability,"D7 / D32, 126-day blocks"
+1-day VaR 95% historical,0.0070941468642742,fraction,P2
+1-day ES 95% historical,0.0119648373020818,fraction,P2
+1-day VaR 99% historical,0.0139192796071179,fraction,P2
+1-day ES 99% historical,0.02197942443173,fraction,P2
+1-day VaR / ES 99% EVT,1.43% / 2.20%,,D8
+1-day VaR 99% GARCH-EVT (current regime),0.009429950136935,fraction,D28 monitoring model
+1-day VaR 99% GARCH-EVT (long_run regime),0.014841463342896,fraction,D28 monitoring model
+"Backtest 2020–26, GARCH-EVT 99%: exceptions / expected / Kupiec p / worst Basel count",20 / 17.1 / 0.49 / 7,,"T10, D28"
+1-day VaR / ES 99% if holdings were not diversified (sum of parts),1.95% / 2.91%,,"QA-02, brief p.4"
+Diversification benefit: VaR 99% / ES 99% reduction,28.8% / 24.5%,,QA-02
+Diversification ratio (Σ wσ / σ_p),1.3823046740384126,,QA-02
+Worst stress loss,23.48% (GFC 2007-09),,"T11, D9 v2 / D29"
+Stress limit,0.25,fraction,D7
+10-year bootstrap: median real value (start = 1),1.0818918554273818,,T20.09
+10-year bootstrap: P(real value < 90%),0.21395,probability,T20.09
+10-year bootstrap: P(real spending cut > 10% at some point),0.2361,probability,T20.09
+Median years to recover from a 25% drawdown,3.015873015873016,years,T20.09
