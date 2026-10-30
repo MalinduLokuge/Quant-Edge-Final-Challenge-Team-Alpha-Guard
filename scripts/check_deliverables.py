@@ -26,6 +26,8 @@ def main() -> int:
     dv = pd.read_csv(T / "p2_diversification.csv")
     dv = dv[(dv.portfolio == "d26_selected") & (dv.alpha == 0.99)].iloc[0]
     f = lambda x, d=1: f"{float(x):.{d}%}"
+    tech = summ["Technology look-through: share of fund / of equities"].split(" / ")[0]           # D37
+    eff = summ["Effective risk contributors, 99% ES: per ETF / SPY + XLK as one"].split(" / ")  # D36
     checks = {
         "tear_sheet/tear_sheet.md": [f(summ["Expected return (nominal, compound)"], 2), f(summ["Spending the portfolio supports"], 2),
                                      f"${float(summ['Spending in USD (year 1)']):,.0f}", f(-float(summ["Max drawdown incl. 2008 replay (limit 25%)"])),
@@ -34,13 +36,16 @@ def main() -> int:
                                      f(o6["A Energy stagflation (Hormuz II) (severe)"]), f(o6["B AI unwind with recession (severe)"]),
                                      f(k.loc[("d26_selected", "validation"), "CAGR"]), f(k.loc[("d26_selected", "test"), "CAGR"]),
                                      f"${port.loc['AGG', 'usd']:,.0f}", f"${port.loc['SPY', 'usd']:,.0f}",
-                                     f(dv["VaR_benefit"]), f(dv["ES_benefit"])],
-        "memo/investment_committee_memo.md": ["2.65%", "$265,000", "5.8%", "1.4%", "2.2%"],
+                                     f(dv["VaR_benefit"]), f(dv["ES_benefit"]),
+                                     f(o6["T Tech-led crash (severe)"]), f(pol["T Tech-led crash (severe)"]), tech],
+        "memo/investment_committee_memo.md": ["2.65%", "$265,000", "5.8%", "1.4%", "2.2%", f(o6["T Tech-led crash (severe)"], 0)],
         "report/technical_report.md": [f(summ["Expected return (nominal, compound)"], 2), f(o6["GFC 2007-09"]), f(o6["Taper tantrum 2013"]),
                                        f(o6["A Energy stagflation (Hormuz II) (central)"]), f(o6["A Energy stagflation (Hormuz II) (severe)"]),
                                        f(o6["B AI unwind with recession (central)"]), f(o6["B AI unwind with recession (severe)"]),
                                        f(summ["1-day VaR 95% historical"], 2), f(summ["1-day ES 99% historical"], 2),
-                                       f(dv["VaR_benefit"]), f(dv["ES_benefit"]), f(dv["VaR_undiversified"], 2), f(dv["ES_undiversified"], 2)],
+                                       f(dv["VaR_benefit"]), f(dv["ES_benefit"]), f(dv["VaR_undiversified"], 2), f(dv["ES_undiversified"], 2),
+                                       f(o6["T Tech-led crash (central)"]), f(o6["T Tech-led crash (severe)"]), tech,
+                                       f"{eff[1]} effective risk contributors rather than {eff[0]}"],
     }
     bad = 0
     for doc, values in checks.items():

@@ -1,8 +1,9 @@
-level,drawdown,rolling_es99,action,basel_zone
-watch,0.1,0.025,report to committee,
-review,0.15,,"committee check of model, stress and spending",yellow
-act,0.2,0.025,formal decision - keep / reduce risk at next rebalance / adjust spending,
-limit,0.25,,mandatory decision - accept / adjust risk limit / reject,red
-rebalance,,,quarterly back to target weights (D11); no tactical changes,
-model check,,,"GARCH-EVT 99% VaR backtest each quarter; Basel yellow → review, red → D23 limit step",
-annual review,,,"refresh CMA, rerun the D26 rule, re-check D7 / D27 / D33 and spending (D24 / D30)",
+level,drawdown,rolling_es99,action,basel_zone,tech_lookthrough
+watch,0.1,0.025,report to committee,,
+review,0.15,,"committee check of model, stress and spending",yellow,
+act,0.2,0.025,formal decision - keep / reduce risk at next rebalance / adjust spending,,
+limit,0.25,,mandatory decision - accept / adjust risk limit / reject,red,
+tech concentration,,,committee review of technology concentration; pre-agreed fallback V4 (look-through tech <= SPY's tech share x equity weight),,0.2
+rebalance,,,quarterly back to target weights (D11); no tactical changes,,
+model check,,,"GARCH-EVT 99% VaR backtest each quarter; Basel yellow → review, red → D23 limit step",,
+annual review,,,"refresh CMA, rerun the D26 rule, re-check D7 / D27 / D33 and spending (D24 / D30)",,

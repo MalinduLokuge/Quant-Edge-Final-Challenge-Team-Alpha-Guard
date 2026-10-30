@@ -109,3 +109,11 @@ def test_stress_factor_panel_levels_changes_and_end_date():
     assert p.index[-1] == pd.Timestamp("2020-03-31") and len(p) == 3
     assert p["d_real10"].iloc[-1] == pytest.approx(p["lvl_real10"].iloc[-1] - p["lvl_real10"].iloc[-2])
     assert p["oil"].iloc[-1] == pytest.approx(np.log(p["lvl_brent"].iloc[-1] / p["lvl_brent"].iloc[-2]))
+
+
+def test_lookthrough_shock_moves_by_tech_share_and_gives_no_hedge_credit():
+    w = pd.Series({"AGG": 0.6, "SPY": 0.2, "XLK": 0.1, "GLD": 0.1})
+    ret, move, contrib = H.lookthrough_shock(w, {"SPY": 0.4, "XLK": 1.0}, ["SPY", "XLK"], -0.40, -0.10)
+    assert move["SPY"] == pytest.approx(0.4 * -0.40 + 0.6 * -0.10) and move["XLK"] == pytest.approx(-0.40)
+    assert move["AGG"] == 0 and move["GLD"] == 0
+    assert ret == pytest.approx(contrib.sum()) and ret == pytest.approx(0.2 * -0.22 + 0.1 * -0.40)

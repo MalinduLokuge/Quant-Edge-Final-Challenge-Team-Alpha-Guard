@@ -39,3 +39,18 @@ def test_diversification_benefit_zero_for_one_asset_and_identical_assets_positiv
     assert np.allclose(same[["VaR_benefit", "ES_benefit"]], 0, atol=1e-12)
     mix = A.diversification_table(R, W)                # independent assets: risk well below the sum of parts
     assert (mix["VaR_benefit"] > 0.2).all() and (mix["ES_benefit"] > 0.2).all() and mix["diversification_ratio"].iloc[0] > 1.2
+
+
+def test_effective_contributors_count_and_grouping():
+    assert A.effective_contributors(pd.Series({"X": 1.0, "Y": 0.0})) == pytest.approx(1.0)
+    four = pd.Series({"A": 0.25, "B": 0.25, "C": 0.25, "D": 0.25})
+    assert A.effective_contributors(four) == pytest.approx(4.0)
+    assert A.effective_contributors(four, {"A+B": ["A", "B"]}) == pytest.approx(1 / (0.5 ** 2 + 2 * 0.25 ** 2))  # 2.67
+    assert A.effective_contributors(pd.Series({"A": 0.8, "B": 0.3, "C": -0.1})) == pytest.approx(1 / (0.8 ** 2 + 0.3 ** 2))  # hedges ignored
+    same = A.diversification_table(pd.DataFrame({"X": R["X"], "X2": R["X"]}), pd.Series({"X": 0.5, "X2": 0.5}), groups={"G": ["X", "X2"]})
+    assert np.allclose(same["effective_contributors"], 2) and np.allclose(same["effective_contributors_grouped"], 1)
+
+
+def test_lookthrough_share():
+    w = pd.Series({"SPY": 0.2, "XLK": 0.1, "AGG": 0.7})
+    assert A.lookthrough_share(w, {"SPY": 0.4, "XLK": 1.0}) == pytest.approx(0.2 * 0.4 + 0.1)

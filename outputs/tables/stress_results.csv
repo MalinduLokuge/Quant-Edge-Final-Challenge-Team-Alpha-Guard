@@ -53,3 +53,15 @@ min_cvar,C Term-premium shock (sensitivity) (central),hypothetical,,,-0.11567433
 risk_parity,C Term-premium shock (sensitivity) (central),hypothetical,,,-0.10242723448951627,,,,,,,,0.10242723448951627,0.25,False,0.14757276551048373,1024272.3448951626
 max_sharpe,C Term-premium shock (sensitivity) (central),hypothetical,,,-0.11933566081959807,,,,,,,,0.11933566081959807,0.25,False,0.13066433918040193,1193356.6081959805
 [benchmark] Policy 40/50/10,C Term-premium shock (sensitivity) (central),hypothetical,,,-0.10963425883005508,,,,,,,,0.10963425883005508,0.25,False,0.14036574116994494,1096342.5883005508
+d26_selected,T Tech-led crash (central),hypothetical,,,-0.09172106408226394,,,,,,,,0.09172106408226394,0.25,False,0.15827893591773606,917210.6408226393
+min_variance,T Tech-led crash (central),hypothetical,,,-0.04303999976718237,,,,,,,,0.04303999976718237,0.25,False,0.20696000023281763,430399.99767182366
+min_cvar,T Tech-led crash (central),hypothetical,,,-0.1000508714267817,,,,,,,,0.1000508714267817,0.25,False,0.1499491285732183,1000508.7142678171
+risk_parity,T Tech-led crash (central),hypothetical,,,-0.06726886871703501,,,,,,,,0.06726886871703501,0.25,False,0.18273113128296498,672688.6871703501
+max_sharpe,T Tech-led crash (central),hypothetical,,,-0.11154059655499438,,,,,,,,0.11154059655499438,0.25,False,0.13845940344500562,1115405.9655499437
+[benchmark] Policy 40/50/10,T Tech-led crash (central),hypothetical,,,-0.0751,,,,,,,,0.0751,0.25,False,0.1749,751000.0
+d26_selected,T Tech-led crash (severe),hypothetical,,,-0.16728425313517342,,,,,,,,0.16728425313517342,0.25,False,0.08271574686482658,1672842.5313517342
+min_variance,T Tech-led crash (severe),hypothetical,,,-0.08071999956335876,,,,,,,,0.08071999956335876,0.25,False,0.16928000043664124,807199.9956335876
+min_cvar,T Tech-led crash (severe),hypothetical,,,-0.1776232886054289,,,,,,,,0.1776232886054289,0.25,False,0.07237671139457111,1776232.8860542888
+risk_parity,T Tech-led crash (severe),hypothetical,,,-0.12717487062389982,,,,,,,,0.12717487062389982,0.25,False,0.12282512937610018,1271748.706238998
+max_sharpe,T Tech-led crash (severe),hypothetical,,,-0.2004161755599138,,,,,,,,0.2004161755599138,0.25,False,0.04958382444008619,2004161.755599138
+[benchmark] Policy 40/50/10,T Tech-led crash (severe),hypothetical,,,-0.1468,,,,,,,,0.1468,0.25,False,0.10319999999999999,1468000.0000000002

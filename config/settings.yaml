@@ -53,7 +53,12 @@ risk:
   bootstrap_reps: 1000                    # historical / normal intervals (D18)
   bootstrap_reps_t: 100                   # Student-t refits are slow
   p2_portfolios: [d26_selected, min_variance, min_cvar, risk_parity, max_sharpe]  # target_return = min_variance; max_expected ≈ max_sharpe
+  risk_groups: {SPY + XLK: [SPY, XLK]}    # D36: one risk source for the effective-contributor count (same large tech stocks)
   random_seed: 42
+lookthrough:                    # D35 / D37, APPROVED 2026-10-30: technology share of each ETF's holdings
+  as_of: "2026-10-29"
+  source: "SPY: ssga.com SPY fund page, Fund Sector Breakdown, Information Technology 38.40% as of 2026-10-29 (checked 2026-10-30); EFA, EEM approximate; XLK by definition"
+  tech_share: {SPY: 0.3840, XLK: 1.0, EFA: 0.09, EEM: 0.24, XLE: 0.0, AGG: 0.0, GLD: 0.0}
 validation:                     # T10 backtesting (D13 window above)
   portfolios_from: p1_train     # weights chosen with data <= 2014 only: no look-ahead in 2015-2026
   confidence_levels: [0.95, 0.99]
@@ -109,6 +114,10 @@ stress:                         # T11
     mc_low_multiplier: 0.5
     mc_residual_months: 3       # residual (non-factor) noise of a 3-month episode, correlated across ETFs
     one_at_a_time_multiplier: 1.5
+  lookthrough_scenarios:        # D35, APPROVED 2026-10-30: same SPY loss as D29 B, but led by technology; equity ETFs move by
+    T Tech-led crash:           # their look-through tech share (lookthrough.tech_share); AGG and GLD get no hedge credit
+      central: {tech: -0.40, rest: -0.10}
+      severe: {tech: -0.65, rest: -0.25}
 sustainability:                 # T20.09: endowment sustainability and recovery stress test (D24 at the D30 rate)
   declines: [0.15, 0.20, 0.25]  # initial fall (view 1: portfolio value; view 2: stock market)
   recovery_years: [1, 3, 5, 7]  # years to regain the pre-crisis level after the fall; plus a lost decade
@@ -137,6 +146,9 @@ risk_limits:                    # D7, APPROVED 2026-10-28
     review: {drawdown: 0.15, basel_zone: yellow, action: "committee check of model, stress and spending"}
     act: {drawdown: 0.20, rolling_es99: 0.025, action: "formal decision - keep / reduce risk at next rebalance / adjust spending"}
     limit: {drawdown: 0.25, basel_zone: red, action: "mandatory decision - accept / adjust risk limit / reject"}
+  concentration_trigger:        # D37, APPROVED 2026-10-30: checked at each quarterly rebalance with refreshed sector weights
+    tech_lookthrough: 0.20      # look-through technology share of the fund (O6: 17.7%)
+    action: "committee review of technology concentration; pre-agreed fallback V4 (look-through tech <= SPY's tech share x equity weight)"
   monitoring:                   # review triggers, not forced sales
     rolling_es_window: 250
     basel_zones_review: [yellow, red]

@@ -35,6 +35,7 @@
 **What can go wrong, and how bad it could be.**
 - **A repeat of 2008:** a fall of about 23% ($2.3M), recovered in about 3 years on average.
 - **An energy-driven inflation shock** like a renewed Hormuz closure (oil +50%, interest rates up, stocks −30%): about 19% ($1.9M). In this case bonds fall too.
+- **A technology-led crash** (tech stocks −65%, US stocks −40%): about 17% ($1.7M). Counting what SPY itself holds, technology is about 18% of the fund.
 - **On a typical bad day:** 1 day in 100 the fund can lose 1.4% ($139,000) or more; on those days the average loss is 2.2% ($220,000).
 - **Over 10 years:** about a 1-in-5 chance that the fund's real value ends below 90% of today's, and about a 1-in-4 chance that real spending is cut by more than 10% at some point.
 
@@ -54,5 +55,7 @@
    | 15% | review | review the risk model, stress tests and spending |
    | 20% | act | formal decision on risk and spending |
    | 25% | limit | mandatory decision: accept, adjust the risk limit, or reject |
+
+   A review is also triggered if technology, counting SPY's holdings, rises above 20% of the fund.
 
 4. **An annual review** of assumptions, weights and spending.

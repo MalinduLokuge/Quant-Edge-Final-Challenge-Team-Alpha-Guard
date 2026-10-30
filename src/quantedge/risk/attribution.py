@@ -8,6 +8,8 @@ Euler allocation (VaR and ES are homogeneous of degree 1 in the weights, so comp
 Diversification benefit (brief p.4, QA-02): undiversified risk = Σ wᵢ·(ETF i's own VaR or ES), i.e. the risk if all
 holdings had their bad days together; benefit = 1 − portfolio risk / undiversified risk. Diversification ratio =
 Σ wᵢσᵢ / σ_p (1 = no diversification).
+Effective risk contributors (D36) = 1 / Σ sᵢ² over the positive ES shares, per ETF and with ETFs that hold the same
+stocks merged into one source (SPY + XLK). Look-through share (D37) = Σ wᵢ × ETF i's share of a sector.
 """
 from __future__ import annotations
 
@@ -57,12 +59,29 @@ def attribution_table(returns: pd.DataFrame, weights: pd.Series, alphas=(0.95, 0
     return pd.concat(rows, ignore_index=True)
 
 
-def diversification_table(returns: pd.DataFrame, weights: pd.Series, alphas=(0.95, 0.99)) -> pd.DataFrame:
-    """Portfolio vs undiversified (weighted sum of standalone) historical VaR / ES, and the diversification ratio."""
+def effective_contributors(pct_es: pd.Series, groups: dict | None = None) -> float:
+    """1 / Σ s² over positive ES shares; each group's members are merged into one source first (D36)."""
+    s = pct_es.clip(lower=0)
+    for g, members in (groups or {}).items():
+        m = [t for t in members if t in s.index]
+        s = pd.concat([s.drop(m), pd.Series({g: s[m].sum()})])
+    return float(1 / (s ** 2).sum())
+
+
+def lookthrough_share(weights: pd.Series, share: dict) -> float:
+    """Fund exposure to a sector through the ETFs' holdings: Σ wᵢ × sector share of ETF i (D37)."""
+    return float(sum(float(v) * float(share.get(k, 0.0)) for k, v in weights.items()))
+
+
+def diversification_table(returns: pd.DataFrame, weights: pd.Series, alphas=(0.95, 0.99),
+                          groups: dict | None = None) -> pd.DataFrame:
+    """Portfolio vs undiversified (weighted sum of standalone) historical VaR / ES, the diversification ratio and the
+    effective number of risk contributors (per ETF and with `groups` merged, D36)."""
     w = weights.reindex(returns.columns, fill_value=0.0)
     loss = -(returns @ w).to_numpy()
     rows = []
     for a in alphas:
+        pct = scenario_components(returns, w, a)["pct_ES"]
         v = float(np.quantile(loss, a))
         es = float(loss[loss >= v].mean())
         sv = se = 0.0
@@ -74,7 +93,9 @@ def diversification_table(returns: pd.DataFrame, weights: pd.Series, alphas=(0.9
             sv += w[t] * vi
             se += w[t] * float(li[li >= vi].mean())
         rows.append({"alpha": a, "VaR": v, "ES": es, "VaR_undiversified": sv, "ES_undiversified": se,
-                     "VaR_benefit": 1 - v / sv, "ES_benefit": 1 - es / se})
+                     "VaR_benefit": 1 - v / sv, "ES_benefit": 1 - es / se,
+                     "effective_contributors": effective_contributors(pct),
+                     "effective_contributors_grouped": effective_contributors(pct, groups)})
     out = pd.DataFrame(rows)
     sd = returns.std()
     out["diversification_ratio"] = float((w * sd).sum() / (returns @ w).std())

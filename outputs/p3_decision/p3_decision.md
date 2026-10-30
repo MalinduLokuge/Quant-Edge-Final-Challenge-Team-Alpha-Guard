@@ -34,7 +34,10 @@
 | 1-day VaR / ES 99% if holdings were not diversified (sum of parts) | 1.95% / 2.91% | QA-02, brief p.4 |
 | Diversification benefit: VaR 99% / ES 99% reduction | 28.8% / 24.5% | QA-02 |
 | Diversification ratio (Σ wσ / σ_p) | 1.38 | QA-02 |
-| Worst stress loss | 23.48% (GFC 2007-09) | T11, D9 v2 / D29 |
+| Effective risk contributors, 99% ES: per ETF / SPY + XLK as one | 3.9 / 2.3 | D36 |
+| Technology look-through: share of fund / of equities | 17.7% / 46% | D37 (trigger 20%), sector weights 2026-10-29 |
+| Worst stress loss | 23.48% (GFC 2007-09) | T11, D9 v2 / D29 / D35 |
+| Tech-led crash loss: central / severe | 9.17% / 16.73% | D35 |
 | Stress limit | 25.00% | D7 |
 | 10-year bootstrap: median real value (start = 1) | 1.08 | T20.09 |
 | 10-year bootstrap: P(real value < 90%) | 21.39% | T20.09 |

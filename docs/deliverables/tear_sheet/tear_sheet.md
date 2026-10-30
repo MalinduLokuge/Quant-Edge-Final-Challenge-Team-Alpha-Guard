@@ -44,6 +44,7 @@
 | 2022 rates and inflation | 17.8% | 18.6% |
 | Energy stagflation, severe (oil +50%, stocks −30%) | 18.8% | 19.2% |
 | AI unwind with recession, severe (stocks −40%) | 14.2% | 13.0% |
+| Tech-led crash, severe (tech −65%, stocks −40%) | 16.7% | 14.7% |
 
 **Out-of-sample evidence** (weights built only with earlier data)
 
@@ -57,7 +58,7 @@
 
 **Key risks**
 - **Inflation shocks:** bonds and stocks fall together, as in 2022.
-- **Equity concentration:** SPY and XLK carry about 60% of the tail risk.
+- **Equity concentration:** SPY and XLK carry about 60% of the tail risk; counting SPY's holdings, technology is 17.7% of the fund.
 - **Rates:** returns are lower if interest rates fall.
 - **Limited history:** only one 2008-type crisis is in the data.
 
@@ -69,4 +70,5 @@
 | −15%, or Basel yellow | review |
 | −20% | act |
 | −25%, or Basel red | mandatory committee decision |
+| Technology above 20% of the fund (counting SPY's holdings) | review |
 | Every year | annual review |

@@ -12,6 +12,8 @@ average oil–equity link is demand-driven and has the wrong sign for a supply s
                             shock ranges, beta standard errors and correlated residual noise
     scenario VaR            current GARCH-EVT VaR/ES × (scenario VIX / current VIX): a 1-day statistic, distinct from
                             the multi-month scenario loss
+    look-through shock      D35 tech-led crash: equity ETF i moves techᵢ·tech move + (1 − techᵢ)·rest move, where techᵢ
+                            is the technology share of its holdings; non-equity ETFs get no hedge credit (0)
 """
 from __future__ import annotations
 
@@ -77,6 +79,14 @@ def instant(weights: pd.Series, beta: pd.DataFrame, f: pd.Series) -> tuple[float
     """(portfolio return, ETF moves, contributions) for an instantaneous factor shock."""
     move = beta @ f
     contrib = weights.reindex(beta.index, fill_value=0.0) * move
+    return float(contrib.sum()), move, contrib
+
+
+def lookthrough_shock(weights: pd.Series, tech_share: dict, equity, tech_move: float, rest_move: float) -> tuple[float, pd.Series, pd.Series]:
+    """(portfolio return, ETF moves, contributions) when technology falls tech_move and other equities rest_move (D35)."""
+    move = pd.Series({k: tech_share.get(k, 0.0) * tech_move + (1 - tech_share.get(k, 0.0)) * rest_move if k in equity else 0.0
+                      for k in weights.index})
+    contrib = weights * move
     return float(contrib.sum()), move, contrib
 
 

@@ -5,7 +5,8 @@ Final portfolio = d26_selected from P1-final: the D26 rule with the D32 5-year t
 Outputs (outputs/p3_decision/):
     p3_portfolio.csv            weights, USD amounts, role of each ETF
     p3_summary.csv              horizon, expected nominal / real return, spending, downside, model trust, stress
-    p3_triggers.csv             monitoring and action rules (D23 ladder, Basel zone, rebalancing, annual review)
+    p3_triggers.csv             monitoring and action rules (D23 ladder, Basel zone, D37 tech concentration, rebalancing,
+                                annual review)
     p3_trigger_frequency.csv    how often each trigger level would have fired on the 2004–2026 path (T20.08)
     p3_tradeoff.csv             frontier: expected return vs drawdown vs spending (T20.06)
     p3_decision.md              one-page plain summary for the memo
@@ -18,6 +19,7 @@ import pandas as pd
 from quantedge.common import config
 from quantedge.common import conventions as cv
 from quantedge.portfolio import return_objective as ro
+from quantedge.risk import attribution
 from quantedge.validation import limits
 
 ROLES = {"AGG": "income and ballast (bond yield, liquidity for spending)", "SPY": "core growth (US equities)",
@@ -98,9 +100,18 @@ def run() -> dict:
     rows += [("1-day VaR / ES 99% if holdings were not diversified (sum of parts)",
               f"{dv['VaR_undiversified']:.2%} / {dv['ES_undiversified']:.2%}", "", "QA-02, brief p.4"),
              ("Diversification benefit: VaR 99% / ES 99% reduction", f"{dv['VaR_benefit']:.1%} / {dv['ES_benefit']:.1%}", "", "QA-02"),
-             ("Diversification ratio (Σ wσ / σ_p)", dv["diversification_ratio"], "", "QA-02")]
+             ("Diversification ratio (Σ wσ / σ_p)", dv["diversification_ratio"], "", "QA-02"),
+             ("Effective risk contributors, 99% ES: per ETF / SPY + XLK as one",
+              f"{dv['effective_contributors']:.1f} / {dv['effective_contributors_grouped']:.1f}", "", "D36")]
+    tech = attribution.lookthrough_share(w, s["lookthrough"]["tech_share"])
+    eq = float(w[s["constraints"]["groups"]["equity"]["tickers"]].sum())
+    ct = lim["concentration_trigger"]
+    rows += [("Technology look-through: share of fund / of equities", f"{tech:.1%} / {tech / eq:.0%}", "",
+              f"D37 (trigger {ct['tech_lookthrough']:.0%}), sector weights {s['lookthrough']['as_of']}")]
     worst = st.loc[st["loss"].idxmax()]
-    rows += [("Worst stress loss", f"{worst['loss']:.2%} ({worst['scenario']})", "", "T11, D9 v2 / D29"),
+    tl = st.set_index("scenario")["loss"]
+    rows += [("Worst stress loss", f"{worst['loss']:.2%} ({worst['scenario']})", "", "T11, D9 v2 / D29 / D35"),
+             ("Tech-led crash loss: central / severe", f"{tl['T Tech-led crash (central)']:.2%} / {tl['T Tech-led crash (severe)']:.2%}", "", "D35"),
              ("Stress limit", lim["stress_loss_max"], "fraction", "D7")]
     rows += [("10-year bootstrap: median real value (start = 1)", mc["median_real_nav_end"], "", "T20.09"),
              ("10-year bootstrap: P(real value < 90%)", mc["P(real NAV end < 90%)"], "probability", "T20.09"),
@@ -112,6 +123,7 @@ def run() -> dict:
     lad = lim["action_ladder"]
     trig = pd.DataFrame([{"level": k, **v} for k, v in lad.items()])
     trig = pd.concat([trig, pd.DataFrame([
+        {"level": "tech concentration", "tech_lookthrough": ct["tech_lookthrough"], "action": ct["action"]},
         {"level": "rebalance", "action": "quarterly back to target weights (D11); no tactical changes"},
         {"level": "model check", "action": "GARCH-EVT 99% VaR backtest each quarter; Basel yellow → review, red → D23 limit step"},
         {"level": "annual review", "action": "refresh CMA, rerun the D26 rule, re-check D7 / D27 / D33 and spending (D24 / D30)"}])], ignore_index=True)

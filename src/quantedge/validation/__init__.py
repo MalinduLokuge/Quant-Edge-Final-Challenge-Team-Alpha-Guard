@@ -6,7 +6,8 @@ with data ≤ 2014) so nothing is fitted on the evaluation years. Model selectio
 chosen model is frozen in config (validation.test_unlocked). Outputs (outputs/tables/):
 backtest_forecasts_<period>.csv, backtest_results_<period>.csv, backtest_window_sensitivity.csv.
 Stress (T11): historical replays (stress_results.csv, stress_contributions.csv, stress_correlations.csv) and the
-D9 v2 / D29 hypothetical scenarios (stress_hyp_*.csv; rows also added to stress_results.csv).
+D9 v2 / D29 hypothetical scenarios (stress_hyp_*.csv; rows also added to stress_results.csv) and the D35 tech-led crash
+(look-through shock; stress_results.csv and stress_contributions.csv only).
 Limit stability (T10.12): D7 limits on train / validation / test / full periods → limit_stability.csv.
 Sustainability (T20.09): recovery from 15/20/25% falls while paying D24 spending → sustainability_*.csv.
 """
@@ -63,13 +64,20 @@ def run_stress(simple: pd.DataFrame, s: dict) -> dict:
         rows.append({"portfolio": r.portfolio, "scenario": f"{r.scenario} ({r.severity})", "type": "hypothetical",
                      "scenario_return": r.instant_return})
     contrib.append(hyp["contributions"])
+    lt, equity = s["lookthrough"]["tech_share"], s["constraints"]["groups"]["equity"]["tickers"]
+    for scen, spec in st["lookthrough_scenarios"].items():  # D35: tech-led crash on the ETFs' look-through tech shares
+        for sev, m in spec.items():
+            for name, wt in ports.items():
+                ret, _, c = H.lookthrough_shock(wt.reindex(simple.columns, fill_value=0.0), lt, equity, m["tech"], m["rest"])
+                rows.append({"portfolio": name, "scenario": f"{scen} ({sev})", "type": "hypothetical", "scenario_return": ret})
+                contrib.append(c.rename("contribution").to_frame().assign(portfolio=name, scenario=f"{scen} ({sev})"))
     res = stress.breach_table(pd.DataFrame(rows), s["risk_limits"])
     res["loss_usd"] = res["loss"] * nav
     res.to_csv(out / "stress_results.csv", index=False)
     pd.concat(contrib).rename_axis("etf").reset_index().to_csv(out / "stress_contributions.csv", index=False)
     crisis, calm = stress.stress_correlations(simple, st["windows"])
     pd.concat([crisis.assign(regime="stress"), calm.assign(regime="calm")]).to_csv(out / "stress_correlations.csv")
-    n_hyp = hyp["results"][["scenario", "severity"]].drop_duplicates().shape[0]
+    n_hyp = hyp["results"][["scenario", "severity"]].drop_duplicates().shape[0] + sum(map(len, st["lookthrough_scenarios"].values()))
     print(f"[validation] stress: {len(st['windows'])} historical + {n_hyp} hypothetical x {len(ports)} portfolios")
     return {"stress": res, **hyp}
 

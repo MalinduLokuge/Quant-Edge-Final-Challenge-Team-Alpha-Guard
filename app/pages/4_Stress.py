@@ -18,9 +18,11 @@ res["Portfolio"] = res["portfolio"].map(D.label)
 st.subheader("Loss in each scenario")
 piv = res.pivot_table(index="scenario", columns="Portfolio", values="loss", sort=False)
 order = [D.FINAL_LABEL] + [c for c in piv.columns if c != D.FINAL_LABEL]
-st.dataframe(piv[order].style.format("{:.1%}").background_gradient(cmap="Reds", vmin=0, vmax=0.25), use_container_width=True)
+st.dataframe(piv[order].style.format("{:.1%}").background_gradient(cmap="Reds", vmin=0, vmax=0.25), use_container_width=True,
+             height=35 * (len(piv) + 1) + 3)  # every scenario visible without scrolling inside the table
 st.caption("Historical rows = worst peak-to-trough loss inside the crisis window, with quarterly rebalancing. Hypothetical rows = "
-           "instant loss from the six-factor model. Every value is below the 25% limit.")
+           "instant loss from the six-factor model; T (tech-led crash, D35) uses the technology share of each ETF's holdings, "
+           "with no hedge credit for bonds or gold. Every value is below the 25% limit.")
 
 final = res[res.portfolio == D.FINAL]
 c1, c2 = st.columns(2)

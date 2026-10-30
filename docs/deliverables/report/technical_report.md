@@ -202,6 +202,9 @@
 | A Energy stagflation "Hormuz II" (oil +25 / +50%, real yield +40 / +100 bp, stocks −15 / −30%) | 8.7% | 18.8% |
 | B AI unwind with recession (stocks −25 / −40%, credit +100 / +250 bp) | 8.8% | 14.2% |
 | C Term-premium shock (sensitivity) | 11.3% | — |
+| T Tech-led crash (D35; tech −40 / −65%, other stocks −10 / −25%) | 9.2% | 16.7% |
+
+**Tech-led crash (D35).** SPY already holds the large technology companies that make up XLK. Counting SPY's holdings, technology is 17.7% of the fund and 46% of its equities (SPY's own share is 38.4%, SSGA, 29 October 2026). Scenario T gives SPY the same loss as B but leads it with technology. Each equity ETF moves by the technology share of its holdings, and bonds and gold get no hedge credit. O6 loses 16.7% in the severe case, 2.6 pp more than in B. History cannot test this: 2004–26 has no tech-led crash, and XLK helped in 2008. Portfolios with less XLK were evaluated under a rule fixed in advance and not adopted. All of them deepen the 2008 drawdown, and none reaches O6's return within D7 (research doc V2). Instead, technology above 20% of the fund triggers a committee review (D37). Counting SPY and XLK as one source, O6 has 2.3 effective risk contributors rather than 3.9 (D36).
 
 **What the scenarios show:**
 - **The bond hedge fails in inflationary shocks.** In A severe, AGG contributes over a third of the loss; in a recession it rallies.

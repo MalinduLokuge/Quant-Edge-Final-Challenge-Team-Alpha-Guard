@@ -63,10 +63,12 @@ st.markdown("""
 st.subheader("Monitoring and action rules (D23, no forced selling)")
 ui.ladder_status()
 trig = D.p3("p3_triggers").fillna("")
-for c in ("drawdown", "rolling_es99"):
+for c in ("drawdown", "rolling_es99", "tech_lookthrough"):
     trig[c] = trig[c].apply(lambda x: f"{float(x):.1%}" if x != "" else "")
+trig = trig[[c for c in trig.columns if c != "action"] + ["action"]]
 st.dataframe(trig.rename(columns={"level": "Step", "drawdown": "Drawdown from peak", "rolling_es99": "Rolling 250-day ES99",
-                                  "basel_zone": "Backtest zone", "action": "Action"}), hide_index=True, use_container_width=True)
+                                  "basel_zone": "Backtest zone", "tech_lookthrough": "Tech share of fund (look-through)",
+                                  "action": "Action"}), hide_index=True, use_container_width=True)
 freq = D.p3("p3_trigger_frequency")
 st.caption("How often each trigger would have fired on 2004–2026 history: " +
            "; ".join(f"{r.trigger}: {r.share_of_days:.0%} of days, {r.episodes} episodes" for r in freq.itertuples()))
