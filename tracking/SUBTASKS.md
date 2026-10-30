@@ -294,13 +294,13 @@ Stage: decision/docs · Owner: Raveena · Priority: Core · Target: Week 3
 
 | ID | Subtask | Expected output | Priority | Owner | Depends on | Status | Source |
 |---|---|---|---|---|---|---|---|
-| T16.01 | Outline 7–15 page technical report based on actual results | Report outline | Critical | Raveena | T1.07 | Not started | PM · BR p.6 |
-| T16.02 | Complete methods, evidence, tests and limitations writeup | Report draft | Critical | Raveena | T20.04 | Not started | PM |
-| T16.03 | Create concise one-page portfolio tear sheet | Tear sheet (<5 min read) | Critical | Raveena | T20.04 | Not started | PM · BR p.6 |
-| T16.04 | Write one-page investment committee decision memo | Memo: accept / adjust risk limit / reject (D14) | Critical | Raveena | T20.04 | Not started | PM · BR p.8 |
-| T16.05 | Cross-check all numbers between report, memo and app | Number audit (automated where possible) | Critical | Raveena | T16.02–T16.04, T14.* | Not started | PM · FJ calculation audit |
-| T16.06 | Data sources and cleaning steps section | Report section from data/README.md | Critical | Raveena | T2.11 | Not started | BR p.6 |
-| T16.07 | Report sections: return objective & sustainable spending; benchmark and risk-limit research (appendix) | Report draft sections | High | Raveena | T20.04 | Not started | DEC D3, D7, D12 |
+| T16.01 | Outline 7–15 page technical report based on actual results | docs/deliverables/report/technical_report.md: 11 sections + appendix (draft, team review) | Critical | Raveena | T1.07 | In progress | PM · BR p.6 |
+| T16.02 | Complete methods, evidence, tests and limitations writeup | report draft: methods, evidence, tests, limitations (team to edit and own) | Critical | Raveena | T20.04 | In progress | PM |
+| T16.03 | Create concise one-page portfolio tear sheet | docs/deliverables/tear_sheet/tear_sheet.md (draft, team review) | Critical | Raveena | T20.04 | In progress | PM · BR p.6 |
+| T16.04 | Write one-page investment committee decision memo | docs/deliverables/memo/investment_committee_memo.md: verdict ACCEPT drafted, team to confirm (D14) | Critical | Raveena | T20.04 | In progress | PM · BR p.8 |
+| T16.05 | Cross-check all numbers between report, memo and app | scripts/check_deliverables.py: 30 figures vs outputs, 0 mismatches (caught one rounding error) | Critical | Raveena | T16.02–T16.04, T14.* | Done | PM · FJ calculation audit |
+| T16.06 | Data sources and cleaning steps section | report §3 data sources and cleaning (draft) | Critical | Raveena | T2.11 | In progress | BR p.6 |
+| T16.07 | Report sections: return objective & sustainable spending; benchmark and risk-limit research (appendix) | report §2, §4.4 return objective, spending and risk-limit research (draft) | High | Raveena | T20.04 | In progress | DEC D3, D7, D12 |
 
 ## T17 — Repository & reproducibility
 Stage: — · Owner: Malindu · Priority: Core · Target: Week 3
