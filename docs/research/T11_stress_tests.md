@@ -37,7 +37,7 @@
 | Stagflation shock (D9) | **16.7%** ($1.67M) | 13.9% | 13.7% | 17.5% | 15.9% |
 | Stagflation + oil/gold spike | **15.6%** | 13.9% | 9.8% | 17.0% | 14.3% |
 
-**D26 detail:** worst day −5.2% (2008-10-10) and −6.2% (2020-03-12). Recovery to the pre-crisis level: GFC 277 trading days after the trough, COVID 53, 2022 303, taper tantrum 16.
+**D26 detail:** worst day −5.2% (2008-10-10) and −6.2% (2020-03-12). Recovery to the pre-crisis level: GFC 277 trading days after the trough, COVID 53, 2022 303, taper tantrum 16 (D26 weights at the time of T11). Final O6 (`stress_results.csv`): GFC 254, COVID 52, 2022 325, taper tantrum 18.
 
 ## 3. Findings
 1. **No breach (T11.10):** D26 passes every scenario. The GFC is the binding one (24.5% vs the 25% limit). That is by design, because D7 includes the 2008 replay, but it leaves only 0.5 pp of headroom. A deeper crisis than 2008 would breach.

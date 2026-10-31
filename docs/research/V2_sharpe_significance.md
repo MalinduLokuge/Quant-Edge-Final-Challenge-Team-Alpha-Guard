@@ -36,3 +36,4 @@
 ## Limitations
 - Sharpe ratio only. The drawdown advantage was not tested for significance, because maximum drawdown is a single path statistic with no standard test. It is supported by the walk-forward, the 2008 replay and the D7 5-year probability.
 - The walk-forward rule was chosen in 2026 after the earlier years had been seen, as already disclosed in T20.07.
+- Multiple testing (raised in a second QA review): more than 20 portfolio variants were compared, so the best observed Sharpe is biased upward. A deflated Sharpe ratio (Bailey and López de Prado, 2014) corrects for the number of trials, but it can only lower significance. No difference is significant even before that correction, so no claim changes and the DSR was not computed. O6 was selected by the D26 rule, not by Sharpe.

@@ -66,6 +66,9 @@ def main() -> int:
                                        f"GARCH-EVT: {rgv.exceptions}, p {rgv.p_ind:.2f}, {rgv.basel_worst_count:.0f} (yellow)",
                                        f"{f(cv.meanVaR_regime_primary, 2)} against {f(cv.meanVaR_garch_evt, 2)} for GARCH-EVT", *sr_rep, f"Sharpe ratio is not statistically significant (Ledoit–Wolf {p_wf})"],
     }
+    gfc_rec = f"{st[st.portfolio == 'd26_selected'].set_index('scenario').loc['GFC 2007-09', 'recovery_days']:.0f} trading days"  # QA: historical vs simulated recovery
+    for doc in checks:
+        checks[doc].append(gfc_rec)
     bad = 0
     for doc, values in checks.items():
         text = (DOCS / doc).read_text(encoding="utf8")

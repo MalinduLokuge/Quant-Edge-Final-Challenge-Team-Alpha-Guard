@@ -264,7 +264,9 @@
 | D24 at 2.00% | 58% / 76% | 11.5 | 2.3% | 23% |
 | D24 capped at 2.65% of current value | 49% / 66% | 15.8 | 2.8% | 48% |
 
-- **After a severe fall, the price recovers in about 3 years, but purchasing power typically takes 15–20 years and returns within 15 years only about half the time.** We give a range, not one year: the median moves by about 2 years between simulation seeds. Without a crisis, real value grows only about 0.6% a year after spending, so a 25% loss is slow to rebuild: the fund would need about 1.9% a year to do it in 15 years.
+- **After a severe fall, the price recovers in about 1–3 years, but purchasing power typically takes 15–20 years and returns within 15 years only about half the time.**
+  - Historical: in 2008 O6's price was back at its pre-crisis level 254 trading days (about 1 year) after the trough (`stress_results.csv`; one crisis, −23.5%).
+  - Simulated: median 3.0 years (p90 5.3) for a 25% fall on the bootstrap paths, before spending and inflation. We give a range, not one year: the median moves by about 2 years between simulation seeds. Without a crisis, real value grows only about 0.6% a year after spending, so a 25% loss is slow to rebuild: the fund would need about 1.9% a year to do it in 15 years.
 - **Lowering spending helps only slowly.** At 2.0%, the chance rises by 12 pp, at a cost of about 0.6% of start value in average real spending a year. A crisis cap gains 3 pp but makes real spending cuts above 10% much more likely.
 - **The portfolio cannot close the gap.** O6 is already the highest-return portfolio within D7. The policy benchmark recovers a little faster after a severe fall (52%) but suffers one more often (845 vs 629 crisis paths).
 - **A stricter target was tested and rejected (research doc V2_recovery_target).** We tested a 60% chance of real recovery within 15 years after a 25%+ fall, under a rule fixed before the run and with every D6/D7/D27 and stress test applied:
@@ -303,6 +305,8 @@ These are summarised from `docs/ASSUMPTIONS_LIMITATIONS.md`, which is identical 
 - **The factor stress model is linear**; XLE and GLD sensitivities are unstable.
 - **ETFs can trade below the value of their holdings in a panic** (AGG −6.8% in a day in 2008). The AGG floor and D24 avoid forced sales.
 - **Selection bias:** 2015–26 was examined during selection. The walk-forward and live monitoring are the defensible tests.
+  - More than 20 portfolio variants were compared (6 P1 candidates, options O1–O6, two walk-forward rules, the V2 recovery-target and tech-concentration variants), so the best observed Sharpe ratio is biased upward.
+  - A deflated Sharpe ratio (Bailey and López de Prado, 2014) would correct for the number of trials. It can only lower significance, and we already claim no Sharpe advantage (Ledoit–Wolf, §4.5), so no conclusion changes. O6 was chosen by the D26 rule (highest return within the D7 limits), not by Sharpe.
 - **Spending:** the brief sets no spending rate; 2.65% is the team's recommendation.
 
 ## 11. AI use and human validation
