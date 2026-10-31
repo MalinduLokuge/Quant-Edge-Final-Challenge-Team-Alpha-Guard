@@ -45,13 +45,13 @@ if np.isclose(conf, 0.99):
     fig.add_hline(y=lim["es99_1d_max"], line_dash="dash", annotation_text="ES99 limit 2.5%")
     fig.add_hline(y=lim["var99_1d_max"], line_dash="dot", annotation_text="VaR99 limit 1.7%")
 fig.update_layout(barmode="group", height=400, yaxis_tickformat=".2%", margin=dict(t=10, b=10))
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig, width="stretch")
 if rows["VaR"].isna().any():
     st.caption("EVT at 90% is 'not applicable': the threshold sits at the 90th percentile (D8).")
 
 tab = rows[["Method", "VaR", "ES"]].assign(**{"VaR $": rows["VaR"] * D.NAV, "ES $": rows["ES"] * D.NAV, "ES ÷ VaR": rows["ES"] / rows["VaR"]})
 st.dataframe(tab.style.format({"VaR": "{:.2%}", "ES": "{:.2%}", "VaR $": "${:,.0f}", "ES $": "${:,.0f}", "ES ÷ VaR": "{:.2f}"}, na_rep="n/a"),
-             hide_index=True, use_container_width=True)
+             hide_index=True, width="stretch")
 st.markdown("""
 **How to read this.** VaR is the loss exceeded on only 1 day in 100 (at 99%). ES is the *average* loss on those worst
 days, so it says how bad a bad day is. The normal model understates the tail. Student-t, EVT and Monte Carlo agree
@@ -68,7 +68,7 @@ fig = px.bar(att.melt(id_vars="etf", value_vars=["weight", "pct_ES"]), x="etf", 
 fig.for_each_trace(lambda t: t.update(name={"weight": "Share of capital", "pct_ES": f"Share of {a_conf:.0%} ES"}[t.name]))
 fig.add_hline(y=D.settings()["constraints"]["component_es_max"], line_dash="dash", annotation_text="D27 cap 40%")
 fig.update_layout(height=320, yaxis_tickformat=".0%", margin=dict(t=10, b=10))
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig, width="stretch")
 st.caption("Euler allocation: each ETF's average contribution to losses on the worst days; contributions add up to total ES. "
            "Bonds are most of the capital but a small part of the tail risk.")
 
@@ -80,7 +80,7 @@ st.dataframe(dv[["Portfolio", "VaR", "VaR_undiversified", "VaR_benefit", "ES", "
                               "ES_benefit": "ES saved", "diversification_ratio": "Diversification ratio"})
              .style.format({"VaR": "{:.2%}", "VaR if not diversified": "{:.2%}", "VaR saved": "{:.0%}", "ES": "{:.2%}",
                             "ES if not diversified": "{:.2%}", "ES saved": "{:.0%}", "Diversification ratio": "{:.2f}"}),
-             hide_index=True, use_container_width=True)
+             hide_index=True, width="stretch")
 st.caption("'If not diversified' adds up each ETF's own VaR or ES, weighted, as if every holding had its worst days together. "
            "The saving is what holding different assets buys. Diversification ratio = weighted average volatility ÷ portfolio volatility. "
            "Risk parity diversifies most; the recommended portfolio trades some diversification for a higher return within the limits.")

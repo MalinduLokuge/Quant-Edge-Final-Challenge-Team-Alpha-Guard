@@ -21,7 +21,7 @@ fig = px.scatter(t, x=-t["max_drawdown"], y="spending_usd", color="pass_D7", sym
                  labels={"x": "worst historical drawdown", "spending_usd": "spending the portfolio supports ($/yr)", "pass_D7": "passes D7"})
 fig.add_vline(x=s["risk_limits"]["max_drawdown"], line_dash="dash", annotation_text="D7 limit 25%")
 fig.update_layout(height=380, xaxis_tickformat=".0%", yaxis_tickprefix="$", margin=dict(t=10, b=10))
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig, width="stretch")
 st.caption("Points along the efficient frontier (D6 + D7 constraints). Each step to the right adds about $12k a year of spending "
            "and about 1 pp of drawdown. The last points fail the 5-year drawdown test (D32).")
 
@@ -63,21 +63,24 @@ long["year"] = long["year"].str.extract(r"(\d+)").astype(int)
 fig = px.line(long, x="year", y="real value", color="recovery", markers=True)
 fig.add_hline(y=1.0, line_dash="dot", annotation_text="starting real value")
 fig.update_layout(height=360, yaxis_tickformat=".0%", margin=dict(t=10, b=10), yaxis_title="fund value in today's money")
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig, width="stretch")
 tab = sel[["recovery", "nav_min", "years_to_regain_nominal", "years_to_regain_real", "max_real_spending_cut", "spending_real_y5", "spending_real_y10"]]
 st.dataframe(tab.rename(columns={"recovery": "Recovery path", "nav_min": "Lowest value", "years_to_regain_nominal": "Years to regain $10M",
                                  "years_to_regain_real": "Years to regain real value", "max_real_spending_cut": "Largest real spending cut",
                                  "spending_real_y5": "Real spending yr 5 (vs today)", "spending_real_y10": "Real spending yr 10"})
              .style.format({"Lowest value": "{:.0%}", "Largest real spending cut": "{:.0%}", "Real spending yr 5 (vs today)": "{:.0%}",
                             "Real spending yr 10": "{:.0%}", "Years to regain $10M": "{:.0f}", "Years to regain real value": "{:.0f}"}, na_rep="not within 15 yrs"),
-             hide_index=True, use_container_width=True)
+             hide_index=True, width="stretch")
 mc = D.table("sustainability_mc").set_index("portfolio").loc[D.FINAL]
-st.markdown(f"""
-**Read this way:** the fund falls in year 1, earns nothing extra until it is back at its pre-crisis level (after 1–7 years),
-then earns its expected return. At about 2.65% spending the fund grows only about 0.5% a year above inflation, so **how fast
-markets recover matters more than how deep they fall**. The fund usually regains its nominal $10M within a few years,
-but its value in today's money can stay below today's level for a decade.
-
-**Simulated 10-year futures (20,000 paths):** median real value **{mc['median_real_nav_end']:.2f}×** today's,
-**{mc['P(real NAV end < 90%)']:.0%}** chance of ending below 90%, **{mc['P(real spending ever cut > 10%)']:.0%}** chance of a real
-spending cut above 10% at some point. A 25% drawdown takes about **{mc['DD25% median_years_to_recover']:.1f} years** to recover (median).""")
+st.caption("Stylised paths above: the fund falls in year 1, earns nothing extra until it is back at its pre-crisis level (after "
+           "1–7 years), then earns its expected return. At about 2.65% spending it grows only about 0.5% a year above inflation, so "
+           "how fast markets recover matters more than how deep they fall. Scenarios, not forecasts.")
+st.subheader("Simulated 10-year futures (bootstrap of history, 20,000 paths)")
+k = st.columns(4)
+k[0].metric("Median real value after 10 years", f"{mc['median_real_nav_end']:.2f}×", "today's = 1.00×", delta_color="off")
+k[1].metric("P(real value < 90%)", f"{mc['P(real NAV end < 90%)']:.0%}", "after 10 years", delta_color="off")
+k[2].metric("P(real spending cut > 10%)", f"{mc['P(real spending ever cut > 10%)']:.0%}", "at some point", delta_color="off")
+k[3].metric("Price recovery from a 25% fall", f"{mc['DD25% median_years_to_recover']:.1f} yrs", "median, before spending", delta_color="off")
+st.caption("Simulated recovery (resampled history) is not the same as the historical recovery of the 2008 replay. Real-value "
+           "recovery while paying the university is slower: back within 15 years in about 42–45% of simulated 25%+ falls with "
+           "quarterly rebalancing (D39/D40).")

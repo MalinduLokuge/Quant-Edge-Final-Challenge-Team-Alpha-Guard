@@ -18,11 +18,26 @@ res["Portfolio"] = res["portfolio"].map(D.label)
 st.subheader("Loss in each scenario")
 piv = res.pivot_table(index="scenario", columns="Portfolio", values="loss", sort=False)
 order = [D.FINAL_LABEL] + [c for c in piv.columns if c != D.FINAL_LABEL]
-st.dataframe(piv[order].style.format("{:.1%}").background_gradient(cmap="Reds", vmin=0, vmax=0.25), use_container_width=True,
+st.dataframe(piv[order].style.format("{:.1%}").background_gradient(cmap="Reds", vmin=0, vmax=0.25), width="stretch",
              height=35 * (len(piv) + 1) + 3)  # every scenario visible without scrolling inside the table
 st.caption("Historical rows = worst peak-to-trough loss inside the crisis window, with quarterly rebalancing. Hypothetical rows = "
            "instant loss from the six-factor model; T (tech-led crash, D35) uses the technology share of each ETF's holdings, "
-           "with no hedge credit for bonds or gold. Every value is below the 25% limit.")
+           "with no hedge credit for bonds or gold. Every value is below the 25% limit. These are scenario losses: they are "
+           "not the D7 maximum-drawdown statistic (full history) or the 5-year drawdown probability.")
+
+st.subheader("AI / tech-led crash with inflation (D44)")
+ai = D.table("research_v2_ai_inflation").assign(Portfolio=lambda d: d["portfolio"].replace({"O6": D.FINAL_LABEL}))
+lim25 = s["risk_limits"]["stress_loss_max"]
+st.dataframe(ai[["Portfolio", "scenario", "loss_central", "loss_severe", "loss_severe_equity_x1.5", "bond_gold_loss_severe"]]
+             .rename(columns={"scenario": "Scenario", "loss_central": "Central", "loss_severe": "Severe",
+                              "loss_severe_equity_x1.5": "Severe, equity leg ×1.5", "bond_gold_loss_severe": "Of which bonds + gold (severe)"})
+             .style.format({c: "{:.1%}" for c in ("Central", "Severe", "Severe, equity leg ×1.5", "Of which bonds + gold (severe)")}, na_rep="—")
+             .map(lambda v: "color: #c62828; font-weight: bold" if isinstance(v, float) and v > lim25 else "",
+                  subset=["Severe", "Severe, equity leg ×1.5"]),
+             hide_index=True, width="stretch")
+st.caption("T + I: the tech crash while inflation keeps rates up, so bonds and gold fall too. Severe passes the 25% limit; "
+           "at 1.5× the equity shock (tech −97.5%) it breaches (red). One-step shocks; the data hold no multi-year tech crash. "
+           "Source: research_v2_ai_inflation.csv.")
 
 final = res[res.portfolio == D.FINAL]
 c1, c2 = st.columns(2)
@@ -34,7 +49,7 @@ with c1:
     fig = go.Figure(go.Waterfall(x=con["etf"], y=con["contribution"], measure=["relative"] * len(con),
                                  text=[f"{v:+.1%}" for v in con["contribution"]]))
     fig.update_layout(height=340, yaxis_tickformat=".0%", margin=dict(t=10, b=10))
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
     st.caption("Historical windows: buy-and-hold contribution over the window. Hypothetical: weight × ETF move.")
 with c2:
     st.subheader("12-month path of the designed scenarios")
@@ -43,7 +58,7 @@ with c2:
     fig = px.line(p, x="month", y="nav", color="case", markers=True)
     fig.add_hline(y=1 - s["risk_limits"]["max_drawdown"], line_dash="dash", annotation_text="−25%")
     fig.update_layout(height=340, yaxis_tickformat=".0%", margin=dict(t=10, b=10), yaxis_title="value (start = 100%)")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
     st.caption("Quarterly rebalancing and 10 bp trading costs. A = energy stagflation (Hormuz II), B = AI unwind with "
                "recession, C = term-premium shock.")
 
@@ -68,7 +83,7 @@ for pn, w in D.portfolios().items():
     rows.append({"Portfolio": pn, "Loss": -ret, "Loss $": -ret * D.NAV})
 out = pd.DataFrame(rows)
 st.dataframe(out.style.format({"Loss": "{:.1%}", "Loss $": "${:,.0f}"}).background_gradient(subset=["Loss"], cmap="Reds", vmin=0, vmax=0.25),
-             hide_index=True, use_container_width=True)
+             hide_index=True, width="stretch")
 ret, move, contrib = H.instant(D.portfolios()[D.FINAL_LABEL], beta, f)
 st.caption("ETF moves in this scenario: " + ", ".join(f"{k} {v:+.1%}" for k, v in move.items())
            + ". Factor betas from monthly data 2006–2026. They are unreliable for XLE and GLD (design report §4.3).")

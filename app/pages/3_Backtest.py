@@ -51,7 +51,7 @@ fig.add_scatter(x=one["date"], y=one["VaR"], mode="lines", name=f"{opt['method_l
 fig.add_scatter(x=exc["date"], y=exc["loss"], mode="markers", name="Exception", marker=dict(color="crimson", size=7))
 fig.add_vline(x=pd.Timestamp("2020-01-01"), line_dash="dot", annotation_text="test period starts (model frozen, D28)")
 fig.update_layout(height=420, yaxis_tickformat=".1%", hovermode="x unified", margin=dict(t=10, b=10))
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig, width="stretch")
 
 st.subheader("All methods on this date range")
 tab = coverage.evaluate_table(sl, a, b)
@@ -59,7 +59,7 @@ tab = tab[np.isclose(tab.alpha, conf)].assign(Method=lambda d: d["method"].map(l
 cols = ["Method", "exceptions", "expected", "p_uc", "p_ind", "p_cc", "severity_ratio", "fz0"] + (["basel_worst_count"] if "basel_worst_count" in tab else [])
 st.dataframe(tab[cols].style.format({"expected": "{:.1f}", "p_uc": "{:.2f}", "p_ind": "{:.2f}", "p_cc": "{:.2f}",
                                      "severity_ratio": "{:.2f}", "fz0": "{:.3f}", "basel_worst_count": "{:.0f}"}, na_rep="—"),
-             hide_index=True, use_container_width=True)
+             hide_index=True, width="stretch")
 st.markdown("""
 - **Kupiec:** is the number of exceptions right? **Christoffersen:** do exceptions bunch together? A p-value below 0.05 fails.
 - **Basel traffic light** (99% only, 250-day windows): green 0–4, yellow 5–9, red 10 or more exceptions.

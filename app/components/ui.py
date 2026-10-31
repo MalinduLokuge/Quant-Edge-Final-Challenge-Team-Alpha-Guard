@@ -3,10 +3,25 @@ session state so every page uses the same choice."""
 from __future__ import annotations
 
 import datetime as dt
+import re
 
+import pandas as pd
+import plotly.graph_objects as go
 import streamlit as st
 
 from components import data as D
+
+# One palette for status everywhere: comfortable pass, pass close to the limit, breach.
+STATUS = {"pass": ("#2e7d32", "✅ pass"), "near": ("#e09b00", "🟡 near limit"), "breach": ("#c62828", "❌ breach")}
+NEAR = 0.10  # headroom below 10% of the limit counts as "near"
+
+# The story the pages tell, in order (Home links to each).
+STORY = [("pages/5_Sustainability.py", "1 · Objectives", "spending rate and the return it needs"),
+         ("pages/1_Portfolio.py", "2 · Portfolio", "weights, growth, drawdown vs benchmarks"),
+         ("pages/2_Risk.py", "3 · Risk", "VaR and ES at 95% / 99%, tail drivers"),
+         ("pages/3_Backtest.py", "4 · Validation", "out-of-sample VaR backtests"),
+         ("pages/4_Stress.py", "5 · Stress", "crises and designed scenarios"),
+         ("pages/6_Decision.py", "6 · Decision", "verdict, limits, evidence, monitoring")]
 
 METHODS = {"Historical": "historical", "Normal (parametric)": "normal", "Student-t": "student_t",
            "Monte Carlo (t-copula)": "monte_carlo", "EVT (POT-GPD)": "evt", "GARCH-t": "garch_t", "GARCH-EVT": "garch_evt"}
@@ -41,6 +56,74 @@ def ladder_status() -> None:
                 if L["basel"] else "n/a", "yellow → review, red → limit", delta_color="off",
                 help="GARCH-EVT 99% backtest, last 250 days, on weights built with data to 2014 (no look-ahead). "
                      "Tests whether the risk model is reliable, not the final portfolio's own losses.")
+
+
+def status(value: float, limit: float, floor: bool = False) -> str:
+    """'pass', 'near' or 'breach' for a value against a cap (or a minimum when floor=True)."""
+    head = value - limit if floor else limit - value
+    if head < -1e-12:
+        return "breach"
+    return "near" if head < NEAR * abs(limit) else "pass"
+
+
+def limit_chart(rows: pd.DataFrame) -> go.Figure:
+    """Each limit as a bar of 'share of the limit used' (value ÷ limit; floors inverted), coloured by status."""
+    used = [(l / v if f else v / l) if v and l else 0 for v, l, f in zip(rows["value"], rows["limit"], rows["floor"])]
+    colors = [STATUS[s][0] for s in rows["status"]]
+    fig = go.Figure(go.Bar(y=rows["name"], x=used, orientation="h", marker_color=colors,
+                           text=[f"{v:.2%} vs {l:.2%}" for v, l in zip(rows["value"], rows["limit"])], textposition="outside",
+                           hovertemplate="%{y}<br>%{text}<br>%{x:.0%} of the limit used<extra></extra>"))
+    fig.add_vline(x=1, line_dash="dash", line_color=STATUS["breach"][0], annotation_text="limit")
+    fig.add_vline(x=1 - NEAR, line_dash="dot", line_color=STATUS["near"][0], annotation_text="near", annotation_position="bottom")
+    fig.update_layout(height=40 * len(rows) + 60, margin=dict(t=20, b=10, l=10, r=20), xaxis_tickformat=".0%",
+                      xaxis_range=[0, 1.6], xaxis_tickvals=[0, 0.25, 0.5, 0.75, 1], yaxis_autorange="reversed", xaxis_title="share of the limit used")
+    return fig
+
+
+def story_nav() -> None:
+    """Links to the pages in story order."""
+    cols = st.columns(len(STORY))
+    for c, (path, title, sub) in zip(cols, STORY):
+        with c.container(border=True):
+            st.page_link(path, label=f"**{title}**")
+            st.caption(sub)
+
+
+def md_sections(path) -> dict[str, list[str]]:
+    """'## Heading' → list of top-level bullets (sub-bullets joined into their parent) from a markdown file."""
+    out, cur = {}, None
+    for line in path.read_text(encoding="utf8").splitlines():
+        if line.startswith("## "):
+            cur = line[3:].strip()
+            out[cur] = []
+        elif cur is None or not line.strip():
+            continue
+        elif line.startswith("- "):
+            out[cur].append(line[2:].strip())
+        elif out[cur]:  # sub-bullet or continuation
+            out[cur][-1] += "\n" + line
+        else:  # text before the first bullet
+            out[cur].append(line.strip())
+    return out
+
+
+def first_sentence(text: str, limit: int = 160) -> str:
+    """Bold lead-in or first sentence of a bullet, without markdown emphasis; a terse lead keeps the rest of its line
+    (cut at a word boundary near `limit` characters)."""
+    head = text.split("\n")[0].replace("**", "").replace("`", "")
+    m = re.match(r"\*\*(.+?)\*\*", text)
+    s = m.group(1) if m else re.split(r"(?<=[.:])\s", head, maxsplit=1)[0]
+    s = s.replace("`", "").rstrip(":").strip()
+    if len(s) < 45 and len(head) > len(s) + 2:
+        s = head if len(head) <= limit else head[:limit].rsplit(" ", 1)[0] + " …"
+    return s
+
+
+def refs(text: str) -> str:
+    """Decision IDs (D7, D9 v2) and output files a bullet cites."""
+    ids = sorted(set(re.findall(r"\bD\d{1,2}\b", text)), key=lambda x: int(x[1:]))
+    files = re.findall(r"`([\w./-]+\.(?:csv|md))`", text)
+    return ", ".join(ids + files)
 
 
 def sidebar() -> dict:
