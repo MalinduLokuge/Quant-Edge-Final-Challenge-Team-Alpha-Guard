@@ -23,7 +23,7 @@
 | Scenario | Loss |
 |---|---|
 | A repeat of 2008 | about 23% ($2.3M) |
-| Energy inflation shock (oil +50%, stocks −30%) | about 19% ($1.9M); bonds fall too |
+| Energy inflation shock (oil +50%, stocks −30%) | about 19% ($1.9M); bonds fall too, and our 0.4% gold is too small to help (even 20% gold would cut this by under 1 point) |
 | Tech-led crash (tech −65%, US stocks −40%) | about 17% ($1.7M) |
 | A bad day (1 day in 100) | 1.4% ($139,000) or more; 2.2% ($220,000) on average on those days |
 | Over 10 years | 1-in-5 chance real value ends below 90%; 1-in-4 of a real spending cut over 10% |

@@ -65,6 +65,9 @@ st.markdown("""
   in all six segments; 7.3% a year, Sharpe 0.89 vs 0.75 for the policy benchmark. The Sharpe gap is **not statistically
   significant** (Ledoit–Wolf p = 0.15): the proven edge is the smaller worst fall (−16.4% vs −19.2%), not better risk-adjusted return.
 - **Rejected after testing (D41):** a regime-switching VaR blend looked plausible but failed the backtests; GARCH-EVT was kept.
+- **Gold tested, not forced (D43):** the 0.4% follows from CAPM's 4.6% for gold. Assuming more moves gold up to its 20% cap,
+  but 18–20% gold improves 2022 and stagflation losses by under 1 pp and fails the 5-year drawdown test on base assumptions.
+  The 0.4% is not counted as a hedge; O6 has no effective inflation hedge (disclosed).
 - **Risk model (D28):** GARCH-EVT chosen on 2015–19 only, then tested once on 2020–26: passed Kupiec, Christoffersen and Basel.
 - **Audit (2026-10-29):** a seed-tuned drawdown test and unpropagated spending were found and fixed; the selection was redone
   (research doc T4.25, corrections table).""")

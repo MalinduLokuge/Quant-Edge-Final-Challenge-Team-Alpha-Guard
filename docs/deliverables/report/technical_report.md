@@ -15,6 +15,7 @@
   - The rule matched the policy benchmark's return with a smaller worst fall.
   - Its higher Sharpe ratio is not statistically significant (Ledoit–Wolf p = 0.15), so we do not claim better risk-adjusted returns (§4.5).
   - The same standard led us to reject a regime-switching VaR model that looked plausible but failed the tests (D41, §6).
+  - **Gold** (D43, §4.5): O6's 0.4% follows from CAPM's 4.6% for gold, and it is given no hedge credit. Raising gold's assumed return moves its weight up to the 20% cap. Even then, the 2022 and stagflation losses improve by under 1 pp, and the portfolio fails the D7 5-year test on our base assumptions. The gap is disclosed: O6 has no effective inflation hedge (§10).
 - **The main trade-off is spending.** A 4% payout needs about 7.2% a year, which no portfolio delivers without accepting falls of 35–47%. We therefore recommend about 2.65% and state it openly. The brief sets no spending rate.
 
 ## 2. Client, horizon and return objective
