@@ -40,6 +40,9 @@ def christoffersen(exc: np.ndarray, alpha: float) -> dict:
     prev, cur = e[:-1], e[1:]
     n00, n01 = int(((prev == 0) & (cur == 0)).sum()), int(((prev == 0) & (cur == 1)).sum())
     n10, n11 = int(((prev == 1) & (cur == 0)).sum()), int(((prev == 1) & (cur == 1)).sum())
+    if len(e) < 2:  # no day-to-day transitions: independence is undefined
+        return {"n00": n00, "n01": n01, "n10": n10, "n11": n11,
+                "LR_ind": np.nan, "p_ind": np.nan, "LR_cc": np.nan, "p_cc": np.nan}
     pi01 = n01 / (n00 + n01) if n00 + n01 else 0.0
     pi11 = n11 / (n10 + n11) if n10 + n11 else 0.0
     pi = (n01 + n11) / (n00 + n01 + n10 + n11)
