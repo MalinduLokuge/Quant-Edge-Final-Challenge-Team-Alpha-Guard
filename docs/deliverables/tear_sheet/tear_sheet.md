@@ -19,9 +19,10 @@
 |---|---|---|
 | Expected return, compound nominal / real (volatility 8.2%) | 5.80% / about 3.4% a year | — |
 | Spending it supports (D12) | 2.65% ≈ $264,883 a year | — |
-| Worst drawdown (incl. 2008) / P(drawdown > 25% within 5 years) | 23.5% / 4.9% | 25% / 5% |
+| Worst drawdown (incl. 2008) / P(drawdown > 25% within 5 years), **investment returns: official D7** | 23.5% / 4.9% | 25% / 5% |
+| Same, fund value after D24 spending and costs (disclosure, not the limit) | 25.3% / 9.5% | — |
 | 1-day VaR / ES 99% ($139k / $220k); 95% | 1.39% / 2.20%; 0.71% / 1.20% | 1.7% / 2.5%; 0.9% / 1.45% |
-| Largest single-fund share of tail risk | SPY 40% | 40% |
+| Largest single-fund share of tail risk | SPY 40% (90% interval 36.8%–43.7%) | 40% |
 | Diversification benefit, 99% VaR / ES (vs sum of holdings' own risks) | 28.8% / 24.5% lower | — |
 
 **Stress tests: loss of the $10M**

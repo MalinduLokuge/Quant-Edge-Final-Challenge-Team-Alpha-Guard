@@ -51,6 +51,13 @@ gate = pd.DataFrame([{"Limit": n, "Portfolio": abs(v), "Limit value": abs(l), "H
 st.dataframe(gate.style.format({"Portfolio": "{:.2%}", "Limit value": "{:.2%}", "Headroom": "{:.2%}"}), hide_index=True, use_container_width=True)
 st.caption("Limits are on full-cycle history (D7). The AGG row is a minimum (8%), so its headroom is how far above the floor it sits.")
 
+fv = D.table("d7_fund_value")
+fv = fv[fv.portfolio == D.FINAL].set_index("basis")
+st.markdown("**Drawdown on two bases (D42).** The gate above uses investment returns, the official D7 basis. "
+            "The fund's own value after D24 spending and costs is shown for disclosure; it is not the limit.")
+st.dataframe(pd.DataFrame({"Max drawdown incl. 2008": -fv["max_drawdown_hist"], "P(drawdown > 25% in 5 years)": fv["P(DD>limit, 5y)"]})
+             .rename_axis("Basis").style.format("{:.1%}"), use_container_width=True)
+
 st.subheader("How it was validated")
 st.markdown("""
 - **Out-of-sample limits (T10.12):** portfolios built with data to 2014 kept every D7 limit in 2015–19 and 2020–26.

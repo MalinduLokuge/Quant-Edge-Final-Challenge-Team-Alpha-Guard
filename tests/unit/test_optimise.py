@@ -118,3 +118,24 @@ def test_drawdown_test_batches_reproduce_single_batch_and_settings():
     assert fr.mc_se(0.05, 32000) < fr.mc_se(0.05, 4000)
     assert fr.dd_test_kwargs({"risk_limits": {"drawdown_test": {"paths": 32000, "block": 63}}}) == {"n_paths": 32000, "block": 63}
     assert fr.dd_test_kwargs({"risk_limits": {}}) == {"n_paths": 4000, "block": 63}
+
+
+def test_nav_after_d24_spending_and_fund_value_drawdown_test():
+    """D42: zero spending = investment NAV; flat market falls by spending only; D24 year-2 formula; the
+    fund-value test on the same paths never gives a lower breach probability."""
+    from quantedge.portfolio import frontier as fr
+
+    rp = np.random.default_rng(5).normal(0.0003, 0.01, (4, 300))
+    np.testing.assert_allclose(fr.nav_after_d24(rp, 0.0, 0.03), np.cumprod(1 + rp, axis=1))
+    flat = fr.nav_after_d24(np.zeros((1, 8 * 63)), 0.04, 0.0, cost=0.0)[0]
+    assert flat[62] == pytest.approx(0.99) and flat[63 * 4 - 1] == pytest.approx(0.96)  # 1% a quarter, year 1
+    s2 = 0.7 * 0.01 * 1.0 + 0.3 * 0.04 / 4 * 0.96      # year-2 payment from V = 0.96 (after four withdrawals)
+    assert flat[63 * 5 - 1] == pytest.approx(0.96 - s2)
+    assert fr.nav_after_d24(np.zeros((1, 63)), 0.0, 0.0, cost=0.004)[0, -1] == pytest.approx(0.999)
+    rng = np.random.default_rng(3)
+    daily = rng.normal(0.0002, 0.012, (3000, 2))
+    w, mu = np.array([0.6, 0.4]), np.array([0.05, 0.03])
+    base = fr.forward_drawdown_prob(w, daily, mu, 0.15, n_paths=1000)
+    net = fr.forward_drawdown_prob(w, daily, mu, 0.15, n_paths=1000,
+                                   spending={"rate": 0.0265, "infl": 0.025, "smooth": 0.7, "cost": 0.002})
+    assert net >= base and net > 0

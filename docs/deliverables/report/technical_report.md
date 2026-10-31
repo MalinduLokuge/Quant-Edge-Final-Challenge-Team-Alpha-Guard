@@ -66,6 +66,14 @@
   - P(drawdown > 25% within 5 years) ≤ 5%, by block bootstrap with CAPM-reset means, **126-day blocks (D32)**, 32,000 paths.
   - 1-day ES99 ≤ 2.5%, VaR99 ≤ 1.7%, ES95 ≤ 1.45%, VaR95 ≤ 0.9%.
   - Every stress scenario ≤ 25%.
+  - **Basis (D42):** both drawdown tests are measured on **investment returns** (quarterly-rebalanced, before spending and costs). That is the official D7 test. The fund's value after D24 spending and costs is reported next to it as a disclosure, not as the limit:
+
+    | O6 (`d7_fund_value.csv`) | Investment returns (official D7) | Fund value after D24 spending and costs |
+    |---|---|---|
+    | Max drawdown incl. 2008 (limit 25%) | 23.5% (pass) | 25.3% |
+    | P(drawdown > 25% within 5 years) (limit 5%) | 4.9% (pass) | 9.5% |
+
+    - Spending deepens the fall: D24 keeps paying near last year's level while the value drops. On the fund-value basis O6 would exceed both limits. The policy benchmark exceeds them on both bases (25.3% / 9.0% on investment returns).
 - **D27:** no ETF above 40% of the 99% ES (Euler component ES).
 - **D33 precedence:** D7 > D6 > D27 > return target.
 - **Optimiser:** cvxpy with a CVaR linear programme for ES and conditional drawdown-at-risk (CDaR) for drawdown, then post-checks on the compounded, quarterly-rebalanced path (D22).
@@ -90,6 +98,7 @@
 - The 5-year test resamples history in blocks.
 - The Politis–White optimal block length is 5–14 days for returns but **120–160 days for absolute and squared returns** (volatility clustering).
 - Drawdowns depend on runs of turbulent days, so the test uses 126-day blocks instead of the original 63.
+- **This is a heuristic and a conservative choice, not a proof.** The Politis–White rule (with the Patton–Politis–White 2009 correction) is derived for stationary and circular bootstraps and for a specific statistic. Applying it to |r| and r² and using the result as a moving-block length is a judgement. The 21-, 63- and 252-day results are reported as sensitivity analysis.
 
 ### 4.5 Final selection and its audit (T4.25; `research_t425_*`)
 **Options.** Six options were evaluated under identical assumptions:
@@ -106,7 +115,8 @@
 - **(c) Two arbitrary thresholds.**
 
 **Result:**
-- **O6 is the only option that passes the 5-year test at both block lengths** on 2026 and 2014 inputs, and it survives a 1.5× larger equity shock in the severe scenarios.
+- **O6 passes the 5-year test at both block lengths** on 2026 and 2014 inputs, and it survives a 1.5× larger equity shock in the severe scenarios.
+  - Passing at 126 days is partly by construction: the rule picks the highest return whose 126-day probability is still ≤ 5% (O6 sits just under 5%), and 63-day blocks always give a lower probability. The 2014-input result (4.9%) is the less circular check.
 - **The gold floor (O4) was rejected.** Its +0.01 pp expected-return edge reverses if rates fall. Its 2020–26 outperformance came mostly from one gold cycle (+64% in 2025) that was seen before the option was proposed.
 
 | | O1 | O2 | O3 | O4 | O5 | **O6** |
@@ -149,6 +159,7 @@
 - **EVT confirms the historical tail** and extends it to 99.5%: VaR 1.85%, ES 2.79%.
 - **GARCH:** persistence 0.989 and a volatility half-life of 65 days. Today's calm regime gives a 99% VaR of 0.94%, against 1.48% in an average regime. This is why D7 is checked on full-cycle history.
 - **Attribution:** SPY carries 40% of the 99% ES, XLK 22%, EFA 16% and AGG 14%. Bonds are 61% of the capital but a small part of the tail risk.
+  - **SPY sits on the D27 cap by construction, and the share is an estimate.** It comes from 56 tail days. A 21-day block bootstrap gives SPY 40.0% with a 90% interval of 36.8%–43.7%, and 51% of resamples put it above 40% (`p2_attribution_ci.csv`; 63-day blocks give the same picture). Component-ES estimates are noisy (Tasche 2000; Yamai & Yoshiba 2002), so D27 is a target for the point estimate, not a guarantee.
 
 **Diversification benefit** (brief p.4; `p2_diversification.csv`). The undiversified risk is each ETF's own VaR or ES, weighted and added up, as if all holdings had their worst days together.
 
@@ -176,6 +187,7 @@
 
 **Backtest portfolio (D26 rule on data to 2014), 99%, 2020–2026:**
 - **GARCH-EVT:** 20 exceptions against 17.1 expected; Kupiec p 0.49, Christoffersen p 0.62; worst Basel window 7 (yellow, never red).
+  - **ES:** Acerbi–Székely Z2 = 0.26, below the approximate 5% critical value of 0.70 (Acerbi & Székely 2014), so the ES forecast is not rejected. Severity ratio 1.09. FZ0 joint VaR/ES score −4.12, the best of the 7 methods (historical −3.55, normal −3.10).
 - **Others:**
   - historical: 26 exceptions, red zone;
   - normal: 30, red;
@@ -301,7 +313,9 @@ On 2004–2026 history the watch trigger was active 7–10% of the time; the −
 These are summarised from `docs/ASSUMPTIONS_LIMITATIONS.md`, which is identical to the app page:
 - **CAPM expected returns** with a 5% ERP. AGG's yield is assumed locked in when rates fall. Returns are lower if the T-bill falls (at a 2.5% T-bill and a 4% ERP, the supported spending is about 1.7%).
 - **History** contains one 2008-type crisis, so limits are targets, not guarantees. The bootstrap cannot create crises unlike the sample's.
-- **The 5-year drawdown test is sensitive to block length** (model uncertainty, reported).
+- **The 5-year drawdown test is sensitive to block length** (model uncertainty, reported). The 126-day block is a heuristic, conservative choice; 21/63/252 days are sensitivity analysis.
+- **Drawdown limits are measured on investment returns** (D42). After D24 spending and costs, O6's fund value fell 25.3% in 2008 and P(fall > 25% in 5 years) is 9.5%, above both limits. The committee should read the D7 limits as limits on investment performance.
+- **Component ES is estimated from 56 tail days.** SPY's 40.0% share has a 90% interval of 36.8%–43.7%.
 - **The factor stress model is linear**; XLE and GLD sensitivities are unstable.
 - **ETFs can trade below the value of their holdings in a panic** (AGG −6.8% in a day in 2008). The AGG floor and D24 avoid forced sales.
 - **Selection bias:** 2015–26 was examined during selection. The walk-forward and live monitoring are the defensible tests.

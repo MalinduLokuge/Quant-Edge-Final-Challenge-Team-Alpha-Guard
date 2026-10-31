@@ -84,6 +84,7 @@ Policy 40/50/10 for reference: real value after 10 years 1.045 with no crisis; b
 - Drawdowns are driven by runs of turbulent days, so the dependence that matters for a 5-year drawdown test lasts about half a year. The approved 63-day blocks cut these runs in half and understate drawdown risk.
 - At 126 days, P rises by 1.1–1.9 pp for every option.
 - **This is evidence, not a chosen margin.** It is a reason to run the D7 test at about 126 days (a D7 *method* change, which the team must approve).
+- **Caveat (QA review 2026-10-31):** `optimal_block_length` implements Politis–White with the Patton–Politis–White (2009) correction, which is derived for stationary and circular bootstraps and a specific statistic. Using its result on |r| and r² as a *moving*-block length is a heuristic. Read 126 days as a conservative choice and the 21/63/252-day results as sensitivity analysis, not proof. O6 then passes at 126 days partly by construction, because D26 selects to that test.
 
 **Does O4's gold floor help?** No.
 - **Return:** +0.01 pp of expected return. Below O1 at rf 2.5% (5.16% vs 5.23%).

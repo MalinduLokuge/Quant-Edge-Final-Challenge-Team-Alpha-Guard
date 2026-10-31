@@ -1,0 +1,5 @@
+portfolio,basis,max_drawdown_hist,trough_date,"P(DD>limit, 5y)",P_mc_se,block,paths,pass_hist,pass_5y,spending_rate,extra_costs
+d26_selected,investment returns (official D7),-0.2347534830275203,2008-10-10,0.049375,0.0012111088588433122,126,32000,True,True,0.0,0.0
+d26_selected,fund value after D24 spending and costs,-0.252861190607649,2009-03-09,0.09540625,0.0016422535722763088,126,32000,False,False,0.0265,0.002
+[benchmark] Policy 40/50/10,investment returns (official D7),-0.25263725111318547,2008-11-20,0.0898125,0.0015983019783092267,126,32000,False,False,0.0,0.0
+[benchmark] Policy 40/50/10,fund value after D24 spending and costs,-0.2711844277411507,2008-11-20,0.14425,0.0019640673478460457,126,32000,False,False,0.0265,0.002

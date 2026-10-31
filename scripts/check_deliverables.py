@@ -69,6 +69,18 @@ def main() -> int:
     gfc_rec = f"{st[st.portfolio == 'd26_selected'].set_index('scenario').loc['GFC 2007-09', 'recovery_days']:.0f} trading days"  # QA: historical vs simulated recovery
     for doc in checks:
         checks[doc].append(gfc_rec)
+    fv = pd.read_csv(T / "d7_fund_value.csv")                                                   # D42 fund-value basis
+    fv = fv[fv.portfolio == "d26_selected"].iloc[-1]
+    fv_dd, fv_p = f(-fv["max_drawdown_hist"]), f(fv["P(DD>limit, 5y)"])
+    ci = pd.read_csv(T / "p2_attribution_ci.csv")
+    ci = ci[(ci.etf == "SPY") & (ci.block == 21)].iloc[0]
+    spy_ci = f"{f(ci['lo90'])}–{f(ci['hi90'])}"
+    bt = pd.read_csv(T / "backtest_results_test.csv")
+    bt = bt[(bt.portfolio == "d26_selected") & (bt.method == "garch_evt") & (bt.alpha == 0.99)].iloc[0]
+    checks["tear_sheet/tear_sheet.md"] += [f"{fv_dd} / {fv_p}", spy_ci]
+    checks["memo/investment_committee_memo.md"] += [fv_dd, fv_p]
+    checks["report/technical_report.md"] += [fv_dd, fv_p, spy_ci, f"Z2 = {bt['z2']:.2f}", f"{bt['fz0']:.2f}".replace("-", "−"),
+                                             f"Severity ratio {bt['severity_ratio']:.2f}"]
     bad = 0
     for doc, values in checks.items():
         text = (DOCS / doc).read_text(encoding="utf8")

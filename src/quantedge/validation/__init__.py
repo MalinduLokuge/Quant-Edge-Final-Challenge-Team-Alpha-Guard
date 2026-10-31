@@ -291,11 +291,49 @@ def run_sustainability(simple: pd.DataFrame, s: dict) -> dict:
     return {f"sustainability_{k}": v for k, v in t.items()}
 
 
+def run_fund_value(simple: pd.DataFrame, s: dict) -> pd.DataFrame:
+    """D42: both D7 drawdown tests on two bases for the final portfolio and the policy benchmark.
+    'investment returns' is the official D7 basis (quarterly-rebalanced returns, as in the P1 post-check);
+    'fund value after D24 spending and costs' withdraws spending at the D30 policy rate and the D12 extra costs
+    (frontier.nav_after_d24). The 5-year test uses the same paths, seeds and blocks as the official test."""
+    from quantedge.common import conventions as cv
+    from quantedge.portfolio import frontier as fr
+    m, lim = s["mandate"], s["risk_limits"]
+    infl = float(pd.read_csv(config.OUTPUT_TABLES / "cma_sets_summary.csv", index_col=0).loc["inflation_breakeven", "full"])
+    mu = pd.read_csv(config.OUTPUT_TABLES / "cma_full.csv", index_col=0).reindex(simple.columns)["expected_arithmetic"].to_numpy()
+    spend = {"rate": m["spending_rate"]["base"], "infl": infl, "smooth": m["spending_rule"]["weight_on_last_year"],
+             "cost": m["extra_costs"]["base"]}
+    w = pd.read_csv(config.OUTPUT_TABLES / "p1_final_weights.csv", index_col=0)
+    b = s["benchmarks"]["primary"]
+    ports = {"d26_selected": w.loc["d26_selected"],
+             f"[benchmark] {b['name']}": pd.Series(b["weights"]).reindex(simple.columns, fill_value=0.0)}
+    kw = fr.dd_test_kwargs(s)
+    rows = []
+    for name, wt in ports.items():
+        rp, _ = cv.rebalanced_returns(simple, wt[wt > 0], "quarterly")
+        for basis, sp in (("investment returns (official D7)", None), ("fund value after D24 spending and costs", spend)):
+            nav = np.cumprod(1 + rp.to_numpy()) if sp is None else fr.nav_after_d24(rp.to_numpy(), **sp)[0]
+            dd = nav / np.maximum.accumulate(nav) - 1
+            p = fr.forward_drawdown_prob(wt.reindex(simple.columns, fill_value=0.0).to_numpy(), simple.to_numpy(), mu,
+                                         lim["max_drawdown"], spending=sp, **kw)
+            rows.append({"portfolio": name, "basis": basis, "max_drawdown_hist": float(dd.min()),
+                         "trough_date": rp.index[int(dd.argmin())].date(), "P(DD>limit, 5y)": p,
+                         "P_mc_se": fr.mc_se(p, kw["n_paths"]), "block": kw["block"], "paths": kw["n_paths"],
+                         "pass_hist": bool(dd.min() >= -lim["max_drawdown"]),
+                         "pass_5y": bool(p <= lim["max_prob_drawdown_breach_5y"]),
+                         "spending_rate": 0.0 if sp is None else sp["rate"], "extra_costs": 0.0 if sp is None else sp["cost"]})
+    t = pd.DataFrame(rows)
+    t.to_csv(config.OUTPUT_TABLES / "d7_fund_value.csv", index=False)
+    print(f"[validation] D7 on two bases (D42): {len(t)} rows -> d7_fund_value.csv")
+    return t
+
+
 def run(include_test: bool | None = None, stress_only: bool = False) -> dict:
     s = config.load_settings()
     simple = pd.read_csv(config.DATA_PROCESSED / "simple_returns.csv", index_col=0, parse_dates=True)
     if stress_only:
-        return run_stress(simple, s) | {"limits": run_limits(simple, s)} | run_sustainability(simple, s)
+        return (run_stress(simple, s) | {"limits": run_limits(simple, s), "d7_fund_value": run_fund_value(simple, s)}
+                | run_sustainability(simple, s))
     ports, out = portfolios(s), config.OUTPUT_TABLES
     names = ["validation"]
     if include_test if include_test is not None else s["validation"]["test_unlocked"]:
@@ -314,4 +352,5 @@ def run(include_test: bool | None = None, stress_only: bool = False) -> dict:
     sens = [run_period("validation", simple, s, key, w)[1].assign(window=w)
             for w in (s["risk"]["backtest_window_days"], s["risk"]["backtest_window_sensitivity_days"])]
     pd.concat(sens).to_csv(out / "backtest_window_sensitivity.csv", index=False)
-    return res | run_stress(simple, s) | {"limits": run_limits(simple, s)} | run_sustainability(simple, s)
+    return (res | run_stress(simple, s) | {"limits": run_limits(simple, s), "d7_fund_value": run_fund_value(simple, s)}
+            | run_sustainability(simple, s))

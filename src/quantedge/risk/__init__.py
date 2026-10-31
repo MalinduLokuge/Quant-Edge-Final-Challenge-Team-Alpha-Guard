@@ -42,9 +42,21 @@ def run() -> dict:
     pd.concat([attribution.diversification_table(simple, w, groups=r["risk_groups"]).assign(portfolio=n)
                for n, w in portfolios(s).items()]).to_csv(config.OUTPUT_TABLES / "p2_diversification.csv", index=False)  # QA-02, D36
     _plot_attribution(att)
+    run_es_share_interval(simple, s)
     evt = run_evt_garch(simple, s, portfolios(s))
     print(f"[risk] VaR/ES for {len(diags)} portfolios x {len(r['confidence_levels'])} levels x 4 methods; EVT + GARCH-EVT")
     return {"var_es": pd.concat(tables), "diagnostics": pd.DataFrame(diags).T, **evt}
+
+
+def run_es_share_interval(simple: pd.DataFrame, s: dict) -> pd.DataFrame:
+    """D27 QA: bootstrap intervals for the final portfolio's 99% component-ES shares (21-day blocks; 63 as
+    sensitivity) → p2_attribution_ci.csv."""
+    w = portfolios(s)["d26_selected"]
+    cap = s["constraints"]["component_es_max"]
+    t = pd.concat([attribution.es_share_interval(simple, w, 0.99, s["risk"]["bootstrap_reps"], b, s["risk"]["random_seed"], cap)
+                   for b in (21, 63)], ignore_index=True).assign(portfolio="d26_selected")
+    t.to_csv(config.OUTPUT_TABLES / "p2_attribution_ci.csv", index=False)
+    return t
 
 
 def run_evt_garch(simple: pd.DataFrame, s: dict, ports: dict[str, pd.Series]) -> dict:
