@@ -10,7 +10,7 @@ from components import data as D
 from components import ui
 from quantedge.validation import hypothetical as H
 
-ui.page("Stress tests", "Loss of the $10M fund in past crises and in designed scenarios; limit 25% (D7)")
+ui.page("Stress tests", "Loss of the $10M fund in past crises and in designed scenarios; limit 25%")
 s = D.settings()
 res = D.table("stress_results")
 res["Portfolio"] = res["portfolio"].map(D.label)
@@ -21,11 +21,11 @@ order = [D.FINAL_LABEL] + [c for c in piv.columns if c != D.FINAL_LABEL]
 st.dataframe(piv[order].style.format("{:.1%}").background_gradient(cmap="Reds", vmin=0, vmax=0.25), width="stretch",
              height=35 * (len(piv) + 1) + 3)  # every scenario visible without scrolling inside the table
 st.caption("Historical rows = worst peak-to-trough loss inside the crisis window, with quarterly rebalancing. Hypothetical rows = "
-           "instant loss from the six-factor model; T (tech-led crash, D35) uses the technology share of each ETF's holdings, "
+           "instant loss from the six-factor model; T (tech-led crash) uses the technology share of each ETF's holdings, "
            "with no hedge credit for bonds or gold. Every value is below the 25% limit. These are scenario losses: they are "
-           "not the D7 maximum-drawdown statistic (full history) or the 5-year drawdown probability.")
+           "not the maximum-drawdown limit statistic (full history) or the 5-year drawdown probability.")
 
-st.subheader("AI / tech-led crash with inflation (D44)")
+st.subheader("AI / tech-led crash with inflation")
 ai = D.table("research_v2_ai_inflation").assign(Portfolio=lambda d: d["portfolio"].replace({"O6": D.FINAL_LABEL}))
 lim25 = s["risk_limits"]["stress_loss_max"]
 st.dataframe(ai[["Portfolio", "scenario", "loss_central", "loss_severe", "loss_severe_equity_x1.5", "bond_gold_loss_severe"]]

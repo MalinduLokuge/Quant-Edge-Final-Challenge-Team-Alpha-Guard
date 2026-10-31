@@ -7,7 +7,7 @@ import streamlit as st
 from components import data as D
 from components import ui
 
-ui.page("Portfolio", "Weights, growth of $10M, drawdown and performance ratios (quarterly rebalancing, D11)")
+ui.page("Portfolio", "Weights, growth of $10M, drawdown and performance ratios (quarterly rebalancing)")
 
 ports = D.portfolios()
 names = list(ports)
@@ -37,12 +37,12 @@ fig = go.Figure([go.Scatter(x=dd.index, y=dd[c], name=c, fill="tozeroy" if c == 
                             line=dict(width=2 if c == names[0] else 1)) for c in show])
 for step, color in (("watch", "#4c78a8"), ("review", "#e5b800"), ("act", "#f58518")):
     lvl = s["risk_limits"]["action_ladder"][step]["drawdown"]
-    fig.add_hline(y=-lvl, line_dash="dot", line_color=color, line_width=1, annotation_text=f"D23 {step} −{lvl:.0%}",
+    fig.add_hline(y=-lvl, line_dash="dot", line_color=color, line_width=1, annotation_text=f"{step} −{lvl:.0%}",
                   annotation_position="bottom left")
-fig.add_hline(y=-s["risk_limits"]["max_drawdown"], line_dash="dash", line_color="#e45756", annotation_text="D7 limit −25% (investment returns, D42)")
+fig.add_hline(y=-s["risk_limits"]["max_drawdown"], line_dash="dash", line_color="#e45756", annotation_text="limit −25% (investment returns)")
 fig.update_layout(height=300, margin=dict(t=10, b=10), yaxis_tickformat=".0%", hovermode="x unified")
 st.plotly_chart(fig, width="stretch")
-st.caption("Dotted lines: D23 action ladder (watch / review / act), committee steps, not forced sales. "
+st.caption("Dotted lines: action ladder (watch / review / act), committee steps, not forced sales. "
            "These are the 2026 weights applied to history. They were chosen with all of this data, so read the curves as "
            "descriptive. The out-of-sample evidence (2014-built weights) is in the KPI table below and on the Decision page.")
 
