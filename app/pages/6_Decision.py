@@ -55,7 +55,9 @@ st.subheader("How it was validated")
 st.markdown("""
 - **Out-of-sample limits (T10.12):** portfolios built with data to 2014 kept every D7 limit in 2015–19 and 2020–26.
 - **Walk-forward (T20.07):** the selection rule re-run every 3 years from 2008 with only past data. The drawdown limit held
-  in all six segments; 7.3% a year, Sharpe 0.89 vs 0.75 for the policy benchmark.
+  in all six segments; 7.3% a year, Sharpe 0.89 vs 0.75 for the policy benchmark. The Sharpe gap is **not statistically
+  significant** (Ledoit–Wolf p = 0.15): the proven edge is the smaller worst fall (−16.4% vs −19.2%), not better risk-adjusted return.
+- **Rejected after testing (D41):** a regime-switching VaR blend looked plausible but failed the backtests; GARCH-EVT was kept.
 - **Risk model (D28):** GARCH-EVT chosen on 2015–19 only, then tested once on 2020–26: passed Kupiec, Christoffersen and Basel.
 - **Audit (2026-10-29):** a seed-tuned drawdown test and unpropagated spending were found and fixed; the selection was redone
   (research doc T4.25, corrections table).""")

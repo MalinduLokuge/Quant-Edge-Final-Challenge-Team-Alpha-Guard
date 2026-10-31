@@ -71,6 +71,7 @@ The Streamlit page and the report section are both built from this file, so they
   - The VaR model was chosen using 2015–19 only and frozen before 2020–26 was run.
   - The portfolio weights in the backtest were built with data up to 2014.
   - However, 2015–26 was looked at while choosing among final portfolios, so for the portfolio choice it is not untouched. The walk-forward and future monitoring are the honest tests.
+- **Performance differences against the benchmark are not statistically proven.** The Ledoit–Wolf (2008) Sharpe test finds no significant difference in any period (p 0.10–0.67; `research_v2_sharpe_test.csv`). The portfolios share the same ETFs (correlation 0.91–0.96), so the data cannot separate them. We claim only the smaller drawdown within the D7 limit, which the benchmark breaches; that advantage is a path result with no formal significance test.
 - **No model catches the first day of a sudden shock** (24 Feb 2020, 3–4 Apr 2025). Risk forecasts rise only after volatility does.
 
 ## Not captured

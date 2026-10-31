@@ -11,6 +11,10 @@
 - **Downside:** worst historical drawdown 23.5% (limit 25%); P(drawdown > 25% within 5 years) 4.9% (limit 5%); worst stress loss 23.5% (2008 replay).
 - **Model trust:** the daily VaR model (GARCH-EVT) was selected on 2015–19 data and passed every backtest on 2020–26.
 - **Why it is suitable:** it is the highest-return mix that passes every risk limit derived from the committee's principle that "avoiding large losses is more important than maximizing gains". It was checked out of sample and by a walk-forward that rebuilds it every three years with only past data.
+- **Evidence standard: observed is not proven.**
+  - The rule matched the policy benchmark's return with a smaller worst fall.
+  - Its higher Sharpe ratio is not statistically significant (Ledoit–Wolf p = 0.15), so we do not claim better risk-adjusted returns (§4.5).
+  - The same standard led us to reject a regime-switching VaR model that looked plausible but failed the tests (D41, §6).
 - **The main trade-off is spending.** A 4% payout needs about 7.2% a year, which no portfolio delivers without accepting falls of 35–47%. We therefore recommend about 2.65% and state it openly. The brief sets no spending rate.
 
 ## 2. Client, horizon and return objective
