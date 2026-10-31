@@ -32,6 +32,11 @@ def main() -> int:
     rec = rec[rec.portfolio == "d26_selected"].set_index(["rule", "spending_rate"])
     r0, r_low = rec.loc[("smoothed", 0.0265)], rec.loc[("smoothed", 0.02)]
     rec15, rec15_low = f(r0["DD25% P(real back within 15y)"], 0), f(r_low["DD25% P(real back within 15y)"], 0)
+    rg = pd.read_csv(T / "research_v2_regime_blend_summary.csv")                                # D41
+    rg = rg[(rg.portfolio == "O6") & (rg.period == "test") & (rg.alpha == 0.99)].set_index("model")
+    rb, rgv = rg.loc["regime_primary"], rg.loc["garch_evt"]
+    cv = pd.read_csv(T / "research_v2_regime_blend_stress.csv")
+    cv = cv[(cv.portfolio == "O6") & (cv.alpha == 0.99) & (cv.window == "COVID 2020")].iloc[0]
     checks = {
         "tear_sheet/tear_sheet.md": [f(summ["Expected return (nominal, compound)"], 2), f(summ["Spending the portfolio supports"], 2),
                                      f"${float(summ['Spending in USD (year 1)']):,.0f}", f(-float(summ["Max drawdown incl. 2008 replay (limit 25%)"])),
@@ -50,7 +55,10 @@ def main() -> int:
                                        f(dv["VaR_benefit"]), f(dv["ES_benefit"]), f(dv["VaR_undiversified"], 2), f(dv["ES_undiversified"], 2),
                                        f(o6["T Tech-led crash (central)"]), f(o6["T Tech-led crash (severe)"]), tech,
                                        f"{eff[1]} effective risk contributors rather than {eff[0]}",
-                                       f"{rec15} / {f(r0['DD20% P(real back within 15y)'], 0)} | {r0['DD25% median_years_real']:.1f}"],
+                                       f"{rec15} / {f(r0['DD20% P(real back within 15y)'], 0)} | {r0['DD25% median_years_real']:.1f}",
+                                       f"blend: {rb.exceptions} exceptions, Christoffersen p {rb.p_ind:.3f}, worst Basel window {rb.basel_worst_count:.0f} (red)",
+                                       f"GARCH-EVT: {rgv.exceptions}, p {rgv.p_ind:.2f}, {rgv.basel_worst_count:.0f} (yellow)",
+                                       f"{f(cv.meanVaR_regime_primary, 2)} against {f(cv.meanVaR_garch_evt, 2)} for GARCH-EVT"],
     }
     bad = 0
     for doc, values in checks.items():

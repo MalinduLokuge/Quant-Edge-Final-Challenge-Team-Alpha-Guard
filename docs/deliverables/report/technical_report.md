@@ -172,6 +172,21 @@
   - GARCH-t: 33, fails.
 - **Stress windows:** GARCH-EVT halves the exceptions of historical simulation in COVID and 2022, because its volatility rises within days.
 
+**A regime-switching alternative was tested and rejected (D41, proposed; research doc V2_regime_blend):**
+- **Idea (Team Guide §8):** classify each day as calm or elevated volatility (20-day vs 252-day σ, data up to t−1). Weight historical 70% / EVT 30% when calm and 30 / 70 when elevated.
+- **Integrity:** the design, 12 variants and the adoption rule were committed before the first run, and the baseline reproduced exactly.
+- **O6 (final weights), 99%, 2020–26:**
+  - blend: 22 exceptions, Christoffersen p 0.002, worst Basel window 12 (red);
+  - GARCH-EVT: 24, p 0.35, 8 (yellow).
+  - The 2014-weights portfolio above and the policy benchmark give the same result.
+- **Why it fails:** the detector flagged COVID, 2022 and 2025 on day 0, but historical and EVT share one 1,000-day window.
+  - A blend moves VaR by less than 15% on 95% of days.
+  - In the COVID weeks its 99% VaR averaged 1.25% against 4.37% for GARCH-EVT.
+- **Result:**
+  - The FZ0 score is worse than GARCH-EVT's in 2008–14, 2015–19 and 2020–26, for every variant.
+  - Even max(historical, EVT) stays red.
+  - GARCH-EVT is kept. This measures forecast quality only: O6's weights and returns do not change.
+
 **What backtesting cannot show:**
 - The first day of a sudden shock is still missed.
 - Six years contain few tail events.

@@ -222,8 +222,9 @@ Secondary question: the blend is not a better full-cycle limit check than Histor
 - Not tested, because they are outside the pre-registered scope: a regime switch *into* GARCH-EVT, a regime-dependent EVT threshold, or a calm-period floor for GARCH-EVT (B6). Each would need its own pre-registration on validation data.
 - The 20/252 classifier is a fast, transparent volatility flag. Using it as a committee indicator next to the D23 ladder would be a separate proposal; it is not made here.
 
-### B14. Proposed amendments (not applied; need team approval)
-- Technical report, innovation section: one paragraph and the B9 table as evidence that regime switching was tested and rejected in favour of GARCH-EVT (the same pattern as D39 and D40).
+### B14. Amendments
+- **Applied 2026-10-31 (approved in chat by Malindu):** technical report §6 has a paragraph saying that regime switching was tested and rejected in favour of GARCH-EVT (the same pattern as D39 and D40). Its figures are registered in `scripts/check_deliverables.py` (51 figures, 0 mismatches).
+- **Open, flagged, not changed:** report §6 is headed "O6, 99%, 2020–2026", but it quotes the D26-train backtest (GARCH-EVT 20 exceptions, Kupiec 0.49). On O6 the figures are 24 exceptions, Kupiec 0.11, independence 0.35, worst Basel window 8. Either the label or the numbers need correcting.
 - DECISIONS D41 (PROPOSED): record the rejection.
 - The memo, tear sheet, app, approved outputs and the D28 choice are unchanged.
 
