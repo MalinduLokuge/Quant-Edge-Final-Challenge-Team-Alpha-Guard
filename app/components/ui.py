@@ -3,6 +3,7 @@ session state so every page uses the same choice."""
 from __future__ import annotations
 
 import datetime as dt
+import re
 
 import pandas as pd
 import plotly.graph_objects as go
@@ -86,6 +87,43 @@ def story_nav() -> None:
         with c.container(border=True):
             st.page_link(path, label=f"**{title}**")
             st.caption(sub)
+
+
+def md_sections(path) -> dict[str, list[str]]:
+    """'## Heading' → list of top-level bullets (sub-bullets joined into their parent) from a markdown file."""
+    out, cur = {}, None
+    for line in path.read_text(encoding="utf8").splitlines():
+        if line.startswith("## "):
+            cur = line[3:].strip()
+            out[cur] = []
+        elif cur is None or not line.strip():
+            continue
+        elif line.startswith("- "):
+            out[cur].append(line[2:].strip())
+        elif out[cur]:  # sub-bullet or continuation
+            out[cur][-1] += "\n" + line
+        else:  # text before the first bullet
+            out[cur].append(line.strip())
+    return out
+
+
+def first_sentence(text: str, limit: int = 160) -> str:
+    """Bold lead-in or first sentence of a bullet, without markdown emphasis; a terse lead keeps the rest of its line
+    (cut at a word boundary near `limit` characters)."""
+    head = text.split("\n")[0].replace("**", "").replace("`", "")
+    m = re.match(r"\*\*(.+?)\*\*", text)
+    s = m.group(1) if m else re.split(r"(?<=[.:])\s", head, maxsplit=1)[0]
+    s = s.replace("`", "").rstrip(":").strip()
+    if len(s) < 45 and len(head) > len(s) + 2:
+        s = head if len(head) <= limit else head[:limit].rsplit(" ", 1)[0] + " …"
+    return s
+
+
+def refs(text: str) -> str:
+    """Decision IDs (D7, D9 v2) and output files a bullet cites."""
+    ids = sorted(set(re.findall(r"\bD\d{1,2}\b", text)), key=lambda x: int(x[1:]))
+    files = re.findall(r"`([\w./-]+\.(?:csv|md))`", text)
+    return ", ".join(ids + files)
 
 
 def sidebar() -> dict:
