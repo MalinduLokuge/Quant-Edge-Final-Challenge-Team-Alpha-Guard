@@ -172,7 +172,7 @@
   - GARCH-t: 33, fails.
 - **Stress windows:** GARCH-EVT halves the exceptions of historical simulation in COVID and 2022, because its volatility rises within days.
 
-**A regime-switching alternative was tested and rejected (D41, proposed; research doc V2_regime_blend):**
+**A regime-switching alternative was tested and rejected (D41; research doc V2_regime_blend):**
 - **Idea (Team Guide §8):** classify each day as calm or elevated volatility (20-day vs 252-day σ, data up to t−1). Weight historical 70% / EVT 30% when calm and 30 / 70 when elevated.
 - **Integrity:** the design, 12 variants and the adoption rule were committed before the first run, and the baseline reproduced exactly.
 - **O6 (final weights), 99%, 2020–26:**
