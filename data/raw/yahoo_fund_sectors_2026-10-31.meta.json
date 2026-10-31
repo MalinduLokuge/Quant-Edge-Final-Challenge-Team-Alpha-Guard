@@ -1,0 +1,7 @@
+{
+  "source": "Yahoo Finance via yfinance",
+  "call": "yf.Ticker(t).funds_data.sector_weightings",
+  "yfinance_version": "1.7.0",
+  "downloaded": "2026-10-31",
+  "note": "Morningstar sector classification as served by Yahoo; 'technology' is broader than GICS Information Technology"
+}

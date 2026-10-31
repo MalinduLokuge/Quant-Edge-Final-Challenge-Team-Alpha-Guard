@@ -35,6 +35,16 @@
   - For the hypothetical stress: 10-year TIPS yield, Moody's Baa spread, Brent and WTI oil, broad USD index, VIX, 2-year yield.
 - **Context only** (not model inputs): IMF, World Bank, IEA, EIA and Federal Reserve publications.
 
+**Source compliance (brief §9.1: Yahoo Finance, FRED, World Bank / IMF).** Every series the models compute from is from Yahoo Finance or FRED. Three items fall outside the list. All are public and disclosed, and none is proprietary:
+
+| Item | Used for | Source | Status |
+|---|---|---|---|
+| SPY technology share (38.4%) | D35 / D37 / D44 look-through: tech-crash stress and the 20% trigger | SSGA fund page, 29 Oct 2026 (EFA, EEM approximate) | Model input outside §9.1. Cross-check from Yahoo Finance (`yahoo_fund_sectors_*.csv`): SPY 40.4%, EFA 12.0%, EEM 44.2% (Morningstar sectors, broader than GICS IT), giving look-through 18.3% instead of 17.7%, still below the 20% trigger |
+| IEA, EIA, Federal Reserve publications | Narrative and plausibility of the hypothetical scenarios (T11) | Public reports, dated and cited | Context only; shock sizes are team judgements calibrated on FRED / Yahoo history (T11 design doc) |
+| NACUBO peer-endowment losses | Context for the 25% drawdown tolerance (D7) | NACUBO study | Context for a team judgement, not a model input |
+
+Academic papers are cited as method references, not data.
+
 **Sample:**
 - **Common sample:** 2004-11-18 (GLD inception) to 2026-10-19 (D1): 5,513 trading days of prices, giving 5,512 daily returns (the split below counts returns).
 - **Chronological split (D5):**
@@ -346,11 +356,11 @@ These are summarised from `docs/ASSUMPTIONS_LIMITATIONS.md`, which is identical 
 ## 11. AI use and human validation
 - **AI tool:** Claude Code (Anthropic) was used for code scaffolding, research, documentation and drafting.
 - **Validation:**
-  - every module has unit tests (133 tests);
+  - every module has unit tests (164 tests);
   - every AI-assisted component is recorded in `tracking/validation/HUMAN_VALIDATION_LOG.md` for team sign-off;
-  - the brief's four disclosure columns are in `docs/AI_DISCLOSURE.md`.
-- **Decisions:** all decisions D1–D33 were taken by the team.
-- **The audit of 2026-10-29** shows the review process catching AI-introduced errors.
+  - the brief's four disclosure columns, and a sign-off table each member signs, are in `docs/AI_DISCLOSURE.md`.
+- **Decisions:** all decisions (D1–D44 in `docs/DECISIONS.md`) were taken by the team.
+- **The audit of 2026-10-29** and an **independent human QA review on 2026-10-31** caught AI-introduced errors and overclaims; the corrections are in D42 and the commit history.
 
 ## Appendix: reproducibility
 - **One command:** `python run_all.py` reruns all stages from the committed data snapshots. `python run_all.py --app` also opens the Streamlit app.

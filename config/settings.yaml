@@ -135,8 +135,8 @@ sustainability:                 # T20.09: endowment sustainability and recovery 
     spending_rates: [0.0265, 0.0245, 0.0225, 0.0200]   # D24 sensitivity (final portfolio)
     capped_rule: true           # also D24 never above the policy rate x current NAV (crisis cap), at the base rate
 risk_limits:                    # D7, APPROVED 2026-10-28
-  max_drawdown: 0.25            # historical incl. 2008 replay
-  max_prob_drawdown_breach_5y: 0.05   # P(DD > 25% within 5y), block bootstrap with CAPM means
+  max_drawdown: 0.25            # historical incl. 2008 replay; on investment returns, before spending (official basis, D42)
+  max_prob_drawdown_breach_5y: 0.05   # P(DD > 25% within 5y), block bootstrap with CAPM means; investment returns (D42)
   drawdown_test:                # D7 5-year test settings (T20.10, 2026-10-29): 4,000 paths with one seed let the D26
     paths: 32000                # bisection tune itself to Monte Carlo noise; 32k paths -> s.e. about 0.12 pp at P = 5%
     block: 126                  # D32, APPROVED 2026-10-29: Politis-White block for volatility clustering 120-160 days (was 63)

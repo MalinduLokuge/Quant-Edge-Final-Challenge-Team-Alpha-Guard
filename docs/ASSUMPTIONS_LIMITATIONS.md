@@ -6,6 +6,7 @@ The Streamlit page and the report section are both built from this file, so they
 - FRED values are carried forward to ETF trading days when FRED has no same-day value (holidays): at most 5 business days, past values only.
 - Extreme returns are real market moves (verified against known events) and are kept. Flags record them; no data is removed or winsorised.
 - CPI for a month is published about two weeks after it ends. Any use in decisions applies a one-month lag.
+- **One model input is outside the brief's approved sources (§9.1):** SPY's technology share (38.4%, SSGA fund page, 29 Oct 2026; EFA and EEM approximate) for the D35 / D37 / D44 look-through. It is public and disclosed. Yahoo Finance's own sector data (Morningstar classification) gives SPY 40.4%, EFA 12.0% and EEM 44.2%, so O6's look-through technology would be 18.3% instead of 17.7%, still below the 20% trigger. IEA, EIA, Federal Reserve and NACUBO material is context only, not a model input.
 - Yahoo revises adjusted history over time, so results are reproduced from dated snapshots (prices 2026-10-20; income and core FRED series 2026-10-28; stress factors 2026-10-29), not live downloads.
 
 ## Client & return objective (D12, D10)
