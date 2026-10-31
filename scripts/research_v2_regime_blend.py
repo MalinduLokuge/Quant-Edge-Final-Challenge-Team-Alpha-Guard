@@ -77,7 +77,7 @@ def build_daily(s, simple, ports, periods) -> pd.DataFrame:
         fc = backtest.rolling_forecasts(simple, ports, a, z, W, tuple(v["confidence_levels"]), COMPONENTS,
                                         v["refit_days"], v["mc_simulations"], v["evt_threshold_q"], s["risk"]["random_seed"])
         wide = fc.pivot_table(index=["portfolio", "alpha", "date"], columns="method", values=["VaR", "ES"])
-        wide.columns = [f"{m}_{k}" for k, m in wide.columns]
+        wide.columns = [f"{k}_{m}" for k, m in wide.columns]       # (VaR | ES, method) → VaR_historical
         wide = wide.join(fc.groupby(["portfolio", "alpha", "date"])["loss"].first()).reset_index().assign(period=p)
         parts.append(wide)
         print(f"[regime] {p}: {fc['date'].nunique()} days x {len(ports)} portfolios ({time.time() - t0:.0f}s)")
@@ -423,6 +423,7 @@ def main(reuse: bool) -> None:
         d = pd.read_csv(path, parse_dates=["date", "window_first", "window_last"])
     else:
         d = build_daily(s, simple, ports, periods)
+        d.to_csv(path, index=False)                                   # components first, so --reuse works after any later error
     rep = reproduction(d)
     rep.to_csv(TAB / f"{PFX}_reproduction.csv", index=False)
     print(f"[regime] baseline reproduction (D26-train vs saved backtest): {int(rep['reproduced'].sum())}/{len(rep)} exact")

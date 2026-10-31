@@ -252,7 +252,7 @@ Stage: risk/validation · Owner: Sujan · Priority: Optional · Target: Week 3
 |---|---|---|---|---|---|---|---|
 | T13.01 | Choose one additional model and state a testable hypothesis | Entry in INNOVATION_LOG.md | Medium | Sujan | T6.05 | Not started | PM |
 | T13.02 | Specify the method and baseline comparison fairly | Method note | Medium | Sujan | T13.01 | Not started | PM |
-| T13.03 | Implement innovation without future-data leakage | GARCH-EVT, t-copula MC, EVT threshold rule, regime VaR built without leakage (rolling data ≤ t−1, test_validation no-look-ahead) | Medium | Sujan | T13.02 | Done | PM · QA 2026-10-30 |
+| T13.03 | Implement innovation without future-data leakage | GARCH-EVT, t-copula MC, EVT threshold rule built without leakage (rolling data ≤ t−1, test_validation no-look-ahead). Correction 2026-10-31: regime VaR (I13) was not built at the QA date; built and backtested as research on 2026-10-31 (T20.13), not in the pipeline | Medium | Sujan | T13.02 | Done | PM · QA 2026-10-30 |
 | T13.04 | Backtest innovation and compare standalone methods | GARCH-EVT backtested vs 6 standalone methods (backtest_results_*.csv, T10 doc) | Medium | Sujan | T13.03, T10.04 | Done | PM · QA 2026-10-30 |
 | T13.05 | Report gains, failures, limitations and overfitting concerns | INNOVATION_LOG.md I1, I12–I16 with results and failures; audit corrections T4_25 §0 | Medium | Sujan | T13.04 | Done | PM · QA 2026-10-30 |
 | T13.06 | Agree the innovation set (rec. #12) and wavelets decision (rec. #13) | Approved list in DECISIONS.md | Medium | All members | — | Not started | REV |
@@ -359,6 +359,7 @@ Stage: decision · Owner: All members · Priority: Core · Target: Week 3
 | T20.10 | Audit fix: 5-year drawdown test seed-tuned (4k paths) → 32k paths, block-length sensitivity; D30 2.8% propagated to hurdle and spending | Pipeline rerun, D26 re-selected | Critical | Malindu | — | Done | Audit 2026-10-29 |
 | T20.11 | Real recovery after a crisis (T20.09 view 4, D39): 25-year bootstrap, P(real value back within 10/15 years) after 20% / 25% falls, D24 at 2.00–2.65% and a crisis cap; memo/report wording (price vs real recovery) | sustainability_recovery.csv, report §8, memo, tear sheet | High | Malindu | T20.09 | Done | Team review 2026-10-31 |
 | T20.12 | Crisis spending buffer / withdrawal rule (D40): per-ETF simulation of D11 vs AGG-only spending with paused rebalancing vs band rebalancing; D39 daily vs quarterly rebalancing note; report §8, A&L, memo, tear sheet wording | research_v2_withdrawal_rule.csv, docs/research/V2_withdrawal_rule.md | Medium | Malindu | T20.11 | Done | Team review 2026-10-31 |
+| T20.13 | Regime-dependent Historical/EVT VaR-ES blend (I13, Team Guide §8): pre-registered design and adoption rule, rolling backtest vs GARCH-EVT on O6 / D26-train / Policy, 12-variant sensitivity, paired bootstrap, stress windows, regime diagnostics; D41 PROPOSED (reject, keep GARCH-EVT) | research_v2_regime_blend_*.csv, research_v2_regime_*.png, docs/research/V2_regime_blend.md, risk/extensions/regime.py, test_regime.py | Medium | Malindu | T10.07, T13.03 | Done (research); D41 needs team approval | 2026-10-31 |
 
 ## T21 — Quality gates & compliance QA
 Stage: — · Owner: Malindu (coordinates) · Priority: Core · Target: Ongoing

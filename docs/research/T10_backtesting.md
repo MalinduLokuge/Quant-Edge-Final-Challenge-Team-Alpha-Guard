@@ -42,6 +42,8 @@ On validation data only, for the D26 portfolio:
 ## 4. Test period 2020-01-02 → 2026-10-19 (run once, after the freeze; commit 60e67e3)
 **Reproduce:** `python run_all.py --only validation` (validation.test_unlocked: true) → `backtest_forecasts_test.csv`, `backtest_results_test.csv`.
 
+> **Note 2026-10-31 (V2_regime_blend.md B1):** the tables in §2 and §4 were computed with the p1_train D26 weights before D32 (commit b9bc407, 126-day blocks) re-selected them. The committed `backtest_results_*.csv` hold the current weights: D26-train GARCH-EVT 14 validation / 20 test exceptions (here 13 / 22), historical 14 / 26, EVT 13 / 20. D28 still selects GARCH-EVT on the current validation results (FZ0 −4.747 vs GARCH-t −4.735). The CSVs are the source of truth; the numbers below are kept as the record of the original run.
+
 **D26 selected portfolio, 99% 1-day (1,708 days, 17.1 exceptions expected):**
 
 | Method | Exceptions | Kupiec p | Christoffersen ind. p | Cond. cov. p | Worst Basel window | Red windows | ES severity | FZ0 |
