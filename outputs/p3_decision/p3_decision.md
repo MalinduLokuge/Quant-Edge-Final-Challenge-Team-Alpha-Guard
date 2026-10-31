@@ -9,7 +9,7 @@
 | XLK | 10.0% | $1,000,000 | growth tilt (technology, capped 10%) |
 | EFA | 7.2% | $717,200 | international diversification |
 | XLE | 3.0% | $296,838 | inflation / energy hedge |
-| GLD | 0.4% | $38,551 | crisis and inflation hedge |
+| GLD | 0.4% | $38,551 | residual weight; no hedge credit (D43) |
 
 | Item | Value | Source |
 |---|---|---|

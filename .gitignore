@@ -13,3 +13,20 @@ data/interim/**
 !data/interim/.gitkeep
 # third-party teaching decks: kept locally, not published (T17.06)
 docs/references/presentations/*.pptx
+
+# local tooling and OS / editor clutter (submission cleanup)
+.claude/launch.json
+.claude/settings.local.json
+.streamlit/secrets.toml
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.log
+*.tmp
+~$*
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

@@ -24,7 +24,7 @@ from quantedge.validation import limits
 
 ROLES = {"AGG": "income and ballast (bond yield, liquidity for spending)", "SPY": "core growth (US equities)",
          "XLK": "growth tilt (technology, capped 10%)", "EFA": "international diversification",
-         "EEM": "emerging markets", "XLE": "inflation / energy hedge", "GLD": "crisis and inflation hedge"}
+         "EEM": "emerging markets", "XLE": "inflation / energy hedge", "GLD": "residual weight; no hedge credit (D43)"}
 
 
 def _get(df: pd.DataFrame, **match) -> pd.DataFrame:

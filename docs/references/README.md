@@ -1,11 +1,9 @@
 # References
-| Folder | Put here |
+| Folder | Contents |
 |---|---|
-| competition/ | Official QuantEdge 1.0 Final Challenge PDF (primary authority) |
-| presentations/ | The 2 .pptx decks (third-party; **not in git**, kept locally only) |
-| explainers/ | Explainer .docx files (Batch01,02,03,05 + Key Findings). **Batch04 (slides 61–80) missing**; Batch02 duplicated |
-| pipeline/ | FigJam export (PDF/PNG) + QuantEdge_FigJam_Pipeline_Block_Reference.xlsm |
+| competition/ | Official QuantEdge 1.0 Final Challenge brief (PDF), the primary authority for every requirement |
 
-Live sources:
-- FigJam: https://www.figma.com/board/0BsezYr2IQNrweujKm3yF3/
-- Drive "alpha guard": Project Management Tracker (.xlsm), Pipeline Block Reference (.xlsm)
+Not included in this submission branch:
+- **EdgeForge masterclass decks and the team's explainer notes on them:** third-party teaching material, kept by the team and not published (T17.06).
+- **FigJam pipeline board:** the design it describes is written out in `docs/MODEL_DESIGN.md`. The board itself is at https://www.figma.com/board/0BsezYr2IQNrweujKm3yF3/.
+- The full development history, including these files, is on branch `version-3`.
