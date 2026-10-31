@@ -18,6 +18,21 @@
 
 **Fresh-clone quick start (D16):** a clean clone at `048107b` with no pipeline run. All 9 Streamlit pages run (`tests/integration/test_app.py`, 9 passed).
 
+## Fresh-clone reproduction of the submission branch, 2026-10-31
+**Setup:** a fresh `git clone` of `submission/clean` (published as `main`) at commit `0ea18dd`, using Python 3.12.10 with every package at its `requirements.txt` pin.
+
+**Run:** `python run_all.py` (all stages from the committed data snapshots, no internet). Exit 0.
+- **Result: every pipeline output is byte-identical to the committed snapshot** (0 tracked files changed, 0 new files).
+- **First attempt:** the risk stage exited with code 4 and no Python error. On its own the stage completed. The machine had about 1.4 GB of free RAM out of 8 GB. A full rerun from a clean state with the fault handler on finished without error, so the cause was environmental (memory pressure), not the code.
+
+**Later commits up to `2a19f89` (`main`):** the app redesign, decision-stage text and documents. A fresh clone was checked again:
+- the decision stage reproduces its outputs exactly;
+- `pytest`: 179 passed, including every app page;
+- `scripts/check_deliverables.py`: 89 figures, 0 mismatches;
+- `scripts/qa/qa_recompute.py` matches.
+
+Nothing upstream of the decision stage changed after `0ea18dd`. The hosted app (deployed from `main`) opens publicly without a login.
+
 ## Known environment issues
 | Issue | Cause | Fix |
 |---|---|---|
