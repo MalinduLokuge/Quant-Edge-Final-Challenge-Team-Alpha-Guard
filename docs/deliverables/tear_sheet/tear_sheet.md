@@ -34,6 +34,7 @@
 | Energy stagflation, severe (oil +50%, stocks −30%) | 18.8% | 19.2% |
 | AI unwind with recession, severe (stocks −40%) | 14.2% | 13.0% |
 | Tech-led crash, severe (tech −65%, stocks −40%) | 16.7% | 14.7% |
+| Tech-led crash with inflation (bonds fall too), severe | 22.8% | 20.5% |
 
 **Out-of-sample evidence** (weights built only with earlier data): return / Sharpe / worst drawdown
 

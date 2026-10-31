@@ -44,6 +44,11 @@ The Streamlit page and the report section are both built from this file, so they
 - Monthly paths are stylised: order and timing are assumptions. Gaps, convexity and liquidity spirals are not modelled. The credit factor is investment grade (Moody's Baa).
 - A multi-month scenario loss is not comparable to the 1-day ES limit. Scenario VaR is a volatility rescaling of GARCH-EVT, not a re-estimated model.
 
+- **AI / tech-led crash** (B, T, T + I; `research_v2_ai_inflation.csv`, D44):
+  - The worst case is a tech crash while inflation keeps rates up, so bonds and gold also fall. O6 loses 22.8% (severe), against 23.5% in the 2008 replay and the 25% limit. Bonds and gold add 6.1 pp of that loss.
+  - At 1.5× the scenario breaches the limit (31.2% for the equity leg, which means tech −97.5%; 25.9% for the rates leg). T alone at 1.5× is 25.1%.
+  - The data have no dot-com-style multi-year tech crash, and the scenarios are one-step shocks.
+
 ## Five-year drawdown test and recovery (audit 2026-10-29)
 - P(drawdown > 25% within 5 years) is a block-bootstrap estimate. It now uses 32,000 paths (Monte Carlo error about ±0.12 pp at 5%). With 4,000 paths and one seed, the selection rule had tuned itself to simulation noise.
 - **The estimate depends on the block length.** Longer blocks keep bear markets intact and raise P. The test now uses **126-day blocks (D32)**, because the data's own volatility clustering lasts about 120–160 days (Politis–White). The final portfolio scores 4.94% (limit 5%); an independent re-run with other random seeds gave 4.58%. It sits close to the limit by design (D26 picks the highest-return portfolio that passes), so passing at 126 days is partly by construction.

@@ -42,6 +42,16 @@ def main() -> int:
     p_wf = f"p = {sr.loc['Walk-forward 2009-26 (R126 rule -> O6)', 'p_hac']:.2f}"
     p_rng = f"p {oos.min():.2f}–{oos.max():.2f}"
     sr_rep = [f"{sr.loc[c, 'diff']:+.2f} (p = {sr.loc[c, 'p_hac']:.2f}".replace("-", "−") for c in sr.index]
+    ai = pd.read_csv(T / "research_v2_ai_inflation.csv").set_index(["portfolio", "scenario"])   # D44
+    ti, tp = ai.loc[("O6", "T + I tech crash with inflation (bonds fall)")], ai.loc[("Policy 40/50/10", "T + I tech crash with inflation (bonds fall)")]
+    hb = pd.read_csv(T / "stress_hyp_results.csv")
+    hb = hb[(hb.portfolio == "d26_selected") & (hb.scenario == "B AI unwind with recession") & (hb.severity == "severe")].iloc[0]
+    sens = pd.read_csv(T / "stress_hyp_sensitivity.csv").query("portfolio == 'd26_selected'").set_index("scenario")["mc_p99"]
+    ai_rep = [f"99th percentile {f(sens.iloc[0])} (A) and {f(sens.iloc[1])} (B)", f"worst fall is {f(-hb.path_max_drawdown)}",
+              f"${hb.next_year_spending_usd:,.0f}", f"**{f(ti.loss_severe)} (severe, ${ti.loss_severe * 10:.2f}M)**",
+              f"against {f(tp.loss_severe)} for the policy benchmark", f"{f(ti["loss_severe_equity_x1.5"])} for the equity leg"]
+    ai_ts = [f"| {f(ti.loss_severe)} | {f(tp.loss_severe)} |"]
+    ai_memo = [f"about {f(ti.loss_severe, 0)} (${ti.loss_severe * 10:.1f}M), our worst scenario"]
     gd = pd.read_csv(T / "research_v2_gold_return.csv").set_index("case")                      # G-12 gold
     gold = [f"{f(gd.loc['capm_plus_0.5', 'w_GLD'])} at +0.5 pp, {f(gd.loc['capm_plus_1', 'w_GLD'])} at +1 pp, "
             f"{f(gd.loc['capm_plus_2', 'w_GLD'])} at +2 pp",
@@ -56,8 +66,8 @@ def main() -> int:
                                      f(k.loc[("d26_selected", "validation"), "CAGR"]), f(k.loc[("d26_selected", "test"), "CAGR"]),
                                      f"${port.loc['AGG', 'usd']:,.0f}", f"${port.loc['SPY', 'usd']:,.0f}",
                                      f(dv["VaR_benefit"]), f(dv["ES_benefit"]),
-                                     f(o6["T Tech-led crash (severe)"]), f(pol["T Tech-led crash (severe)"]), tech, rec15, p_rng],
-        "memo/investment_committee_memo.md": ["2.65%", "$265,000", "5.8%", "1.4%", "2.2%", f(o6["T Tech-led crash (severe)"], 0), rec15, rec15_low,
+                                     f(o6["T Tech-led crash (severe)"]), f(pol["T Tech-led crash (severe)"]), tech, rec15, p_rng, *ai_ts],
+        "memo/investment_committee_memo.md": ["2.65%", "$265,000", "5.8%", "1.4%", "2.2%", f(o6["T Tech-led crash (severe)"], 0), rec15, rec15_low, *ai_memo,
                                               p_wf],
         "report/technical_report.md": [f(summ["Expected return (nominal, compound)"], 2), f(o6["GFC 2007-09"]), f(o6["Taper tantrum 2013"]),
                                        f(o6["A Energy stagflation (Hormuz II) (central)"]), f(o6["A Energy stagflation (Hormuz II) (severe)"]),
@@ -69,7 +79,7 @@ def main() -> int:
                                        f"{rec15} / {f(r0['DD20% P(real back within 15y)'], 0)} | {r0['DD25% median_years_real']:.1f}",
                                        f"blend: {rb.exceptions} exceptions, Christoffersen p {rb.p_ind:.3f}, worst Basel window {rb.basel_worst_count:.0f} (red)",
                                        f"GARCH-EVT: {rgv.exceptions}, p {rgv.p_ind:.2f}, {rgv.basel_worst_count:.0f} (yellow)",
-                                       f"{f(cv.meanVaR_regime_primary, 2)} against {f(cv.meanVaR_garch_evt, 2)} for GARCH-EVT", *sr_rep, f"Sharpe ratio is not statistically significant (Ledoit–Wolf {p_wf})", *gold],
+                                       f"{f(cv.meanVaR_regime_primary, 2)} against {f(cv.meanVaR_garch_evt, 2)} for GARCH-EVT", *sr_rep, f"Sharpe ratio is not statistically significant (Ledoit–Wolf {p_wf})", *gold, *ai_rep],
     }
     gfc_rec = f"{st[st.portfolio == 'd26_selected'].set_index('scenario').loc['GFC 2007-09', 'recovery_days']:.0f} trading days"  # QA: historical vs simulated recovery
     for doc in checks:

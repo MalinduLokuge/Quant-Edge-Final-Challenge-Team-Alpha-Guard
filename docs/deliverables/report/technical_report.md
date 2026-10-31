@@ -255,8 +255,15 @@
 **What the scenarios show:**
 - **The bond hedge fails in inflationary shocks.** In A severe, AGG contributes over a third of the loss; in a recession it rallies.
 - **Robustness:**
-  - Monte Carlo over shock and beta uncertainty: 99th percentile 15.5%.
+  - Monte Carlo over shock and beta uncertainty: 99th percentile 15.5% (A) and 14.6% (B).
   - **The equity shock decides the outcome:** at 1.5× the severe equity fall, losses are 24.8% (A) and 22.1% (B), still within the limit.
+- **An AI unwind is survivable over a year.** On the 12-month path of B severe, the worst fall is 15.5% and the 12-month result is −11.9%. Next year's spending dips only from $265,000 to $257,432 under the smoothed rule.
+- **The worst AI case is a tech crash while inflation keeps rates up (T + I, D44; `research_v2_ai_inflation.csv`).** Scenario T was run again with the rates leg of A at the same severity (real yield +40 / +100 bp, breakeven +20 / +50 bp, Baa +50 / +150 bp) applied to AGG and gold.
+  - O6 loses 11.5% (central) and **22.8% (severe, $2.28M)**, against 20.5% for the policy benchmark. Bonds and gold add 6.1 pp of the severe loss instead of cushioning it.
+  - That is the largest hypothetical loss, close to the 2008 replay (23.5%), but within the 25% limit.
+  - Monte Carlo over shock sizes: 99th percentile 17.9%, with no draw above 25%.
+  - **At 1.5× it breaches the limit:** 31.2% for the equity leg (tech −97.5%, beyond the dot-com fall of about 78%) and 25.9% for the rates leg. T alone at 1.5× is 25.1%. The benchmark also breaches (27.8%).
+  - Less XLK was tested and not adopted (D35), and more gold barely helps (D43). The limit is kept, and the D23 ladder and the D37 technology trigger are the response.
 - **Scenario losses vs the 1-day ES limit:** a multi-month scenario loss is not comparable to the 1-day ES limit. Scaling GARCH-EVT VaR by stressed volatility gives 2.3–2.8% in the severe cases, above the 1.7% VaR limit, so the D23 review would trigger.
 
 ## 8. Spending sustainability and recovery (T20.09; `sustainability_*.csv`)
@@ -322,6 +329,9 @@ On 2004–2026 history the watch trigger was active 7–10% of the time; the −
 These are summarised from `docs/ASSUMPTIONS_LIMITATIONS.md`, which is identical to the app page:
 - **CAPM expected returns** with a 5% ERP. AGG's yield is assumed locked in when rates fall. Returns are lower if the T-bill falls (at a 2.5% T-bill and a 4% ERP, the supported spending is about 1.7%).
 - **History** contains one 2008-type crisis, so limits are targets, not guarantees. The bootstrap cannot create crises unlike the sample's.
+- **AI / tech crash:**
+  - The data start in 2004, so there is no dot-com-style crash: technology fell about 78% over 2.5 years then. The AI scenarios (B, T, T + I) are one-step shocks with linear betas.
+  - The worst case, a tech crash with inflation (T + I, 22.8%), is within the limit but breaches it at 1.5× (§7).
 - **The 5-year drawdown test is sensitive to block length** (model uncertainty, reported). The 126-day block is a heuristic, conservative choice; 21/63/252 days are sensitivity analysis.
 - **Drawdown limits are measured on investment returns** (D42). After D24 spending and costs, O6's fund value fell 25.3% in 2008 and P(fall > 25% in 5 years) is 9.5%, above both limits. The committee should read the D7 limits as limits on investment performance.
 - **Component ES is estimated from 56 tail days.** SPY's 40.0% share has a 90% interval of 36.8%–43.7%.

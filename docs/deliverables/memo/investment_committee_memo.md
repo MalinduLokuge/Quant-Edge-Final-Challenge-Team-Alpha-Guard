@@ -25,6 +25,7 @@
 | A repeat of 2008 | about 23% ($2.3M) |
 | Energy inflation shock (oil +50%, stocks −30%) | about 19% ($1.9M); bonds fall too, and even 20% gold would cut this by under 1 point |
 | Tech-led crash (tech −65%, US stocks −40%) | about 17% ($1.7M) |
+| Same crash while inflation keeps rates up (bonds fall too) | about 23% ($2.3M), our worst scenario; within the 25% limit, beyond it if 1.5× larger |
 | A bad day (1 day in 100) | 1.4% ($139,000) or more; 2.2% ($220,000) on average on those days |
 | Over 10 years | 1-in-5 chance real value ends below 90%; 1-in-4 of a real spending cut over 10% |
 | Recovery after a 25%+ fall, still paying spending | price: 254 trading days after the 2008 trough, simulated median 3.0 years; purchasing power typically 15–20 years (about 42–46% chance within 15; 58% at 2.0% spending) |
