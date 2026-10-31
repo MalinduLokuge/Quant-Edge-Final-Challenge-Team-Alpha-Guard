@@ -29,6 +29,7 @@ Outputs: `research_t425_options.csv`, `research_t425_option_weights*.csv`, `rese
 - CMA full: rf 4.10%, ERP 5%, AGG = its yield (D25; AGG's yield stays locked in when rates fall, as in the approved D12 code).
 - Quarterly rebalancing; 10 bp trading costs.
 - D24 spending at 2.8% (D30); costs 0.2%; inflation 2.35% (10y breakeven).
+  - **Section G was rerun at 2.65% on 2026-10-31** (D30 revised, 2026-10-30); the earlier run used 2.8%. The O6 column now equals `sustainability_mc.csv` (the file behind `p3_decision`): median real value 1.082, P(below 90%) 21.4%, P(spending cut > 10%) 23.6%. Other sections keep their original 2.8% basis.
 
 **Options:**
 - **O1:** D26 + D27, re-selected with the corrected test.
@@ -68,12 +69,12 @@ Weights below are from this research run (`research_t425_option_weights*.csv`). 
 | D7 limits held in 2015–19 and 2020–26 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | Turnover / cost a year | 7.1% / 0.01% | 7.0% / 0.01% | 7.5% / 0.02% | 7.4% / 0.01% | 7.8% / 0.02% | 7.0% / 0.01% |
 | **G. Sustainability and recovery (T20.09)** | | | | | | |
-| Bootstrap 10 years: median real value | 1.076 | 1.067 | 1.056 | 1.077 | 1.035 | 1.066 |
-| P(real value < 90% after 10 years) | 23.0% | 23.4% | 24.2% | 22.9% | 26.9% | 23.4% |
-| P(real spending ever cut > 10%) | 25.4% | 25.2% | 26.0% | 25.5% | 28.2% | 25.2% |
-| P(DD ≥ 25% within 10 years) / median years to recover | 10.7% / 3.0 | 8.6% / 3.0 | 7.9% / 3.0 | 10.6% / 2.9 | 7.4% / 3.0 | 8.3% / 3.0 |
-| Real value after 10 years: no crisis / 25% fall, 3-year recovery | 1.056 / 0.817 | 1.047 / 0.814 | 1.038 / 0.809 | 1.057 / 0.818 | 1.018 / 0.800 | 1.046 / 0.813 |
-| SPY −25%, 3-year recovery: year-1 loss (stagflation) / real value year 10 (stagflation, recession) | −13.3% / 0.930, 0.943 | −12.9% / 0.927, 0.941 | −11.7% / 0.938, 0.951 | −13.0% / 0.936, 0.949 | −10.1% / 0.943, 0.955 | — / 0.927, 0.940 |
+| Bootstrap 10 years: median real value | 1.093 | 1.084 | 1.073 | 1.094 | 1.051 | 1.082 |
+| P(real value < 90% after 10 years) | 21.2% | 21.4% | 22.2% | 21.1% | 24.5% | 21.4% |
+| P(real spending ever cut > 10%) | 23.9% | 23.7% | 24.4% | 23.9% | 26.4% | 23.6% |
+| P(DD ≥ 25% within 10 years) / median years to recover | 10.7% / 3.0 | 8.6% / 3.0 | 7.9% / 3.0 | 10.6% / 2.9 | 7.4% / 3.0 | 8.2% / 3.0 |
+| Real value after 10 years: no crisis / 25% fall, 3-year recovery | 1.072 / 0.831 | 1.063 / 0.827 | 1.054 / 0.823 | 1.073 / 0.832 | 1.034 / 0.814 | 1.061 / 0.826 |
+| SPY −25%, 3-year recovery: year-1 loss (stagflation) / real value year 10 (stagflation, recession) | −13.3% / 0.944, 0.958 | −12.9% / 0.942, 0.955 | −11.7% / 0.953, 0.965 | −13.0% / 0.951, 0.964 | −10.1% / 0.958, 0.970 | -12.8% / 0.942, 0.955 |
 
 Policy 40/50/10 for reference: real value after 10 years 1.045 with no crisis; bootstrap median 1.065.
 
@@ -90,14 +91,14 @@ Policy 40/50/10 for reference: real value after 10 years 1.045 with no crisis; b
 - **Return:** +0.01 pp of expected return. Below O1 at rf 2.5% (5.16% vs 5.23%).
 - **Risk:** the worst P under long blocks (6.9% at 252 days); still breaches under the ×1.5 equity shock; equity concentration unchanged (SPY + XLK 60% of ES).
 - **Track record:** its significant 2015–26 edge (+0.70% a year) comes from GLD (+8.3 pp) and extra SPY (+4.4 pp) in 2020–26, when gold returned +25% (2020), +27% (2024) and +64% (2025). That cycle was seen before the gold floor was proposed, so the edge is not independent evidence.
-- **Recovery and sustainability results:** the same as O1 (median real value 1.077 vs 1.076).
+- **Recovery and sustainability results:** the same as O1 (median real value 1.094 vs 1.093).
 
 **Recovery and sustainability (T20.09).**
-1. **Spending policy matters more than the option.** At 2.8% spending, expected real growth is only about 0.5% a year. A 15–25% fall followed by a 3-year recovery leaves real value about 0.81–0.82 after 10 years for *every* option, against 1.04–1.06 with no crisis.
+1. **Spending policy matters more than the option.** At 2.65% spending, expected real growth is only about 0.5% a year. A 15–25% fall followed by a 3-year recovery leaves real value about 0.81–0.83 after 10 years for *every* option, against 1.03–1.07 with no crisis.
    - Recovery speed matters more than the depth of the fall: in view 1 the depth barely changes the outcome once the level is regained.
    - The D24 smoothing limits the real spending cut, about 19% at the 10-year low in that case.
 2. **Options differ by 1–3 pp of real value**, inside the uncertainty. O5 is weakest (lowest return); O1 and O4 lead with no crisis or a portfolio-level crisis; O3 and O5 lead when the *stock market* crashes (smaller year-1 losses).
-3. **About 1 in 4 bootstrap paths cut real spending by more than 10%** at some point over 10 years, and about 1 in 4 end below 90% of real value. This is the same for all options and is mainly a consequence of 2.8% spending with about 0.5% real growth.
+3. **About 1 in 4 bootstrap paths cut real spending by more than 10%** at some point over 10 years, and about 1 in 4 end below 90% of real value. This is the same for all options and is mainly a consequence of 2.65% spending with about 0.5% real growth.
 4. **Recovery from a 25% drawdown:** median about 3 years, p90 about 5.1–5.3 years. That matches the D4 5-year horizon.
 
 **Why O3 and O5 fail on 2014 inputs.**

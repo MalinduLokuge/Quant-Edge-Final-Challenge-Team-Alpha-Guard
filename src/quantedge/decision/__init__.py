@@ -93,6 +93,12 @@ def run() -> dict:
     for a in (0.95, 0.99):
         h = _get(ve, alpha=a, method="historical").iloc[0]
         rows += [(f"1-day VaR {a:.0%} historical", h["VaR"], "fraction", "P2"), (f"1-day ES {a:.0%} historical", h["ES"], "fraction", "P2")]
+    hv = {a: _get(ve, alpha=a, method="historical").iloc[0] for a in (0.95, 0.99)}
+    ok = (hv[0.99]["VaR"] <= lim["var99_1d_max"] and hv[0.99]["ES"] <= lim["es99_1d_max"]
+          and hv[0.95]["VaR"] <= lim["var95_1d_max"] and hv[0.95]["ES"] <= lim["es95_1d_max"])
+    rows += [("1-day limits (D7): VaR99 / ES99 / VaR95 / ES95", f"{lim['var99_1d_max']:.2%} / {lim['es99_1d_max']:.2%} / "
+              f"{lim['var95_1d_max']:.2%} / {lim['es95_1d_max']:.2%}", "", "D7"),
+             ("All four 1-day limits met (historical)", "yes" if ok else "NO", "", "D7")]
     e99 = _get(evt, alpha=0.99).iloc[0]
     rows += [("1-day VaR / ES 99% EVT", f"{e99['VaR']:.2%} / {e99['ES']:.2%}", "", "D8")]
     for reg in ("current", "long_run"):

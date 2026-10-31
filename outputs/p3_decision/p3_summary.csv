@@ -15,6 +15,8 @@ SPY share of 99% ES: estimate / 90% bootstrap interval / tail days (D27 cap 40%)
 1-day ES 95% historical,0.0119648373020818,fraction,P2
 1-day VaR 99% historical,0.0139192796071179,fraction,P2
 1-day ES 99% historical,0.02197942443173,fraction,P2
+1-day limits (D7): VaR99 / ES99 / VaR95 / ES95,1.70% / 2.50% / 0.90% / 1.45%,,D7
+All four 1-day limits met (historical),yes,,D7
 1-day VaR / ES 99% EVT,1.43% / 2.20%,,D8
 1-day VaR 99% GARCH-EVT (current regime),0.009429950136935,fraction,D28 monitoring model
 1-day VaR 99% GARCH-EVT (long_run regime),0.014841463342896,fraction,D28 monitoring model

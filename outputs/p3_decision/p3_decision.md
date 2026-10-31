@@ -29,6 +29,8 @@
 | 1-day ES 95% historical | 1.20% | P2 |
 | 1-day VaR 99% historical | 1.39% | P2 |
 | 1-day ES 99% historical | 2.20% | P2 |
+| 1-day limits (D7): VaR99 / ES99 / VaR95 / ES95 | 1.70% / 2.50% / 0.90% / 1.45% | D7 |
+| All four 1-day limits met (historical) | yes | D7 |
 | 1-day VaR / ES 99% EVT | 1.43% / 2.20% | D8 |
 | 1-day VaR 99% GARCH-EVT (current regime) | 0.94% | D28 monitoring model |
 | 1-day VaR 99% GARCH-EVT (long_run regime) | 1.48% | D28 monitoring model |
