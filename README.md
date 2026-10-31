@@ -9,8 +9,8 @@ This is a Python and Streamlit system that recommends how to invest a conservati
 | What | How |
 |---|---|
 | **Live app (no install)** | **https://quant-edge-final-challenge-team-alpha-guard-fosy5rmqd3c8u3plfr.streamlit.app/**. If it shows "This app has gone to sleep", click *Yes, get this app back up* and wait about a minute. |
-| **Submission code** | Branch **`submission/clean`**: https://github.com/MalinduLokuge/Quant-Edge-Final-Challenge-Team-Alpha-Guard/tree/submission/clean. Other branches are team working copies. |
-| **Run the app locally (one command after install)** | `git clone -b submission/clean https://github.com/MalinduLokuge/Quant-Edge-Final-Challenge-Team-Alpha-Guard.git`, then `cd Quant-Edge-Final-Challenge-Team-Alpha-Guard`, `pip install -r requirements.txt` (Python 3.12), `streamlit run app/Home.py`, and open http://localhost:8501 |
+| **Submission code** | Branch **`main`** (the default): https://github.com/MalinduLokuge/Quant-Edge-Final-Challenge-Team-Alpha-Guard. Other branches are team working copies. |
+| **Run the app locally (one command after install)** | `git clone https://github.com/MalinduLokuge/Quant-Edge-Final-Challenge-Team-Alpha-Guard.git`, then `cd Quant-Edge-Final-Challenge-Team-Alpha-Guard`, `pip install -r requirements.txt` (Python 3.12), `streamlit run app/Home.py`, and open http://localhost:8501 |
 | **Reproduce every result** | `python run_all.py --app` (1.5–2 h; regenerates `outputs/` exactly, then opens the app) |
 | **Read the deliverables** | [Technical report](docs/deliverables/report/technical_report.md) · [Committee memo](docs/deliverables/memo/investment_committee_memo.md) · [Tear sheet](docs/deliverables/tear_sheet/tear_sheet.md) · [AI disclosure](docs/AI_DISCLOSURE.md) |
 
