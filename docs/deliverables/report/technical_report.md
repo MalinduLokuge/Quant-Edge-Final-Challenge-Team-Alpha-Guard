@@ -6,7 +6,7 @@
 ---
 
 ## 1. Executive summary
-- **Recommendation:** invest the $10M in **AGG 61.1%, SPY 18.4%, XLK 10.0%, EFA 7.2%, XLE 3.0%, GLD 0.4%**, rebalance quarterly, and spend about **2.65% a year** (≈ $265k) through a smoothed rule. The portfolio is called O6 (D31 v2).
+- **Recommendation:** invest the $10M in **AGG 61.05%, SPY 18.42%, XLK 10.00% EFA 7.17%, XLE 2.97%, GLD 0.39%**, rebalance quarterly, and spend about **2.65% a year** (≈ $265k) through a smoothed rule. The portfolio is called O6 (D31 v2).
 - **Return:** expected 5.80% a year nominal, about 3.4% real.
 - **Downside:** worst historical drawdown 23.5% (limit 25%); P(drawdown > 25% within 5 years) 4.9% (limit 5%); worst stress loss 23.5% (2008 replay).
 - **Model trust:** the daily VaR model (GARCH-EVT) was selected on 2015–19 data and, on 2020–26, passed Kupiec and Christoffersen at 99% and 95%; its worst Basel window was yellow (7 breaches), never red. Out of sample, weights built on data to 2014 kept every D7 limit in 2015–26, but the walk-forward segment containing COVID reached a 1-day ES99 of 2.9% against the 2.5% full-cycle limit, as every portfolio did (§4.5). The 2015–26 data were seen during selection (§10).
