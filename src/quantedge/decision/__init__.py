@@ -116,7 +116,16 @@ def run() -> dict:
     rows += [("10-year bootstrap: median real value (start = 1)", mc["median_real_nav_end"], "", "T20.09"),
              ("10-year bootstrap: P(real value < 90%)", mc["P(real NAV end < 90%)"], "probability", "T20.09"),
              ("10-year bootstrap: P(real spending cut > 10% at some point)", mc["P(real spending ever cut > 10%)"], "probability", "T20.09"),
-             ("Median years to recover from a 25% drawdown", mc["DD25% median_years_to_recover"], "years", "T20.09")]
+             ("Median years for the portfolio's price to recover from a 25% drawdown (before spending and inflation)",
+              mc["DD25% median_years_to_recover"], "years", "T20.09")]
+    rec = pd.read_csv(t / "sustainability_recovery.csv")
+    base = _get(rec, portfolio=name, rule="smoothed")
+    b0 = base.loc[(base["spending_rate"] - m["spending_rate"]["base"]).abs().idxmin()]
+    low = base.loc[base["spending_rate"].idxmin()]
+    rows += [("After a fall of 25% or more: P(real value back within 15 years) / median years",
+              f"{b0['DD25% P(real back within 15y)']:.0%} / {b0['DD25% median_years_real']:.1f}", "", "T20.09 view 4, D39"),
+             ("Same at the lowest tested spending rate",
+              f"{low['DD25% P(real back within 15y)']:.0%} at {low['spending_rate']:.2%} spending", "", "T20.09 view 4, D39")]
     summary = pd.DataFrame(rows, columns=["item", "value", "unit", "source"])
     summary.to_csv(out / "p3_summary.csv", index=False)
 

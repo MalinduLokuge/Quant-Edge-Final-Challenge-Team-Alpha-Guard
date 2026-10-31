@@ -61,3 +61,29 @@ def test_bootstrap_recovery_is_reproducible():
     assert SU.recovery_times(a, (0.1,)) == SU.recovery_times(b, (0.1,))
     sp = SU.spending_paths(a, "smoothed", 0.03, 0.02, cost=0.002)
     assert sp["real_nav_end"].shape == (200,)
+
+
+def test_real_wealth_paths_spending_rules():
+    gq = np.ones((2, 12))                      # flat market, no costs, no inflation: NAV falls by spending only
+    real, spend = SU.real_wealth_paths(gq, 0.04, 0.0, 0.0)
+    assert real[0, 3] == pytest.approx(0.96) and np.allclose(spend[:, :4], 1.0)
+    s5 = 0.7 * 0.01 + 0.3 * 0.01 * 0.96        # year-2 quarterly D24 spending
+    assert real[0, 4] == pytest.approx(0.96 - s5)
+    gq[:, 0] = 0.5                              # 50% crash: the cap holds spending at rate x NAV
+    real_c, spend_c = SU.real_wealth_paths(gq, 0.04, 0.0, 0.0, rule="capped")
+    nav4 = real_c[0, 3]
+    assert spend_c[0, 4] == pytest.approx(nav4)  # capped quarterly spending = 0.01 x NAV, i.e. NAV relative to 0.01
+    real_d, _ = SU.real_wealth_paths(gq, 0.04, 0.0, 0.0)
+    assert real_c[0, -1] > real_d[0, -1]
+
+
+def test_crisis_start_and_real_recovery_years():
+    P = np.zeros((1, 63 * 12))
+    P[0, 63 * 2] = -0.30                        # 30% fall on day 126; peak is the day before
+    P[0, 63 * 4] = 1.001 / 0.7 - 1              # just above the old level two quarters later
+    st = SU.crisis_starts(P, 0.25, 63 * 12)
+    assert st == [(0, 0)]                       # flat before the fall: first day is the peak
+    assert SU.crisis_starts(P, 0.35, 63 * 12) == []
+    real, _ = SU.real_wealth_paths(SU.quarterly_gross(P), 1e-12, 0.0, 0.0)
+    assert SU.real_recovery_years(real, st)[0] == pytest.approx(1.0)   # quarter 4 end = 1 year after the peak quarter
+    assert np.isinf(SU.real_recovery_years(np.array([[1.0, 1.0, 0.7, 0.7, 0.8]]), [(0, 63 * 2)])[0])  # never regains 1.0

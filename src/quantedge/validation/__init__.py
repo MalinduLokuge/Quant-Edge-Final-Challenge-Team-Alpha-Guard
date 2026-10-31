@@ -9,7 +9,8 @@ Stress (T11): historical replays (stress_results.csv, stress_contributions.csv, 
 D9 v2 / D29 hypothetical scenarios (stress_hyp_*.csv; rows also added to stress_results.csv) and the D35 tech-led crash
 (look-through shock; stress_results.csv and stress_contributions.csv only).
 Limit stability (T10.12): D7 limits on train / validation / test / full periods → limit_stability.csv.
-Sustainability (T20.09): recovery from 15/20/25% falls while paying D24 spending → sustainability_*.csv.
+Sustainability (T20.09): recovery from 15/20/25% falls while paying D24 spending → sustainability_*.csv; view 4
+(D39) real recovery after crises on 25-year bootstrap paths → sustainability_recovery.csv.
 """
 from __future__ import annotations
 
@@ -244,6 +245,31 @@ def sustainability_tables(simple: pd.DataFrame, s: dict, ports: dict[str, pd.Ser
     return {"grid": pd.DataFrame(v1), "market": pd.DataFrame(v2), "mc": pd.DataFrame(v3)}
 
 
+def recovery_view(simple: pd.DataFrame, s: dict, ports: dict[str, pd.Series], final: str) -> pd.DataFrame:
+    """T20.09 view 4 (D39): real recovery after 20% / 25% crises on 25-year bootstrap paths. The final portfolio
+    under every spending case; the other portfolios under D24 at the base rate."""
+    su, m = s["sustainability"], s["mandate"]
+    rc, rate = su["recovery"], m["spending_rate"]["base"]
+    infl = float(pd.read_csv(config.OUTPUT_TABLES / "cma_sets_summary.csv", index_col=0).loc["inflation_breakeven", "full"])
+    mu = pd.read_csv(config.OUTPUT_TABLES / "cma_full.csv", index_col=0).reindex(simple.columns)["expected_arithmetic"]
+    R = (simple.to_numpy() + (mu.to_numpy() / cv_days() - simple.mean().to_numpy())).astype(np.float32)
+    days, window, batch = rc["years"] * 252, rc["crisis_window_years"] * 252, 1000
+    smooth = m["spending_rule"]["weight_on_last_year"]
+    out = []
+    for name, w in ports.items():
+        wv = w.reindex(simple.columns, fill_value=0.0).to_numpy().astype(np.float32)
+        gq, starts = [], {lvl: [] for lvl in rc["crisis_levels"]}
+        for k in range(rc["paths"] // batch):  # batches keep memory small; same seeds for every portfolio
+            P = R[SU.bootstrap(R, batch, days, s["risk"]["random_seed"] + 100 + k)] @ wv
+            gq.append(SU.quarterly_gross(P))
+            for lvl in starts:
+                starts[lvl] += [(i + k * batch, d) for i, d in SU.crisis_starts(P, lvl, window)]
+        cases = ([("smoothed", r) for r in rc["spending_rates"]] + ([("capped", rate)] if rc["capped_rule"] else [])
+                 if name == final else [("smoothed", rate)])
+        out.append(SU.recovery_table(np.vstack(gq), starts, cases, infl, m["extra_costs"]["base"], smooth).assign(portfolio=name))
+    return pd.concat(out, ignore_index=True)
+
+
 def cv_days() -> int:
     from quantedge.common.conventions import TRADING_DAYS
     return TRADING_DAYS
@@ -256,10 +282,12 @@ def run_sustainability(simple: pd.DataFrame, s: dict) -> dict:
     b = s["benchmarks"]["primary"]
     ports[f"[benchmark] {b['name']}"] = pd.Series(b["weights"]).reindex(simple.columns, fill_value=0.0)
     t = sustainability_tables(simple, s, ports)
+    t["recovery"] = recovery_view(simple, s, {"d26_selected": ports["d26_selected"], f"[benchmark] {b['name']}": ports[f"[benchmark] {b['name']}"]},
+                                  "d26_selected")
     for k, v in t.items():
         v.to_csv(config.OUTPUT_TABLES / f"sustainability_{k}.csv", index=False)
     print(f"[validation] sustainability: {len(t['grid'])} portfolio-value paths, {len(t['market'])} market paths, "
-          f"{int(t['mc']['paths'].sum())} bootstrap paths")
+          f"{int(t['mc']['paths'].sum())} bootstrap paths, real recovery on {s['sustainability']['recovery']['paths']} x 2 paths")
     return {f"sustainability_{k}": v for k, v in t.items()}
 
 

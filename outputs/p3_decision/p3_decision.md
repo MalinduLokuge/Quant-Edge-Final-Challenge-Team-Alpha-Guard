@@ -42,4 +42,6 @@
 | 10-year bootstrap: median real value (start = 1) | 1.08 | T20.09 |
 | 10-year bootstrap: P(real value < 90%) | 21.39% | T20.09 |
 | 10-year bootstrap: P(real spending cut > 10% at some point) | 23.61% | T20.09 |
-| Median years to recover from a 25% drawdown | 3.02 | T20.09 |
+| Median years for the portfolio's price to recover from a 25% drawdown (before spending and inflation) | 3.02 | T20.09 |
+| After a fall of 25% or more: P(real value back within 15 years) / median years | 46% / 17.8 | T20.09 view 4, D39 |
+| Same at the lowest tested spending rate | 58% at 2.00% spending | T20.09 view 4, D39 |

@@ -44,7 +44,7 @@
 
 **Model trust.** GARCH-EVT, selected on 2015–19 and tested once on 2020–26: 20 breaches vs 17.1 expected; passed Kupiec (p 0.49) and Christoffersen (p 0.62); Basel zone never red.
 
-**Key risks.** **Inflation shocks:** bonds and stocks fall together, as in 2022. **Concentration:** SPY and XLK carry about 60% of the tail risk; counting SPY's holdings, technology is 17.7% of the fund. **Rates:** returns are lower if rates fall. **Limited history:** only one 2008-type crisis is in the data.
+**Key risks.** **Inflation shocks:** bonds and stocks fall together, as in 2022. **Concentration:** SPY and XLK carry about 60% of the tail risk; counting SPY's holdings, technology is 17.7% of the fund. **Rates:** returns are lower if rates fall. **Slow real recovery:** after a fall of 25% or more, purchasing power is back within 15 years in 46% of simulations (spending is still paid). **Limited history:** only one 2008-type crisis is in the data.
 
 **Monitoring (no forced selling).**
 

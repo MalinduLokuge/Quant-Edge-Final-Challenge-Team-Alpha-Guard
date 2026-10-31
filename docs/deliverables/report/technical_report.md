@@ -226,8 +226,23 @@
   - median real value 1.08×;
   - 21% chance of ending below 90% of today's real value;
   - 24% chance of a real spending cut above 10% at some point;
-  - median recovery from a 25% drawdown 3.0 years (p90 5.3), within the 5-year horizon.
+  - median recovery of the portfolio's *price* from a 25% drawdown 3.0 years (p90 5.3), before spending and inflation.
 - **The options differ by only 1–3 pp here.** The spending policy matters more than the portfolio choice.
+
+**Real recovery after a crisis (view 4, D39; `sustainability_recovery.csv`).** On 8,000 bootstrap paths of 25 years, a crisis is O6's own drawdown reaching 20% or 25% within the first 10 years. Recovery means real value after spending and costs is back at its pre-crisis level.
+
+| Spending rule | P(back within 15 years) after ≥ 25% / ≥ 20% fall | Median years (≥ 25%) | Avg real spending, years 1–20 | P(real spending cut > 10%) |
+|---|---|---|---|---|
+| D24 at 2.65% (policy) | 46% / 64% | 17.8 | 2.9% of start value | 33% |
+| D24 at 2.45% | 50% / 68% | 15.5 | 2.7% | 30% |
+| D24 at 2.25% | 54% / 71% | 13.5 | 2.5% | 27% |
+| D24 at 2.00% | 58% / 76% | 11.5 | 2.3% | 23% |
+| D24 capped at 2.65% of current value | 49% / 66% | 15.8 | 2.8% | 48% |
+
+- **After a severe fall, purchasing power returns within 15 years only about half the time.** Without a crisis, real value grows only about 0.6% a year after spending, so a 25% loss is slow to rebuild: the fund would need about 1.9% a year to do it in 15 years.
+- **Lowering spending helps only slowly.** At 2.0%, the chance rises by 12 pp, at a cost of about 0.6% of start value in average real spending a year. A crisis cap gains 3 pp but makes real spending cuts above 10% much more likely.
+- **The portfolio cannot close the gap.** O6 is already the highest-return portfolio within D7. The policy benchmark recovers a little faster after a severe fall (52%) but suffers one more often (845 vs 629 crisis paths).
+- **Decision (D39):** keep O6 and 2.65%, set no recovery deadline, and review spending at the D23 "act" step (−20%).
 
 ## 9. Recommendation and monitoring (`outputs/p3_decision/`)
 **Recommendation:** O6 as above; spending about 2.65% via D24; quarterly rebalancing.

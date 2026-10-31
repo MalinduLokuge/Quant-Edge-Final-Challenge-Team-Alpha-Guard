@@ -127,6 +127,13 @@ sustainability:                 # T20.09: endowment sustainability and recovery 
   market_types: {stagflation: "A Energy stagflation (Hormuz II)", recession: "B AI unwind with recession"}  # factor mixes
   mc_paths: 20000               # view 3: block bootstrap, 10 years, 63-day blocks, CAPM-reset means
   mc_years: 10
+  recovery:                     # view 4 (D39, APPROVED 2026-10-31): real recovery after a crisis, same bootstrap
+    years: 25
+    paths: 8000
+    crisis_levels: [0.20, 0.25] # the portfolio's own drawdown from peak
+    crisis_window_years: 10     # the crisis must hit in years 0-10, so at least 15 years after it are observed
+    spending_rates: [0.0265, 0.0245, 0.0225, 0.0200]   # D24 sensitivity (final portfolio)
+    capped_rule: true           # also D24 never above the policy rate x current NAV (crisis cap), at the base rate
 risk_limits:                    # D7, APPROVED 2026-10-28
   max_drawdown: 0.25            # historical incl. 2008 replay
   max_prob_drawdown_breach_5y: 0.05   # P(DD > 25% within 5y), block bootstrap with CAPM means

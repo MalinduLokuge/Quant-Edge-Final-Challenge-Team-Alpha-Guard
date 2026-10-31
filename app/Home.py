@@ -54,9 +54,12 @@ st.markdown(f"""
 - **What it costs:** spending of about **{D.pct(float(val('Spending the portfolio supports')), 2)}** a year instead of 4%. The brief sets
   no spending rate. 4% would need far more risk (a 35–47% drawdown tolerance), which the committee's
   "avoid large losses" principle rules out.
-- **What can go wrong:** a 2008-type crash costs about **{D.pct(-float(val('Max drawdown incl. 2008 replay (limit 25%)')), 0)}**
-  and takes about **{float(val('Median years to recover from a 25% drawdown')):.0f} years** to recover. Inflation shocks hit both bonds and
-  stocks (2022). See the Stress and Sustainability pages.
+- **What can go wrong:** a 2008-type crash costs about **{D.pct(-float(val('Max drawdown incl. 2008 replay (limit 25%)')), 0)}**.
+  The portfolio's price typically recovers in about
+  **{float(val('Median years for the portfolio' + chr(39) + 's price to recover from a 25% drawdown (before spending and inflation)')):.0f} years**,
+  but while it keeps paying the university, purchasing power is back within 15 years only
+  **{val('After a fall of 25% or more: P(real value back within 15 years) / median years').split(' / ')[0]}** of the time (D39).
+  Inflation shocks hit both bonds and stocks (2022). See the Stress and Sustainability pages.
 - **How confident we are:** the daily risk model (GARCH-EVT) passed out-of-sample backtests in 2020–2026
   ({val('Backtest 2020–26, GARCH-EVT 99%: exceptions / expected / Kupiec p / worst Basel count').split(' / ')[0]} misses against
   {val('Backtest 2020–26, GARCH-EVT 99%: exceptions / expected / Kupiec p / worst Basel count').split(' / ')[1]} expected).

@@ -12,7 +12,12 @@ View 2  the stock market (SPY) falls d; each portfolio's loss follows from the s
         while the other factors revert linearly; a portfolio-specific carry  a = μ_p − β_p,SPY · μ_SPY  is earned
         every year, so after recovery each portfolio earns its own expected return.
 View 3  block bootstrap of 10-year daily paths (CAPM-reset means, 63-day blocks) with the same spending, costs
-        and inflation: drawdown frequencies, recovery times, real value and real spending outcomes.
+        and inflation: drawdown frequencies, recovery times, real value and real spending outcomes. Recovery
+        times here are the portfolio's own price (before spending and inflation).
+View 4  (D39) real recovery after a crisis on 25-year bootstrap paths: a crisis is the portfolio's own drawdown
+        reaching 20% / 25% within the first 10 years; recovery = real NAV after spending and costs back at its
+        level on the pre-crisis peak date. Reported for D24 at several spending rates and with a crisis cap
+        (D24 never above the policy rate × current NAV), with the real spending each case pays.
 """
 from __future__ import annotations
 
@@ -82,6 +87,75 @@ def recovery_times(P: np.ndarray, levels=(0.10, 0.15, 0.20, 0.25)) -> dict:
                              "p90_years_to_recover": np.quantile(dur, .9) / 252 if dur else np.nan,
                              "share_not_recovered_in_horizon": censored / hits if hits else np.nan}
     return out
+
+
+# ---------- view 4: real recovery after a crisis (D39) ----------
+def quarterly_gross(P: np.ndarray) -> np.ndarray:
+    """Gross quarterly growth factors (paths × quarters) of daily return paths."""
+    return np.stack([np.prod(1 + P[:, q * Q:(q + 1) * Q], axis=1) for q in range(P.shape[1] // Q)], axis=1)
+
+
+def real_wealth_paths(gq: np.ndarray, rate: float, infl: float, cost: float, rule: str = "smoothed",
+                      smooth: float = 0.7) -> tuple[np.ndarray, np.ndarray]:
+    """Quarter-end real NAV after spending and costs (start NAV 1), and real spending relative to the first year's.
+    rules: 'smoothed' D24, reset yearly; 'capped' D24 but never above rate × current NAV (crisis cap)."""
+    n, nq = gq.shape
+    V, sq = np.ones(n), np.full(n, rate / 4)
+    real, spend = np.empty((n, nq)), np.empty((n, nq))
+    for q in range(nq):
+        V = V * gq[:, q] * (1 - cost / 4)
+        if q % 4 == 0 and q > 0:
+            sq = smooth * sq * (1 + infl) + (1 - smooth) * rate / 4 * V
+            if rule == "capped":
+                sq = np.minimum(sq, rate / 4 * V)
+        V = V - sq
+        deflator = (1 + infl) ** ((q + 1) / 4)
+        real[:, q], spend[:, q] = V / deflator, sq / deflator / (rate / 4)
+    return real, spend
+
+
+def crisis_starts(P: np.ndarray, level: float, window_days: int) -> list[tuple[int, int]]:
+    """(path, pre-crisis peak day) for the first drawdown of at least `level` that is reached within `window_days`."""
+    nav = np.cumprod(1 + P.astype(np.float64), axis=1)
+    peak = np.maximum.accumulate(nav, axis=1)
+    hit = nav / peak - 1 <= -level
+    out = []
+    for i in np.where(hit[:, :window_days].any(axis=1))[0]:
+        t = int(np.argmax(hit[i]))
+        out.append((int(i), int(np.argmax(nav[i, :t + 1] >= peak[i, t] - 1e-12))))
+    return out
+
+
+def real_recovery_years(real: np.ndarray, starts: list[tuple[int, int]]) -> np.ndarray:
+    """Years from the pre-crisis peak until real NAV is back at its level that quarter (inf if not within the path)."""
+    out = []
+    for i, day in starts:
+        q0 = day // Q
+        base = real[i, q0 - 1] if q0 > 0 else 1.0
+        back = np.where(real[i, q0:] >= base)[0]
+        out.append(back[0] / 4 if len(back) else np.inf)
+    return np.array(out)
+
+
+def recovery_table(gq: np.ndarray, starts: dict, cases: list[tuple[str, float]], infl: float, cost: float,
+                   smooth: float = 0.7) -> pd.DataFrame:
+    """View 4 summary per (rule, rate): real value outcomes, real spending paid, and real recovery after crises."""
+    rows = []
+    for rule, rate in cases:
+        real, spend = real_wealth_paths(gq, rate, infl, cost, rule, smooth)
+        yrs = real.shape[1] // 4
+        row = {"rule": rule, "spending_rate": rate,
+               **{f"P(real NAV >= start) y{y}": float((real[:, 4 * y - 1] >= 1).mean()) for y in (10, 15, 20) if y <= yrs},
+               "median_real_nav_y20": float(np.median(real[:, 79])) if yrs >= 20 else np.nan,
+               "avg_real_spending_y1_20": float(spend[:, :80].mean() * rate),
+               "P(real spending cut > 10% ever)": float((spend[:, :80].min(axis=1) < 0.9).mean())}  # years 1–20
+        for lvl, st in starts.items():
+            t = real_recovery_years(real, st)
+            row |= {f"DD{lvl:.0%} crises": len(t), f"DD{lvl:.0%} P(real back within 10y)": float((t <= 10).mean()),
+                    f"DD{lvl:.0%} P(real back within 15y)": float((t <= 15).mean()),
+                    f"DD{lvl:.0%} median_years_real": float(np.median(t))}
+        rows.append(row)
+    return pd.DataFrame(rows)
 
 
 # ---------- deterministic paths ----------

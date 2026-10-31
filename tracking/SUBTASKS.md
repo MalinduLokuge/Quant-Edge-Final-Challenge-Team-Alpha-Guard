@@ -357,6 +357,7 @@ Stage: decision · Owner: All members · Priority: Core · Target: Week 3
 | T20.08 | Recalibrate D23 rolling-ES99 watch trigger (fires on 26% of days at 2.0%) | Approved 2026-10-30: watch rolling ES99 2.5% (was 2.0%; 20% → 9.6% of days) | Medium | All members | T10.12 | Done | Limit-stability finding 2026-10-29 |
 | T20.09 | Endowment sustainability & recovery stress test: 15/20/25% falls, 1/3/5/7-year and lost-decade recoveries, D24 at 2.8%, costs, taxes, inflation; market view; bootstrap | sustainability_*.csv + research_t425_eval_sustainability_*.csv | Critical | All members | T20.10 | Done | User request 2026-10-29 |
 | T20.10 | Audit fix: 5-year drawdown test seed-tuned (4k paths) → 32k paths, block-length sensitivity; D30 2.8% propagated to hurdle and spending | Pipeline rerun, D26 re-selected | Critical | Malindu | — | Done | Audit 2026-10-29 |
+| T20.11 | Real recovery after a crisis (T20.09 view 4, D39): 25-year bootstrap, P(real value back within 10/15 years) after 20% / 25% falls, D24 at 2.00–2.65% and a crisis cap; memo/report wording (price vs real recovery) | sustainability_recovery.csv, report §8, memo, tear sheet | High | Malindu | T20.09 | Done | Team review 2026-10-31 |
 
 ## T21 — Quality gates & compliance QA
 Stage: — · Owner: Malindu (coordinates) · Priority: Core · Target: Ongoing

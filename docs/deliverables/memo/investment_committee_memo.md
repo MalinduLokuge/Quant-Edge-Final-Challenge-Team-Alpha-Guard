@@ -8,7 +8,7 @@
 ### Recommendation: **ACCEPT the mandate as proposed**, with the risk limits unchanged and spending at about 2.65% a year
 *Verdict confirmed by the team on 2026-10-30 (D34), in the brief's wording (D14).*
 
-**What we propose.** Seven exchange-traded funds, rebalanced to these weights every quarter, with no tactical trading:
+**What we propose.** Seven exchange-traded funds, rebalanced quarterly to these weights, no tactical trading:
 
 | Bonds (AGG) | US stocks (SPY) | Technology (XLK) | International stocks (EFA) | Energy (XLE) | Gold (GLD) |
 |---|---|---|---|---|---|
@@ -16,21 +16,22 @@
 
 **Why this portfolio.** It is the highest-return mix within every limit the committee's principles imply: no fall beyond 25% from peak even in a 2008-style crash, less than a 5% chance of such a fall within any 5 years, and no single fund above 40% of the risk on the worst days. Its expected return of 5.8% a year (about 3.4% above inflation) comes from market-based expectations, not past returns. Rebuilt every three years since 2008 with only the data available at the time, it matched the policy benchmark's 7.3% a year with a smaller worst fall (−16% vs −19%).
 
-**What it means for spending.** The brief sets no spending rate. A 4% payout would need about 7.2% a year and falls of 35–47%, against the committee's view that "avoiding large losses is more important than maximizing gains". We recommend **about 2.65% of the fund (about $265,000 next year)**, the rate the portfolio can sustain while keeping its purchasing power. It is applied through a smoothed rule: 70% of last year's spending (inflation-adjusted) plus 30% of 2.65% of the current fund value. Spending more needs more risk or other income.
+**What it means for spending.** The brief sets no spending rate. A 4% payout would need about 7.2% a year and falls of 35–47%, against the committee's view that "avoiding large losses is more important than maximizing gains". We recommend **about 2.65% of the fund (about $265,000 next year)**, the rate the portfolio can sustain while keeping its purchasing power. It is applied through a smoothed rule: 70% of last year's spending (inflation-adjusted) plus 30% of 2.65% of the current fund value; more would need more risk or other income.
 
 **What can go wrong** (loss of the $10M):
 
 | Scenario | Loss |
 |---|---|
-| A repeat of 2008 | about 23% ($2.3M), recovered in about 3 years on average |
-| Energy inflation shock (oil +50%, interest rates up, stocks −30%); bonds fall too | about 19% ($1.9M) |
-| Technology-led crash (tech stocks −65%, US stocks −40%) | about 17% ($1.7M) |
+| A repeat of 2008 | about 23% ($2.3M) |
+| Energy inflation shock (oil +50%, stocks −30%) | about 19% ($1.9M); bonds fall too |
+| Tech-led crash (tech −65%, US stocks −40%) | about 17% ($1.7M) |
 | A bad day (1 day in 100) | 1.4% ($139,000) or more; 2.2% ($220,000) on average on those days |
-| Over 10 years | about 1-in-5 chance real value ends below 90%; 1-in-4 that real spending is cut by over 10% at some point |
+| Over 10 years | 1-in-5 chance real value ends below 90%; 1-in-4 of a real spending cut over 10% |
+| Rebuilding after a 25%+ fall, still paying spending | 46% chance purchasing power is back in 15 years (58% at 2.0% spending) |
 
 SPY and XLK together carry about 60% of the worst-day risk: counting what SPY itself holds, technology is about 18% of the fund.
 
-**How confident we are.** The daily risk model was chosen on 2015–2019 data only, then tested once on 2020–2026. It passed every standard test (20 breaches against 17 expected), and every limit also held on data the portfolio never saw. History contains only one 2008-type crash and no tech-led crash, hence the monitoring rules.
+**How confident we are.** The daily risk model was chosen on 2015–2019 data only, then tested once on 2020–2026. It passed every standard test (20 breaches against 17 expected), and every limit also held on data the portfolio never saw. History has only one 2008-type crash and no tech-led crash, hence the monitoring.
 
 **What we ask the committee to approve.**
 1. **The portfolio above,** rebalanced quarterly.
@@ -41,5 +42,5 @@ SPY and XLK together carry about 60% of the worst-day risk: counting what SPY it
    |---|---|---|---|---|
    | Action | report to the committee | risk model, stress tests and spending | formal decision on risk and spending | accept, adjust the risk limit, or reject |
 
-   A review is also triggered if technology, counting SPY's holdings, rises above 20% of the fund.
+   A review is also triggered if technology (counting SPY's holdings) exceeds 20% of the fund. There is no recovery deadline; the 20% step reviews spending.
 4. **An annual review** of assumptions, weights and spending.
