@@ -34,7 +34,7 @@
 | Energy stagflation, severe (oil +50%, stocks −30%) | 18.8% | 19.2% |
 | AI unwind with recession, severe (stocks −40%) | 14.2% | 13.0% |
 | Tech-led crash, severe (tech −65%, stocks −40%) | 16.7% | 14.7% |
-| Tech-led crash with inflation (bonds fall too), severe | 22.8% | 20.5% |
+| Tech crash + inflation (bonds fall too), severe | 22.8% | 20.5% |
 
 **Out of sample** (weights from earlier data only): return / Sharpe / worst drawdown
 
@@ -46,7 +46,7 @@
 
 No Sharpe difference is significant (Ledoit–Wolf, p 0.10–0.21); the edge is the smaller worst fall. 2015–26 was seen while choosing the rule; the COVID walk-forward segment hit a 1-day ES99 of 2.9% (limit 2.5%), as all portfolios did. **Model trust:** GARCH-EVT (chosen on 2015–19, tested once on 2020–26): 20 breaches vs 17.1 expected; Kupiec p 0.49, Christoffersen p 0.62; worst Basel window yellow, never red.
 
-**Key risks.** **Inflation:** bonds and stocks fall together (2022). **Concentration:** SPY + XLK carry about 60% of tail risk; look-through technology is 17.7% of the fund. **Rates:** lower returns if rates fall. **Slow real recovery:** price came back 254 trading days after the 2008 trough (simulated median 3.0 years); purchasing power, with spending paid, typically 15–20 years (42–46% chance within 15). One 2008-type crisis in the data.
+**Key risks.** **Inflation:** bonds and stocks fall together (2022), but bonds fall ~10% vs 43% for stocks in our worst case. **Concentration:** SPY + XLK carry about 60% of tail risk; look-through technology is 17.7% of the fund. **Rates:** lower returns if rates fall. **Slow real recovery:** price came back 254 trading days after the 2008 trough (simulated median 3.0 years); purchasing power, with spending paid, typically 15–20 years (42–46% chance within 15). One 2008-type crisis in the data.
 
 **Monitoring (no forced selling)**
 

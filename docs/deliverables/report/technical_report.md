@@ -274,6 +274,15 @@ Academic papers are cited as method references, not data.
   - Monte Carlo over shock sizes: 99th percentile 17.9%, with no draw above 25%.
   - **At 1.5× it breaches the limit:** 31.2% for the equity leg (tech −97.5%, beyond the dot-com fall of about 78%) and 25.9% for the rates leg. T alone at 1.5× is 25.1%. The benchmark also breaches (27.8%).
   - Less XLK was tested and not adopted (D35), and more gold barely helps (D43). The limit is kept, and the D23 ladder and the D37 technology trigger are the response.
+- **Why the 61% bond allocation is right, even when bonds fail as a hedge** (`research_v2_ai_inflation_whatif.csv`; O6 changed by hand, everything else fixed):
+  - In T + I, AGG falls 9.9% while O6's equities fall 43.4% on average. Bonds lose too, but four times less, which is what keeps the worst case inside the limit.
+  - Moving only 5 pp from AGG to SPY breaks the 25% limit in a 2008 repeat (−25.2%) and raises P(DD > 25% in 5 years) to 7.9%. At 10 pp, T + I itself breaches (25.9%). 60/40 loses 28.2% in T + I and 35.0% in 2008.
+  - The policy benchmark has the same expected return as O6 (5.79% vs 5.80%) but fails D7: −25.3% in 2008 and a 9.0% five-year probability. O6's mix earns the same return within the committee's limits.
+- **The 10% tech tilt is a deliberate cost:**
+  - It is why O6 loses 2.3 pp more than the benchmark in T + I.
+  - SPY is already at the 40% cap on its share of 99% ES (D27). Moving XLK into SPY would put SPY at 62% of tail risk.
+  - Moving XLK into AGG cuts the T + I loss to 17.3%, but costs 0.45 pp of expected return a year (about $45,000 of spending).
+  - We keep the tilt within its 10% cap, and the D37 trigger reviews it if look-through technology passes 20% of the fund.
 - **Scenario losses vs the 1-day ES limit:** a multi-month scenario loss is not comparable to the 1-day ES limit. Scaling GARCH-EVT VaR by stressed volatility gives 2.3–2.8% in the severe cases, above the 1.7% VaR limit, so the D23 review would trigger.
 
 ## 8. Spending sustainability and recovery (T20.09; `sustainability_*.csv`)
