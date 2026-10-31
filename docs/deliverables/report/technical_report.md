@@ -11,6 +11,11 @@
 - **Downside:** worst historical drawdown 23.5% (limit 25%); P(drawdown > 25% within 5 years) 4.9% (limit 5%); worst stress loss 23.5% (2008 replay).
 - **Model trust:** the daily VaR model (GARCH-EVT) was selected on 2015–19 data and passed every backtest on 2020–26.
 - **Why it is suitable:** it is the highest-return mix that passes every risk limit derived from the committee's principle that "avoiding large losses is more important than maximizing gains". It was checked out of sample and by a walk-forward that rebuilds it every three years with only past data.
+- **Evidence standard: observed is not proven.**
+  - The rule matched the policy benchmark's return with a smaller worst fall.
+  - Its higher Sharpe ratio is not statistically significant (Ledoit–Wolf p = 0.15), so we do not claim better risk-adjusted returns (§4.5).
+  - The same standard led us to reject a regime-switching VaR model that looked plausible but failed the tests (D41, §6).
+  - **Gold** (D43, §4.5): O6's 0.4% follows from CAPM's 4.6% for gold, and it is given no hedge credit. Raising gold's assumed return moves its weight up to the 20% cap. Even then, the 2022 and stagflation losses improve by under 1 pp, and the portfolio fails the D7 5-year test on our base assumptions. The gap is disclosed: O6 has no effective inflation hedge (§10).
 - **The main trade-off is spending.** A 4% payout needs about 7.2% a year, which no portfolio delivers without accepting falls of 35–47%. We therefore recommend about 2.65% and state it openly. The brief sets no spending rate.
 
 ## 2. Client, horizon and return objective
@@ -62,6 +67,14 @@
   - P(drawdown > 25% within 5 years) ≤ 5%, by block bootstrap with CAPM-reset means, **126-day blocks (D32)**, 32,000 paths.
   - 1-day ES99 ≤ 2.5%, VaR99 ≤ 1.7%, ES95 ≤ 1.45%, VaR95 ≤ 0.9%.
   - Every stress scenario ≤ 25%.
+  - **Basis (D42):** both drawdown tests are measured on **investment returns** (quarterly-rebalanced, before spending and costs). That is the official D7 test. The fund's value after D24 spending and costs is reported next to it as a disclosure, not as the limit:
+
+    | O6 (`d7_fund_value.csv`) | Investment returns (official D7) | Fund value after D24 spending and costs |
+    |---|---|---|
+    | Max drawdown incl. 2008 (limit 25%) | 23.5% (pass) | 25.3% |
+    | P(drawdown > 25% within 5 years) (limit 5%) | 4.9% (pass) | 9.5% |
+
+    - Spending deepens the fall: D24 keeps paying near last year's level while the value drops. On the fund-value basis O6 would exceed both limits. The policy benchmark exceeds them on both bases (25.3% / 9.0% on investment returns).
 - **D27:** no ETF above 40% of the 99% ES (Euler component ES).
 - **D33 precedence:** D7 > D6 > D27 > return target.
 - **Optimiser:** cvxpy with a CVaR linear programme for ES and conditional drawdown-at-risk (CDaR) for drawdown, then post-checks on the compounded, quarterly-rebalanced path (D22).
@@ -86,6 +99,7 @@
 - The 5-year test resamples history in blocks.
 - The Politis–White optimal block length is 5–14 days for returns but **120–160 days for absolute and squared returns** (volatility clustering).
 - Drawdowns depend on runs of turbulent days, so the test uses 126-day blocks instead of the original 63.
+- **This is a heuristic and a conservative choice, not a proof.** The Politis–White rule (with the Patton–Politis–White 2009 correction) is derived for stationary and circular bootstraps and for a specific statistic. Applying it to |r| and r² and using the result as a moving-block length is a judgement. The 21-, 63- and 252-day results are reported as sensitivity analysis.
 
 ### 4.5 Final selection and its audit (T4.25; `research_t425_*`)
 **Options.** Six options were evaluated under identical assumptions:
@@ -102,8 +116,16 @@
 - **(c) Two arbitrary thresholds.**
 
 **Result:**
-- **O6 is the only option that passes the 5-year test at both block lengths** on 2026 and 2014 inputs, and it survives a 1.5× larger equity shock in the severe scenarios.
+- **O6 passes the 5-year test at both block lengths** on 2026 and 2014 inputs, and it survives a 1.5× larger equity shock in the severe scenarios.
+  - Passing at 126 days is partly by construction: the rule picks the highest return whose 126-day probability is still ≤ 5% (O6 sits just under 5%), and 63-day blocks always give a lower probability. The 2014-input result (4.9%) is the less circular check.
 - **The gold floor (O4) was rejected.** Its +0.01 pp expected-return edge reverses if rates fall. Its 2020–26 outperformance came mostly from one gold cycle (+64% in 2025) that was seen before the option was proposed.
+- **Gold's 0.4% follows from its expected return, and more gold would not buy a hedge** (`research_v2_gold_return.csv`; the D26 rule re-run with only gold's expected return changed):
+  - At a zero real return (Erb & Harvey 2013) gold drops to 0%; at CAPM's 4.6% it is 0.4% (O6).
+  - Each extra percentage point assumed for gold adds about 9 pp of gold, taken from AGG: 4.7% at +0.5 pp, 9.2% at +1 pp, 18.0% at +2 pp, and the 20% cap from +4 pp.
+  - Even at 18–20% gold, the 2022 and stagflation losses improve by less than 1 pp (2022: −16.9% vs −17.8%), because gold replaces bonds, not equities.
+  - Under our base assumptions those portfolios fail the D7 5-year drawdown test (5.3–6.3% vs 5%), and supportable spending falls to 2.58%.
+  - The literature is mixed. Baur & Lucey (2010) find gold a safe haven only for about two weeks after a crash. Erb & Harvey (2013) find it an unreliable inflation hedge over practical horizons.
+  - We therefore keep CAPM for gold, take no hedge credit for the 0.4%, and disclose the gap (§10).
 
 | | O1 | O2 | O3 | O4 | O5 | **O6** |
 |---|---|---|---|---|---|---|
@@ -118,6 +140,12 @@
 - The rule was re-run at year ends 2008–2023 with only the data available then, and each portfolio was held for 3 years.
 - **The drawdown limit held in all six segments.**
 - Chained 2009–2026 result: 7.3% a year, Sharpe 0.89, worst drawdown −16.4%, against 7.3%, 0.75 and −19.2% for the policy benchmark.
+- **Sharpe differences are not significant** (Ledoit–Wolf 2008 test, robust to fat tails and volatility clustering; `research_v2_sharpe_test.csv`):
+  - walk-forward +0.14 (p = 0.15);
+  - 2015–19 +0.19 (p = 0.21);
+  - 2020–26 −0.19 (p = 0.10);
+  - O6 full sample +0.02 (p = 0.67, in-sample).
+  - The two portfolios hold the same ETFs (return correlation 0.91–0.96), so six to eighteen years cannot separate their Sharpe ratios. Our claim is the smaller drawdown within the D7 limit, not a better Sharpe ratio. The policy benchmark breaches that limit (−25.3% in 2008).
 - At the 2008 and 2011 origins, D27 could not be met together with D7, so the rule fell back to capped minimum variance (now written down as D33).
 
 ## 5. Risk measurement (P2; `p2_*.csv`)
@@ -139,6 +167,7 @@
 - **EVT confirms the historical tail** and extends it to 99.5%: VaR 1.85%, ES 2.79%.
 - **GARCH:** persistence 0.989 and a volatility half-life of 65 days. Today's calm regime gives a 99% VaR of 0.94%, against 1.48% in an average regime. This is why D7 is checked on full-cycle history.
 - **Attribution:** SPY carries 40% of the 99% ES, XLK 22%, EFA 16% and AGG 14%. Bonds are 61% of the capital but a small part of the tail risk.
+  - **SPY sits on the D27 cap by construction, and the share is an estimate.** It comes from 56 tail days. A 21-day block bootstrap gives SPY 40.0% with a 90% interval of 36.8%–43.7%, and 51% of resamples put it above 40% (`p2_attribution_ci.csv`; 63-day blocks give the same picture). Component-ES estimates are noisy (Tasche 2000; Yamai & Yoshiba 2002), so D27 is a target for the point estimate, not a guarantee.
 
 **Diversification benefit** (brief p.4; `p2_diversification.csv`). The undiversified risk is each ETF's own VaR or ES, weighted and added up, as if all holdings had their worst days together.
 
@@ -164,13 +193,29 @@
 - The rule was fixed before the test: pass Kupiec at 95% and 99% with no red Basel window, then rank by FZ0, using **2015–2019 only**.
 - **GARCH-EVT was selected and frozen** (commit 60e67e3) before 2020–26 was run.
 
-**O6, 99%, 2020–2026:**
+**Backtest portfolio (D26 rule on data to 2014), 99%, 2020–2026:**
 - **GARCH-EVT:** 20 exceptions against 17.1 expected; Kupiec p 0.49, Christoffersen p 0.62; worst Basel window 7 (yellow, never red).
+  - **ES:** Acerbi–Székely Z2 = 0.26, below the approximate 5% critical value of 0.70 (Acerbi & Székely 2014), so the ES forecast is not rejected. Severity ratio 1.09. FZ0 joint VaR/ES score −4.12, the best of the 7 methods (historical −3.55, normal −3.10).
 - **Others:**
   - historical: 26 exceptions, red zone;
   - normal: 30, red;
   - GARCH-t: 33, fails.
 - **Stress windows:** GARCH-EVT halves the exceptions of historical simulation in COVID and 2022, because its volatility rises within days.
+
+**A regime-switching alternative was tested and rejected (D41; research doc V2_regime_blend):**
+- **Idea (Team Guide §8):** classify each day as calm or elevated volatility (20-day vs 252-day σ, data up to t−1). Weight historical 70% / EVT 30% when calm and 30 / 70 when elevated.
+- **Integrity:** the design, 12 variants and the adoption rule were committed before the first run, and the baseline reproduced exactly.
+- **O6 (final weights), 99%, 2020–26:**
+  - blend: 22 exceptions, Christoffersen p 0.002, worst Basel window 12 (red);
+  - GARCH-EVT: 24, p 0.35, 8 (yellow).
+  - The 2014-weights portfolio above and the policy benchmark give the same result.
+- **Why it fails:** the detector flagged COVID, 2022 and 2025 on day 0, but historical and EVT share one 1,000-day window.
+  - A blend moves VaR by less than 15% on 95% of days.
+  - In the COVID weeks its 99% VaR averaged 1.25% against 4.37% for GARCH-EVT.
+- **Result:**
+  - The FZ0 score is worse than GARCH-EVT's in 2008–14, 2015–19 and 2020–26, for every variant.
+  - Even max(historical, EVT) stays red.
+  - GARCH-EVT is kept. This measures forecast quality only: O6's weights and returns do not change.
 
 **What backtesting cannot show:**
 - The first day of a sudden shock is still missed.
@@ -239,10 +284,23 @@
 | D24 at 2.00% | 58% / 76% | 11.5 | 2.3% | 23% |
 | D24 capped at 2.65% of current value | 49% / 66% | 15.8 | 2.8% | 48% |
 
-- **After a severe fall, purchasing power returns within 15 years only about half the time.** Without a crisis, real value grows only about 0.6% a year after spending, so a 25% loss is slow to rebuild: the fund would need about 1.9% a year to do it in 15 years.
+- **After a severe fall, the price recovers in about 1–3 years, but purchasing power typically takes 15–20 years and returns within 15 years only about half the time.**
+  - Historical: in 2008 O6's price was back at its pre-crisis level 254 trading days (about 1 year) after the trough (`stress_results.csv`; one crisis, −23.5%).
+  - Simulated: median 3.0 years (p90 5.3) for a 25% fall on the bootstrap paths, before spending and inflation. We give a range, not one year: the median moves by about 2 years between simulation seeds. Without a crisis, real value grows only about 0.6% a year after spending, so a 25% loss is slow to rebuild: the fund would need about 1.9% a year to do it in 15 years.
 - **Lowering spending helps only slowly.** At 2.0%, the chance rises by 12 pp, at a cost of about 0.6% of start value in average real spending a year. A crisis cap gains 3 pp but makes real spending cuts above 10% much more likely.
 - **The portfolio cannot close the gap.** O6 is already the highest-return portfolio within D7. The policy benchmark recovers a little faster after a severe fall (52%) but suffers one more often (845 vs 629 crisis paths).
-- **Decision (D39):** keep O6 and 2.65%, set no recovery deadline, and review spending at the D23 "act" step (−20%).
+- **A stricter target was tested and rejected (research doc V2_recovery_target).** We tested a 60% chance of real recovery within 15 years after a 25%+ fall, under a rule fixed before the run and with every D6/D7/D27 and stress test applied:
+  - **It can be met only by cutting spending.** It needs either 1.8% permanent spending (61%, confirmed on new seeds) or a crisis-time cut to 1.0% of value (62%). The second means about 30% of the normal budget for about 8 years.
+  - **No portfolio solves it.** No allocation within the limits reaches 60% at 2.65%: the best is Risk Parity at 48%. Lower-risk portfolios crash less often but recover more slowly.
+  - **O6 stays best on the long-run measure.** It keeps the highest chance that real value is at least today's after 15 years (67%).
+  - **A stronger recovery target is not a better policy** if meeting it undermines the university's funding purpose.
+- **Rebalancing assumption.** The table assumes daily rebalancing (constant weights). Under the approved quarterly rebalancing (D11), the chance after a 25%+ fall is about 42–45%, so we quote "about 42–46%".
+- **A crisis spending buffer was tested and rejected (D40, research doc V2_withdrawal_rule).** A cash or T-bill reserve is outside the seven-ETF universe, so we tested rules within O6, with AGG as the buffer, on the same paths and crises (P back within 15 years after a 25%+ fall, 8k / new-seed 16k paths):
+  - **Quarterly rebalancing (D11):** 42.0% / 44.6%.
+  - **Spend from AGG only and pause rebalancing from a 15% fall:** 41.2% / 43.3%. Rebalancing already buys equities with AGG after a fall; pausing it slows recovery.
+  - **Withdraw from overweight holdings, rebalance beyond ±5 pp:** 43.2% / 45.4%. The gain is small and the drifted weights were not re-tested on D7.
+  - Real spending is the same in all three. We keep D11 and add no buffer.
+- **Decision (D39, D40):** keep O6, 2.65% and quarterly rebalancing, set no recovery deadline, and review spending at the D23 "act" step (−20%).
 
 ## 9. Recommendation and monitoring (`outputs/p3_decision/`)
 **Recommendation:** O6 as above; spending about 2.65% via D24; quarterly rebalancing.
@@ -263,10 +321,15 @@ On 2004–2026 history the watch trigger was active 7–10% of the time; the −
 These are summarised from `docs/ASSUMPTIONS_LIMITATIONS.md`, which is identical to the app page:
 - **CAPM expected returns** with a 5% ERP. AGG's yield is assumed locked in when rates fall. Returns are lower if the T-bill falls (at a 2.5% T-bill and a 4% ERP, the supported spending is about 1.7%).
 - **History** contains one 2008-type crisis, so limits are targets, not guarantees. The bootstrap cannot create crises unlike the sample's.
-- **The 5-year drawdown test is sensitive to block length** (model uncertainty, reported).
+- **The 5-year drawdown test is sensitive to block length** (model uncertainty, reported). The 126-day block is a heuristic, conservative choice; 21/63/252 days are sensitivity analysis.
+- **Drawdown limits are measured on investment returns** (D42). After D24 spending and costs, O6's fund value fell 25.3% in 2008 and P(fall > 25% in 5 years) is 9.5%, above both limits. The committee should read the D7 limits as limits on investment performance.
+- **Component ES is estimated from 56 tail days.** SPY's 40.0% share has a 90% interval of 36.8%–43.7%.
 - **The factor stress model is linear**; XLE and GLD sensitivities are unstable.
 - **ETFs can trade below the value of their holdings in a panic** (AGG −6.8% in a day in 2008). The AGG floor and D24 avoid forced sales.
 - **Selection bias:** 2015–26 was examined during selection. The walk-forward and live monitoring are the defensible tests.
+  - More than 20 portfolio variants were compared (6 P1 candidates, options O1–O6, two walk-forward rules, the V2 recovery-target and tech-concentration variants), so the best observed Sharpe ratio is biased upward.
+  - A deflated Sharpe ratio (Bailey and López de Prado, 2014) would correct for the number of trials. It can only lower significance, and we already claim no Sharpe advantage (Ledoit–Wolf, §4.5), so no conclusion changes. O6 was chosen by the D26 rule (highest return within the D7 limits), not by Sharpe.
+- **No real inflation hedge.** O6 holds XLE 3.0% and GLD 0.4%. In a 2022-type shock or stagflation, bonds and stocks fall together (O6: −17.8% in 2022, −18.8% in the severe stagflation case). A larger gold weight would help by under 1 pp and fails D7 under our assumptions (§4.5), so the committee accepts this risk through D7 and the D23 ladder.
 - **Spending:** the brief sets no spending rate; 2.65% is the team's recommendation.
 
 ## 11. AI use and human validation

@@ -18,13 +18,38 @@ from quantedge.portfolio import optimise as op
 from quantedge.portfolio import return_objective as ro
 
 
+def nav_after_d24(rp: np.ndarray, rate: float, infl: float, smooth: float = 0.7, cost: float = 0.0,
+                  quarter: int = 63) -> np.ndarray:
+    """Daily fund value (start 1) on portfolio return paths rp (paths × days) after D24 spending and costs, paid
+    at each 63-day quarter end with the timing of validation.sustainability.spending_paths:
+        S₁ = rate/4;  every 4th quarter S = smooth·S·(1+infl) + (1−smooth)·rate/4·V;  V → V·(1−cost/4) − S.
+    rate = cost = 0 gives the investment-only NAV (the official D7 basis)."""
+    rp = np.atleast_2d(rp)
+    n, days = rp.shape
+    nav, V, spend = np.empty((n, days)), np.ones(n), np.full(n, rate / 4)
+    for q0 in range(0, days, quarter):
+        seg = V[:, None] * np.cumprod(1 + rp[:, q0:q0 + quarter], axis=1)
+        V = seg[:, -1]
+        if q0 + quarter <= days:  # full quarter: costs and spending leave at its end
+            q = q0 // quarter
+            V = V * (1 - cost / 4)
+            if q % 4 == 0 and q > 0:
+                spend = smooth * spend * (1 + infl) + (1 - smooth) * rate / 4 * V
+            V = V - spend
+            seg[:, -1] = V
+        nav[:, q0:q0 + quarter] = seg
+    return nav
+
+
 def forward_drawdown_prob(w: np.ndarray, daily: np.ndarray, mu_annual: np.ndarray, limit: float,
                           years: int = 5, n_paths: int = 4000, block: int = 63, seed: int = 7,
-                          batch: int = 4000) -> float:
+                          batch: int = 4000, spending: dict | None = None) -> float:
     """P(max drawdown > limit within `years`): moving-block bootstrap of daily returns with each asset's mean
     reset to its expected return (D7 definition; same method as the research scripts). Paths run in batches of
     `batch` (memory), batch k seeded `seed + k`, so every portfolio sees the same random paths (common random
-    numbers) and n_paths = batch reproduces the single-batch result. Monte Carlo s.e. = √(p(1−p)/n_paths)."""
+    numbers) and n_paths = batch reproduces the single-batch result. Monte Carlo s.e. = √(p(1−p)/n_paths).
+    spending: None = investment returns only (official D7); else nav_after_d24 kwargs (rate, infl, smooth, cost)
+    for the fund-value view on the same paths (D42)."""
     r = daily + (mu_annual / 252 - daily.mean(axis=0))
     days = years * 252
     hits, done, k = 0, 0, 0
@@ -33,7 +58,8 @@ def forward_drawdown_prob(w: np.ndarray, daily: np.ndarray, mu_annual: np.ndarra
         rng = np.random.default_rng(seed + k)
         starts = rng.integers(0, len(r) - block, size=(n, int(np.ceil(days / block))))
         idx = (starts[:, :, None] + np.arange(block)).reshape(n, -1)[:, :days]
-        nav = np.cumprod(1 + r[idx] @ w, axis=1)
+        rp = r[idx] @ w
+        nav = np.cumprod(1 + rp, axis=1) if spending is None else nav_after_d24(rp, **spending)
         hits += int(((nav / np.maximum.accumulate(nav, axis=1) - 1).min(axis=1) < -limit).sum())
         done, k = done + n, k + 1
     return hits / n_paths

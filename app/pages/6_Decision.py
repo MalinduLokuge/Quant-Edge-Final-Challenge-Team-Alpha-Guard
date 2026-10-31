@@ -51,11 +51,23 @@ gate = pd.DataFrame([{"Limit": n, "Portfolio": abs(v), "Limit value": abs(l), "H
 st.dataframe(gate.style.format({"Portfolio": "{:.2%}", "Limit value": "{:.2%}", "Headroom": "{:.2%}"}), hide_index=True, use_container_width=True)
 st.caption("Limits are on full-cycle history (D7). The AGG row is a minimum (8%), so its headroom is how far above the floor it sits.")
 
+fv = D.table("d7_fund_value")
+fv = fv[fv.portfolio == D.FINAL].set_index("basis")
+st.markdown("**Drawdown on two bases (D42).** The gate above uses investment returns, the official D7 basis. "
+            "The fund's own value after D24 spending and costs is shown for disclosure; it is not the limit.")
+st.dataframe(pd.DataFrame({"Max drawdown incl. 2008": -fv["max_drawdown_hist"], "P(drawdown > 25% in 5 years)": fv["P(DD>limit, 5y)"]})
+             .rename_axis("Basis").style.format("{:.1%}"), use_container_width=True)
+
 st.subheader("How it was validated")
 st.markdown("""
 - **Out-of-sample limits (T10.12):** portfolios built with data to 2014 kept every D7 limit in 2015–19 and 2020–26.
 - **Walk-forward (T20.07):** the selection rule re-run every 3 years from 2008 with only past data. The drawdown limit held
-  in all six segments; 7.3% a year, Sharpe 0.89 vs 0.75 for the policy benchmark.
+  in all six segments; 7.3% a year, Sharpe 0.89 vs 0.75 for the policy benchmark. The Sharpe gap is **not statistically
+  significant** (Ledoit–Wolf p = 0.15): the proven edge is the smaller worst fall (−16.4% vs −19.2%), not better risk-adjusted return.
+- **Rejected after testing (D41):** a regime-switching VaR blend looked plausible but failed the backtests; GARCH-EVT was kept.
+- **Gold tested, not forced (D43):** the 0.4% follows from CAPM's 4.6% for gold. Assuming more moves gold up to its 20% cap,
+  but 18–20% gold improves 2022 and stagflation losses by under 1 pp and fails the 5-year drawdown test on base assumptions.
+  The 0.4% is not counted as a hedge; O6 has no effective inflation hedge (disclosed).
 - **Risk model (D28):** GARCH-EVT chosen on 2015–19 only, then tested once on 2020–26: passed Kupiec, Christoffersen and Basel.
 - **Audit (2026-10-29):** a seed-tuned drawdown test and unpropagated spending were found and fixed; the selection was redone
   (research doc T4.25, corrections table).""")

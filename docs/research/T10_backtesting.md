@@ -42,6 +42,8 @@ On validation data only, for the D26 portfolio:
 ## 4. Test period 2020-01-02 → 2026-10-19 (run once, after the freeze; commit 60e67e3)
 **Reproduce:** `python run_all.py --only validation` (validation.test_unlocked: true) → `backtest_forecasts_test.csv`, `backtest_results_test.csv`.
 
+> **Note 2026-10-31 (V2_regime_blend.md B1):** the tables in §2 and §4 were computed with the p1_train D26 weights before D32 (commit b9bc407, 126-day blocks) re-selected them. The committed `backtest_results_*.csv` hold the current weights: D26-train GARCH-EVT 14 validation / 20 test exceptions (here 13 / 22), historical 14 / 26, EVT 13 / 20. D28 still selects GARCH-EVT on the current validation results (FZ0 −4.747 vs GARCH-t −4.735). The CSVs are the source of truth; the numbers below are kept as the record of the original run.
+
 **D26 selected portfolio, 99% 1-day (1,708 days, 17.1 exceptions expected):**
 
 | Method | Exceptions | Kupiec p | Christoffersen ind. p | Cond. cov. p | Worst Basel window | Red windows | ES severity | FZ0 |
@@ -69,5 +71,6 @@ At 95%: GARCH-EVT 95 exceptions vs 85.4 expected (Kupiec p 0.29, cond. cov. p 0.
 1. **The validation choice held out of sample.** GARCH-EVT passes every test at 99% and 95% in 2020–2026, including Christoffersen, and has the best joint VaR/ES score. The selection was not tuned to the test data.
 2. **Static models break in regime changes.** Historical simulation lagged in COVID (8 exceptions in 51 days) and 2022 (8 in 209) and reached the Basel red zone. GARCH-EVT halved the stress-window exceptions because its σ rises within days.
 3. **Losses on exception days were 6% beyond the GARCH-EVT ES forecast** (severity 1.06), close to the 1.0 target. The normal model's ES was 53% too low.
+   - **Current weights (QA review 2026-10-31, `backtest_results_test.csv`):** severity 1.09; **Acerbi–Székely Z2 = 0.26**, below the approximate 5% critical value of 0.70 (Acerbi & Székely 2014), so the ES forecast is not rejected; FZ0 −4.12, the best of the 7 methods. Normal: Z2 1.95, a clear rejection. The Z1 test (conditional on exceptions) is not computed.
 4. **Still not perfect:** 22 exceptions against 17.1 expected (not statistically significant), and the first day of a shock is still missed (e.g. 24 Feb 2020, 3–4 Apr 2025). This is why D7 limits are set on full-cycle history and the D23 action ladder reacts to drawdowns, not to VaR alone.
 5. **Monitoring model:** GARCH-EVT is the VaR model for the memo, the app's backtest page and the D23 watch triggers; historical and EVT stay as full-cycle limit checks (D7).

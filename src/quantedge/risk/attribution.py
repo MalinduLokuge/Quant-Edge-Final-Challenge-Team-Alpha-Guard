@@ -49,6 +49,35 @@ def parametric_components(returns: pd.DataFrame, weights: pd.Series, alpha: floa
     return pd.Series(comp, index=returns.columns, name="component_VaR_normal")
 
 
+def es_share_interval(returns: pd.DataFrame, weights: pd.Series, alpha: float = 0.99, reps: int = 2000,
+                      block: int = 21, seed: int = 42, cap: float | None = None) -> pd.DataFrame:
+    """Estimation error of the component-ES shares (D27 QA): moving-block bootstrap of whole days (all ETFs
+    together, so co-movement in the tail is kept), shares re-estimated on each resample. Returns the point share,
+    a 90% percentile interval, the bootstrap s.e., the number of tail days and, with `cap`, P(share > cap)."""
+    w = weights.reindex(returns.columns, fill_value=0.0).to_numpy()
+    contrib = -(returns.to_numpy() * w)
+    n = len(contrib)
+    rng = np.random.default_rng(seed)
+
+    def shares(c):
+        loss = c.sum(axis=1)
+        tail = loss >= np.quantile(loss, alpha)
+        return c[tail].mean(axis=0) / loss[tail].mean()
+
+    boot = np.empty((reps, len(w)))
+    k = int(np.ceil(n / block))
+    for i in range(reps):
+        idx = (rng.integers(0, n - block, k)[:, None] + np.arange(block)).ravel()[:n]
+        boot[i] = shares(contrib[idx])
+    out = pd.DataFrame({"pct_ES": shares(contrib), "lo90": np.quantile(boot, 0.05, axis=0),
+                        "hi90": np.quantile(boot, 0.95, axis=0), "se": boot.std(axis=0, ddof=1)}, index=returns.columns)
+    if cap is not None:
+        out["P(share > cap)"] = (boot > cap).mean(axis=0)
+    loss = contrib.sum(axis=1)
+    out.attrs.update(n_tail=int((loss >= np.quantile(loss, alpha)).sum()))
+    return out.assign(alpha=alpha, n_tail=out.attrs["n_tail"], block=block, reps=reps).rename_axis("etf").reset_index()
+
+
 def attribution_table(returns: pd.DataFrame, weights: pd.Series, alphas=(0.95, 0.99)) -> pd.DataFrame:
     rows = []
     for a in alphas:

@@ -84,6 +84,12 @@ def run() -> dict:
         ("Max drawdown incl. 2008 replay (limit 25%)", float(d["max_drawdown"]), "fraction", "D7"),
         ("P(drawdown > 25% within 5 years) (limit 5%)", float(d["P(DD>limit, 5y)"]), "probability", "D7 / D32, 126-day blocks"),
     ]
+    fv = _get(pd.read_csv(t / "d7_fund_value.csv"), portfolio=name).set_index("basis").iloc[-1]  # D42: disclosed, not the D7 test
+    rows += [("Fund value after D24 spending and costs: max drawdown incl. 2008 / P(drawdown > 25% within 5 years)",
+              f"{-fv['max_drawdown_hist']:.1%} / {fv['P(DD>limit, 5y)']:.1%}", "", "D42 disclosure (official D7 = investment returns)")]
+    ci = _get(pd.read_csv(t / "p2_attribution_ci.csv"), etf="SPY", block=21).iloc[0]
+    rows += [("SPY share of 99% ES: estimate / 90% bootstrap interval / tail days (D27 cap 40%)",
+              f"{ci['pct_ES']:.1%} / {ci['lo90']:.1%}–{ci['hi90']:.1%} / {int(ci['n_tail'])}", "", "D27 estimation error")]
     for a in (0.95, 0.99):
         h = _get(ve, alpha=a, method="historical").iloc[0]
         rows += [(f"1-day VaR {a:.0%} historical", h["VaR"], "fraction", "P2"), (f"1-day ES {a:.0%} historical", h["ES"], "fraction", "P2")]

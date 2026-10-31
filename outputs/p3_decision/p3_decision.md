@@ -23,6 +23,8 @@
 | Volatility | 8.19% | shrunk covariance |
 | Max drawdown incl. 2008 replay (limit 25%) | -23.48% | D7 |
 | P(drawdown > 25% within 5 years) (limit 5%) | 4.94% | D7 / D32, 126-day blocks |
+| Fund value after D24 spending and costs: max drawdown incl. 2008 / P(drawdown > 25% within 5 years) | 25.3% / 9.5% | D42 disclosure (official D7 = investment returns) |
+| SPY share of 99% ES: estimate / 90% bootstrap interval / tail days (D27 cap 40%) | 40.0% / 36.8%–43.7% / 56 | D27 estimation error |
 | 1-day VaR 95% historical | 0.71% | P2 |
 | 1-day ES 95% historical | 1.20% | P2 |
 | 1-day VaR 99% historical | 1.39% | P2 |

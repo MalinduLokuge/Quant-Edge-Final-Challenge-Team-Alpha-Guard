@@ -238,6 +238,8 @@ Reproduce: `python scripts/research_d3_d7.py --gold` → `research_gold_assessme
 - But gold has its own long drawdowns (−45%, 2011–15), which is why sweep B shows full-history drawdown rising when gold *replaces* bonds in large amounts.
 - **Conclusion:** the evidence supports a **5–15% strategic role** (benchmark 10%, D6 cap 20%), not a large allocation. Its expected return stays at the CAPM value, and its hedge value is shown through stress tests, not by inflating its expected return.
 
+> **Superseded for the final portfolio (note 2026-10-31).** This was a design-stage reading of hedge behaviour, used to set the D6 range (gold 0–20%). The final selection tested a 5% gold floor directly (O4, T4_25) and rejected it: the expected-return edge reverses when rates fall, and the 2020–26 gain came from one gold cycle already seen. A robustness run with gold-specific expected returns is in V2_gold_return.md. O6 holds 0.4%, and the documents give it no hedge credit.
+
 ## 8. Revision 2026-10-28b: model warnings fixed (supersedes figures in §4, §5b, §5c)
 | Warning | Fix in code | Effect |
 |---|---|---|

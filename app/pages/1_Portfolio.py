@@ -57,4 +57,6 @@ cols = ["CAGR", "volatility", "Sharpe", "Sortino", "beta", "Jensen_alpha", "Trey
 fmt = {c: "{:.2%}" for c in ("CAGR", "volatility", "Jensen_alpha", "max_drawdown")} | {c: "{:.2f}" for c in ("Sharpe", "Sortino", "beta", "Treynor", "Information_ratio", "Calmar")}
 st.dataframe(kk[cols].style.format(fmt, na_rep="—"), use_container_width=True)
 st.caption("Sharpe / Sortino: excess return over the 3-month T-bill per unit of risk. Beta, Jensen's alpha and Treynor: vs SPY "
-           "(CAPM market). Information ratio: vs the Policy 40/50/10 benchmark. Calmar: return ÷ worst drawdown.")
+           "(CAPM market). Information ratio: vs the Policy 40/50/10 benchmark. Calmar: return ÷ worst drawdown. "
+           "Sharpe differences against the policy benchmark are not statistically significant in any period "
+           "(Ledoit–Wolf test, p 0.10–0.67; research_v2_sharpe_test.csv).")

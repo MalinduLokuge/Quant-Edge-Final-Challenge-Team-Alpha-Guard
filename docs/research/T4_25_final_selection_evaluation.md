@@ -38,9 +38,11 @@ Outputs: `research_t425_options.csv`, `research_t425_option_weights*.csv`, `rese
 - **O5:** Risk Parity.
 - **O6 (new):** D26 with the 5-year test run at the data-driven block length (126 days, §2).
 
+Weights below are from this research run (`research_t425_option_weights*.csv`). The final O6 weights in the deliverables come from the pipeline's own D26 run (`p1_final_weights.csv`, `p3_portfolio.csv`: AGG 61.05, SPY 18.42, XLK 10.00, EFA 7.17, XLE 2.97, GLD 0.39). The two runs bisect the return target separately and differ by at most 0.05 pp per ETF.
+
 | | O1 | O2 | O3 | O4 | O5 | **O6** |
 |---|---|---|---|---|---|---|
-| Weights | AGG 58.5, SPY 19.4, XLK 10.0, EFA 8.8, XLE 3.1, GLD 0.2 | AGG 60.6, SPY 18.6, XLK 10.0, EFA 7.4, XLE 3.0 | AGG 56.7, SPY 13.5, XLK 8.5, EFA 7.7, GLD 6.6, XLE 4.4, EEM 2.6 | AGG 53.7, SPY 19.3, XLK 10.0, EFA 8.9, GLD 5.0, XLE 3.0 | AGG 54.8, GLD 13.1, SPY 7.6, XLK 6.9, EFA 6.7, XLE 5.7, EEM 5.3 | **AGG 61.0, SPY 18.4, XLK 10.0, EFA 7.2, XLE 3.0** |
+| Weights | AGG 58.5, SPY 19.4, XLK 10.0, EFA 8.8, XLE 3.1, GLD 0.2 | AGG 60.6, SPY 18.6, XLK 10.0, EFA 7.4, XLE 3.0, GLD 0.3 | AGG 56.7, SPY 13.5, XLK 8.5, EFA 7.7, GLD 6.6, XLE 4.4, EEM 2.6 | AGG 53.7, SPY 19.3, XLK 10.0, EFA 8.9, GLD 5.0, XLE 3.0 | AGG 54.8, GLD 13.1, SPY 7.6, XLK 6.9, EFA 6.7, XLE 5.7, EEM 5.3 | **AGG 61.0, SPY 18.4, XLK 10.0, EFA 7.2, XLE 3.0, GLD 0.4** |
 | **A. Return and spending** | | | | | | |
 | Expected return (base) | 5.89% | 5.81% | 5.73% | 5.90% | 5.54% | 5.80% |
 | Spending supported (required 5.95% at 2.8%) | 2.74% | 2.67% | 2.58% | 2.75% | 2.40% | 2.65% |
@@ -82,6 +84,7 @@ Policy 40/50/10 for reference: real value after 10 years 1.045 with no crisis; b
 - Drawdowns are driven by runs of turbulent days, so the dependence that matters for a 5-year drawdown test lasts about half a year. The approved 63-day blocks cut these runs in half and understate drawdown risk.
 - At 126 days, P rises by 1.1–1.9 pp for every option.
 - **This is evidence, not a chosen margin.** It is a reason to run the D7 test at about 126 days (a D7 *method* change, which the team must approve).
+- **Caveat (QA review 2026-10-31):** `optimal_block_length` implements Politis–White with the Patton–Politis–White (2009) correction, which is derived for stationary and circular bootstraps and a specific statistic. Using its result on |r| and r² as a *moving*-block length is a heuristic. Read 126 days as a conservative choice and the 21/63/252-day results as sensitivity analysis, not proof. O6 then passes at 126 days partly by construction, because D26 selects to that test.
 
 **Does O4's gold floor help?** No.
 - **Return:** +0.01 pp of expected return. Below O1 at rf 2.5% (5.16% vs 5.23%).
@@ -180,7 +183,7 @@ Policy 40/50/10 for reference: real value after 10 years 1.045 with no crisis; b
 1. **The drawdown limit held in every out-of-sample segment** for both rules (worst −16.4%, 2022).
    - The 1-day ES99 limit was exceeded only in the 2017→2020 segment, which contains COVID. It was exceeded by every portfolio, the benchmark included.
    - ES99 is a full-cycle limit (D7). A 3-year window around COVID is not a full cycle; D23 treats such a breach as a review trigger.
-2. **The rule matched the policy benchmark's return** (7.3% a year) with lower volatility (6.7% vs 8.0%), a higher Sharpe ratio (0.89 vs 0.75) and a shallower worst drawdown (−16.4% vs −19.2%). That fits the conservative mandate.
+2. **The rule matched the policy benchmark's return** (7.3% a year) with lower volatility (6.7% vs 8.0%), a higher Sharpe ratio (0.89 vs 0.75) and a shallower worst drawdown (−16.4% vs −19.2%). That fits the conservative mandate. The Sharpe gap is not statistically significant (Ledoit–Wolf p = 0.15, V2_sharpe_significance), so the claim is the smaller drawdown, not better risk-adjusted return.
 3. **The D32 test (R126) costs about 0.2% a year** against R63 over 2009–2026, with the same worst drawdown. The difference is small and within noise; the robustness gain is in the tail-risk test, not in realised history.
 4. **Interaction found:** at the 2008 and 2011 origins the D27 cap (≤ 40% of ES per ETF) could not be met together with D7. With the 2008 crash in the sample, AGG carried about 62% of the low-risk portfolio's ES, and adding equity to dilute it would breach the 25% drawdown. The rule fell back to capped minimum variance, which was a safe outcome.
    - **Recommendation:** add an explicit precedence rule, "if D27 and D7 conflict, D7 wins and D27 is reported", to D27's text. This would be a documentation change, not a new parameter.

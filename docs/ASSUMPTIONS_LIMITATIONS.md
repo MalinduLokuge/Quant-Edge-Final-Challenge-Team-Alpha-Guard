@@ -22,6 +22,11 @@ The Streamlit page and the report section are both built from this file, so they
 - The base case uses today's T-bill (4.10%) for the whole 5-year horizon. Scenarios at 3.0% and 2.5% lower every CAPM expected return one-for-one (60/40: 6.59% → 4.99%). AGG's true sensitivity is smaller, because its current yield is locked in for about 6 years of duration.
 - Variance drag uses daily-return covariance, consistent with the VaR/ES framework. Monthly returns give lower volatility (60/40: 9.4% vs 11.5%) and are reported for information only.
 - Gold's expected return stays at its CAPM value (~4.6%). Its hedge value (+24.9% in the GFC, −8.8% vs −15% for AGG in 2022) is shown through stress tests, not by raising its expected return.
+- **Gold weight vs gold assumption** (`research_v2_gold_return.csv`):
+  - O6's 0.4% gold follows from the 4.6% assumption: 0% at a zero real return (Erb & Harvey 2013), 9% at +1 pp, and the 20% cap from +4 pp.
+  - Even 18–20% gold improves the 2022 and stagflation losses by less than 1 pp, and fails the D7 5-year test under the base assumptions.
+  - The evidence on gold as a hedge is mixed (Baur & Lucey 2010: a short-lived safe haven; Erb & Harvey 2013: an unreliable inflation hedge). The 0.4% is not described as a hedge.
+- **O6 has no effective inflation hedge** (XLE 3.0%, GLD 0.4%). It loses 17.8% in a 2022-type shock and 18.8% in severe stagflation, when bonds and stocks fall together; the committee accepts this through D7 and the D23 ladder.
 
 ## Benchmarks & risk limits (D3, D6, D7)
 - 1-day risk limits (% NAV): VaR99 ≤ 1.7%, ES99 ≤ 2.5% (binding); VaR95 ≤ 0.9%, ES95 ≤ 1.45% (reported). Limits sit at 99% because 95% losses occur about 13 days a year (normal noise), while 99% captures the rare crisis days, and Basel's traffic light is defined at 99%.
@@ -41,9 +46,12 @@ The Streamlit page and the report section are both built from this file, so they
 
 ## Five-year drawdown test and recovery (audit 2026-10-29)
 - P(drawdown > 25% within 5 years) is a block-bootstrap estimate. It now uses 32,000 paths (Monte Carlo error about ±0.12 pp at 5%). With 4,000 paths and one seed, the selection rule had tuned itself to simulation noise.
-- **The estimate depends on the block length.** Longer blocks keep bear markets intact and raise P. The test now uses **126-day blocks (D32)**, because the data's own volatility clustering lasts about 120–160 days (Politis–White). The final portfolio scores 4.94% (limit 5%); an independent re-run with other random seeds gave 4.58%. It sits close to the limit by design (D26 picks the highest-return portfolio that passes).
+- **The estimate depends on the block length.** Longer blocks keep bear markets intact and raise P. The test now uses **126-day blocks (D32)**, because the data's own volatility clustering lasts about 120–160 days (Politis–White). The final portfolio scores 4.94% (limit 5%); an independent re-run with other random seeds gave 4.58%. It sits close to the limit by design (D26 picks the highest-return portfolio that passes), so passing at 126 days is partly by construction.
+- **The 126-day block is a heuristic, conservative choice, not a proof.** The Politis–White rule (Patton–Politis–White 2009 correction) is derived for stationary and circular bootstraps and a specific statistic. Using its result on |r| and r² as a moving-block length is a judgement, so 21/63/252 days are reported as sensitivity analysis.
+- **Both drawdown tests are measured on investment returns, the official D7 basis (D42).** Spending and costs are not withdrawn. On the fund's value after D24 spending and costs, O6 fell 25.3% in 2008 and P(fall > 25% within 5 years) is 9.5%, above both limits (`d7_fund_value.csv`). D24 keeps paying close to last year's amount while the value falls, which deepens the drawdown.
 - In falling-rate scenarios, AGG keeps its current yield (bonds held over the horizon lock it in). New money would earn less, so low-rate results flatter bond-heavy portfolios slightly.
 - **Spending at about 2.65% (D30) leaves only about 0.5% a year of expected real growth.** After any large fall the fund regains its *nominal* value within a few years, but its *real* value can take much longer (`sustainability_*.csv`). Recovery paths are stylised scenarios, not forecasts.
+- **The real-recovery figures assume daily rebalancing.** With the approved quarterly rebalancing (D11), the chance of regaining real value within 15 years after a 25%+ fall is about 42–45%, not 46% (D39 note, D40). A crisis buffer that pays spending from AGG and pauses rebalancing does not improve this (D40).
 
 ## Models
 - **Daily losses are far from normal.** Excess kurtosis is about 25, and Jarque–Bera and Ljung–Box tests reject normality and independence (`p2_diagnostics.csv`).
@@ -55,6 +63,8 @@ The Streamlit page and the report section are both built from this file, so they
 - **Expected returns come from a one-factor CAPM** with an assumed 5% equity premium. The data alone cannot pin the premium down (95% range 3.5–15.8%). Expected returns are the least certain input, which is why the selection rule tops out at the risk limits instead of chasing return.
 - **Correlations and volatilities are estimated over 2004–2026 as if stable.** They are not: the stock–bond correlation has been positive since 2022, so bonds protect less against inflation-driven falls than the long-run numbers suggest.
 - **Risk is measured over 1 day and over 5-year simulated paths.** Losses over other horizons are not obtained by √t scaling.
+
+- **Component ES (D27) is estimated from 56 tail days.** SPY's 40.0% share of the 99% ES has a 90% block-bootstrap interval of 36.8%–43.7% (`p2_attribution_ci.csv`). The cap binds on the point estimate; the true share may be above it.
 
 ## Tail / EVT uncertainty
 - **EVT fits a generalised Pareto distribution to losses above a threshold.** The threshold was chosen by a stability rule on 2004–2019 data only (D8): q = 0.92, tail shape ξ ≈ 0.28. The 99% EVT VaR is 1.43% with a 95% interval of 1.33–1.52%. At 99.5% the estimate (1.85%) rests on few observations, and beyond that EVT is extrapolation.
@@ -70,6 +80,7 @@ The Streamlit page and the report section are both built from this file, so they
   - The VaR model was chosen using 2015–19 only and frozen before 2020–26 was run.
   - The portfolio weights in the backtest were built with data up to 2014.
   - However, 2015–26 was looked at while choosing among final portfolios, so for the portfolio choice it is not untouched. The walk-forward and future monitoring are the honest tests.
+- **Performance differences against the benchmark are not statistically proven.** The Ledoit–Wolf (2008) Sharpe test finds no significant difference in any period (p 0.10–0.67; `research_v2_sharpe_test.csv`). The portfolios share the same ETFs (correlation 0.91–0.96), so the data cannot separate them. We claim only the smaller drawdown within the D7 limit, which the benchmark breaches; that advantage is a path result with no formal significance test.
 - **No model catches the first day of a sudden shock** (24 Feb 2020, 3–4 Apr 2025). Risk forecasts rise only after volatility does.
 
 ## Not captured
