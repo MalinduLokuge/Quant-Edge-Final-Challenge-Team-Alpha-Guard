@@ -24,6 +24,9 @@ one = sl[sl.method == opt["method"]].sort_values("date")
 if one.empty:
     st.error("No forecasts in this range.")
     st.stop()
+if len(one) < 2:
+    st.error("Only one forecast day in this range. Pick a longer date range to run the backtests.")
+    st.stop()
 
 res = coverage.evaluate(one["loss"].to_numpy(), one["VaR"].to_numpy(), one["ES"].to_numpy(), conf)
 zone = res.get("basel_last")
