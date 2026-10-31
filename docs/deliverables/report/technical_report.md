@@ -239,7 +239,7 @@
 | D24 at 2.00% | 58% / 76% | 11.5 | 2.3% | 23% |
 | D24 capped at 2.65% of current value | 49% / 66% | 15.8 | 2.8% | 48% |
 
-- **After a severe fall, purchasing power returns within 15 years only about half the time.** Without a crisis, real value grows only about 0.6% a year after spending, so a 25% loss is slow to rebuild: the fund would need about 1.9% a year to do it in 15 years.
+- **After a severe fall, the price recovers in about 3 years, but purchasing power typically takes 15–20 years and returns within 15 years only about half the time.** We give a range, not one year: the median moves by about 2 years between simulation seeds. Without a crisis, real value grows only about 0.6% a year after spending, so a 25% loss is slow to rebuild: the fund would need about 1.9% a year to do it in 15 years.
 - **Lowering spending helps only slowly.** At 2.0%, the chance rises by 12 pp, at a cost of about 0.6% of start value in average real spending a year. A crisis cap gains 3 pp but makes real spending cuts above 10% much more likely.
 - **The portfolio cannot close the gap.** O6 is already the highest-return portfolio within D7. The policy benchmark recovers a little faster after a severe fall (52%) but suffers one more often (845 vs 629 crisis paths).
 - **Decision (D39):** keep O6 and 2.65%, set no recovery deadline, and review spending at the D23 "act" step (−20%).

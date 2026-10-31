@@ -57,7 +57,7 @@ st.markdown(f"""
 - **What can go wrong:** a 2008-type crash costs about **{D.pct(-float(val('Max drawdown incl. 2008 replay (limit 25%)')), 0)}**.
   The portfolio's price typically recovers in about
   **{float(val('Median years for the portfolio' + chr(39) + 's price to recover from a 25% drawdown (before spending and inflation)')):.0f} years**,
-  but while it keeps paying the university, purchasing power is back within 15 years only
+  but while it keeps paying the university, purchasing power typically takes 15–20 years: back within 15 years only
   **{val('After a fall of 25% or more: P(real value back within 15 years) / median years').split(' / ')[0]}** of the time (D39).
   Inflation shocks hit both bonds and stocks (2022). See the Stress and Sustainability pages.
 - **How confident we are:** the daily risk model (GARCH-EVT) passed out-of-sample backtests in 2020–2026
