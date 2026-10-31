@@ -224,7 +224,7 @@ Secondary question: the blend is not a better full-cycle limit check than Histor
 
 ### B14. Amendments
 - **Applied 2026-10-31 (approved in chat by Malindu):** technical report §6 has a paragraph saying that regime switching was tested and rejected in favour of GARCH-EVT (the same pattern as D39 and D40). Its figures are registered in `scripts/check_deliverables.py` (51 figures, 0 mismatches).
-- **Open, flagged, not changed:** report §6 is headed "O6, 99%, 2020–2026", but it quotes the D26-train backtest (GARCH-EVT 20 exceptions, Kupiec 0.49). On O6 the figures are 24 exceptions, Kupiec 0.11, independence 0.35, worst Basel window 8. Either the label or the numbers need correcting.
+- **Applied 2026-10-31 (approved in chat):** report §6 was headed "O6, 99%, 2020–2026" but quoted the D26-train backtest (GARCH-EVT 20 exceptions, Kupiec 0.49). The heading now reads "Backtest portfolio (D26 rule on data to 2014)"; the numbers are unchanged and correct for that portfolio. For reference, O6 has 24 exceptions, Kupiec 0.11, independence 0.35 and a worst Basel window of 8. The tear sheet quotes the same D26-train figures without naming a portfolio and is unchanged.
 - DECISIONS D41 (PROPOSED): record the rejection.
 - The memo, tear sheet, app, approved outputs and the D28 choice are unchanged.
 

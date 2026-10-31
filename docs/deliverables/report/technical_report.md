@@ -164,7 +164,7 @@
 - The rule was fixed before the test: pass Kupiec at 95% and 99% with no red Basel window, then rank by FZ0, using **2015–2019 only**.
 - **GARCH-EVT was selected and frozen** (commit 60e67e3) before 2020–26 was run.
 
-**O6, 99%, 2020–2026:**
+**Backtest portfolio (D26 rule on data to 2014), 99%, 2020–2026:**
 - **GARCH-EVT:** 20 exceptions against 17.1 expected; Kupiec p 0.49, Christoffersen p 0.62; worst Basel window 7 (yellow, never red).
 - **Others:**
   - historical: 26 exceptions, red zone;
