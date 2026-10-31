@@ -26,7 +26,7 @@ Design coverage is complete: every brief requirement maps to an approved or prop
 | G-9 | Innovation log didn't record the innovations already built | INNOVATION_LOG | Medium | Fixed (T21.07): I6–I11 |
 | G-10 | Assumptions doc covered data only | ASSUMPTIONS_LIMITATIONS | High | Fixed (T15.06): client, return, benchmark, risk-limit sections |
 | G-11 | `requirements.txt` unpinned; yfinance 1.7.0 and pandas 2.1.4 installed | requirements.txt | High | T17.02 |
-| G-12 | CAPM values gold at about 4.6% (β ≈ 0), so the optimiser will under-weight gold whatever its hedge value | cma_assets.csv | Medium | Documented in limitations; ERP/CMA sensitivity (T8.12). Consider a gold-specific assumption: **team decision** |
+| G-12 | CAPM values gold at about 4.6% (β ≈ 0), so the optimiser will under-weight gold whatever its hedge value | cma_assets.csv | Medium | Documented in limitations; ERP/CMA sensitivity (T8.12). Consider a gold-specific assumption: **team decision**. Resolved 2026-10-31 (V2_gold_return.md): tested with gold-specific returns; CAPM kept, 0.4% given no hedge credit |
 | G-13 | Validation period (2015–19) is calm | D5 | Medium | Accepted limitation; stress-window evaluation (T8.11) compensates |
 | G-14 | Hypothetical scenario D9 still open; R10 can't close | D9 | High | T11.03 |
 | G-15 | Team of five required (brief p.2); tracker lists four members | PM tracker | Low | Confirm fifth member and owner assignments |

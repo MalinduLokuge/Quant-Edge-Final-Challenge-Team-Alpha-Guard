@@ -42,6 +42,11 @@ def main() -> int:
     p_wf = f"p = {sr.loc['Walk-forward 2009-26 (R126 rule -> O6)', 'p_hac']:.2f}"
     p_rng = f"p {oos.min():.2f}–{oos.max():.2f}"
     sr_rep = [f"{sr.loc[c, 'diff']:+.2f} (p = {sr.loc[c, 'p_hac']:.2f}".replace("-", "−") for c in sr.index]
+    gd = pd.read_csv(T / "research_v2_gold_return.csv").set_index("case")                      # G-12 gold
+    gold = [f"{f(gd.loc['capm_plus_0.5', 'w_GLD'])} at +0.5 pp, {f(gd.loc['capm_plus_1', 'w_GLD'])} at +1 pp, "
+            f"{f(gd.loc['capm_plus_2', 'w_GLD'])} at +2 pp",
+            f"(2022: {f(gd.loc['capm_plus_2', 'stress_2022'])} vs {f(gd.loc['capm (pipeline)', 'stress_2022'])})".replace("-", "−"),
+            f"supportable spending falls to {f(gd.loc['capm_plus_2', 'spending_supported_base_cma'], 2)}"]
     checks = {
         "tear_sheet/tear_sheet.md": [f(summ["Expected return (nominal, compound)"], 2), f(summ["Spending the portfolio supports"], 2),
                                      f"${float(summ['Spending in USD (year 1)']):,.0f}", f(-float(summ["Max drawdown incl. 2008 replay (limit 25%)"])),
@@ -64,7 +69,7 @@ def main() -> int:
                                        f"{rec15} / {f(r0['DD20% P(real back within 15y)'], 0)} | {r0['DD25% median_years_real']:.1f}",
                                        f"blend: {rb.exceptions} exceptions, Christoffersen p {rb.p_ind:.3f}, worst Basel window {rb.basel_worst_count:.0f} (red)",
                                        f"GARCH-EVT: {rgv.exceptions}, p {rgv.p_ind:.2f}, {rgv.basel_worst_count:.0f} (yellow)",
-                                       f"{f(cv.meanVaR_regime_primary, 2)} against {f(cv.meanVaR_garch_evt, 2)} for GARCH-EVT", *sr_rep, f"Sharpe ratio is not statistically significant (Ledoit–Wolf {p_wf})"],
+                                       f"{f(cv.meanVaR_regime_primary, 2)} against {f(cv.meanVaR_garch_evt, 2)} for GARCH-EVT", *sr_rep, f"Sharpe ratio is not statistically significant (Ledoit–Wolf {p_wf})", *gold],
     }
     gfc_rec = f"{st[st.portfolio == 'd26_selected'].set_index('scenario').loc['GFC 2007-09', 'recovery_days']:.0f} trading days"  # QA: historical vs simulated recovery
     for doc in checks:

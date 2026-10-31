@@ -118,6 +118,13 @@
 - **O6 passes the 5-year test at both block lengths** on 2026 and 2014 inputs, and it survives a 1.5× larger equity shock in the severe scenarios.
   - Passing at 126 days is partly by construction: the rule picks the highest return whose 126-day probability is still ≤ 5% (O6 sits just under 5%), and 63-day blocks always give a lower probability. The 2014-input result (4.9%) is the less circular check.
 - **The gold floor (O4) was rejected.** Its +0.01 pp expected-return edge reverses if rates fall. Its 2020–26 outperformance came mostly from one gold cycle (+64% in 2025) that was seen before the option was proposed.
+- **Gold's 0.4% follows from its expected return, and more gold would not buy a hedge** (`research_v2_gold_return.csv`; the D26 rule re-run with only gold's expected return changed):
+  - At a zero real return (Erb & Harvey 2013) gold drops to 0%; at CAPM's 4.6% it is 0.4% (O6).
+  - Each extra percentage point assumed for gold adds about 9 pp of gold, taken from AGG: 4.7% at +0.5 pp, 9.2% at +1 pp, 18.0% at +2 pp, and the 20% cap from +4 pp.
+  - Even at 18–20% gold, the 2022 and stagflation losses improve by less than 1 pp (2022: −16.9% vs −17.8%), because gold replaces bonds, not equities.
+  - Under our base assumptions those portfolios fail the D7 5-year drawdown test (5.3–6.3% vs 5%), and supportable spending falls to 2.58%.
+  - The literature is mixed. Baur & Lucey (2010) find gold a safe haven only for about two weeks after a crash. Erb & Harvey (2013) find it an unreliable inflation hedge over practical horizons.
+  - We therefore keep CAPM for gold, take no hedge credit for the 0.4%, and disclose the gap (§10).
 
 | | O1 | O2 | O3 | O4 | O5 | **O6** |
 |---|---|---|---|---|---|---|
@@ -321,6 +328,7 @@ These are summarised from `docs/ASSUMPTIONS_LIMITATIONS.md`, which is identical 
 - **Selection bias:** 2015–26 was examined during selection. The walk-forward and live monitoring are the defensible tests.
   - More than 20 portfolio variants were compared (6 P1 candidates, options O1–O6, two walk-forward rules, the V2 recovery-target and tech-concentration variants), so the best observed Sharpe ratio is biased upward.
   - A deflated Sharpe ratio (Bailey and López de Prado, 2014) would correct for the number of trials. It can only lower significance, and we already claim no Sharpe advantage (Ledoit–Wolf, §4.5), so no conclusion changes. O6 was chosen by the D26 rule (highest return within the D7 limits), not by Sharpe.
+- **No real inflation hedge.** O6 holds XLE 3.0% and GLD 0.4%. In a 2022-type shock or stagflation, bonds and stocks fall together (O6: −17.8% in 2022, −18.8% in the severe stagflation case). A larger gold weight would help by under 1 pp and fails D7 under our assumptions (§4.5), so the committee accepts this risk through D7 and the D23 ladder.
 - **Spending:** the brief sets no spending rate; 2.65% is the team's recommendation.
 
 ## 11. AI use and human validation

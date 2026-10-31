@@ -22,6 +22,11 @@ The Streamlit page and the report section are both built from this file, so they
 - The base case uses today's T-bill (4.10%) for the whole 5-year horizon. Scenarios at 3.0% and 2.5% lower every CAPM expected return one-for-one (60/40: 6.59% → 4.99%). AGG's true sensitivity is smaller, because its current yield is locked in for about 6 years of duration.
 - Variance drag uses daily-return covariance, consistent with the VaR/ES framework. Monthly returns give lower volatility (60/40: 9.4% vs 11.5%) and are reported for information only.
 - Gold's expected return stays at its CAPM value (~4.6%). Its hedge value (+24.9% in the GFC, −8.8% vs −15% for AGG in 2022) is shown through stress tests, not by raising its expected return.
+- **Gold weight vs gold assumption** (`research_v2_gold_return.csv`):
+  - O6's 0.4% gold follows from the 4.6% assumption: 0% at a zero real return (Erb & Harvey 2013), 9% at +1 pp, and the 20% cap from +4 pp.
+  - Even 18–20% gold improves the 2022 and stagflation losses by less than 1 pp, and fails the D7 5-year test under the base assumptions.
+  - The evidence on gold as a hedge is mixed (Baur & Lucey 2010: a short-lived safe haven; Erb & Harvey 2013: an unreliable inflation hedge). The 0.4% is not described as a hedge.
+- **O6 has no effective inflation hedge** (XLE 3.0%, GLD 0.4%). It loses 17.8% in a 2022-type shock and 18.8% in severe stagflation, when bonds and stocks fall together; the committee accepts this through D7 and the D23 ladder.
 
 ## Benchmarks & risk limits (D3, D6, D7)
 - 1-day risk limits (% NAV): VaR99 ≤ 1.7%, ES99 ≤ 2.5% (binding); VaR95 ≤ 0.9%, ES95 ≤ 1.45% (reported). Limits sit at 99% because 95% losses occur about 13 days a year (normal noise), while 99% captures the rare crisis days, and Basel's traffic light is defined at 99%.
