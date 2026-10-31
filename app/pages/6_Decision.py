@@ -1,6 +1,7 @@
 """Decision page (T14.09, T14.11): the P3 recommendation, limit checks, evidence, trade-offs, monitoring and downloads.
 Every figure is read from outputs/; the status colours come from components.ui.status."""
 import pandas as pd
+import plotly.graph_objects as go
 import streamlit as st
 
 from components import data as D
@@ -108,48 +109,97 @@ wi = D.table("research_v2_ai_inflation_whatif").set_index("portfolio")
 p5 = lim["max_prob_drawdown_breach_5y"]
 
 
-def tested(lines):
-    st.markdown("**What we tested**")
-    st.markdown("\n".join(f"- {x}" for x in lines))
+COLORS = {"chosen": "#1f77b4", "benchmark": "#9aa4ae", "not adopted": "#c9a227", "breach": ui.STATUS["breach"][0]}
 
 
-t = st.columns(3)
-with t[0].container(border=True):
-    st.markdown("**Lower spending**")
-    st.markdown(f"{D.pct(float(sv['Spending the portfolio supports']), 2)} instead of 4%. 4% would need a 35–47% drawdown tolerance, against the 25% drawdown limit.")
-    tested([f"**Real recovery after a 25%+ fall** (back within 15 years): {D.pct(rt.loc['A', 'DD25% P(back <= 15y)'], 0)} of simulated "
-            f"cases at 2.65%. Raising that to {D.pct(rt.loc['B1', 'DD25% P(back <= 15y)'], 0)} would need spending of "
-            f"{D.pct(rt.loc['B1', 'spending_rate'], 2)} (60% recovery-target study).",
-            f"**Recovery mode** (after a 20% fall, spend {D.pct(rt.loc['B2', 'recovery_low'], 0)} of value until real value returns): "
-            f"{D.pct(rt.loc['B2', 'DD25% P(back <= 15y)'], 0)}, but in {D.pct(rt.loc['B2', 'paths ever in recovery mode'], 0)} of paths "
-            "the budget falls to about 30% of normal for years. Not adopted.",
-            f"**Crisis spending buffer** (pay from AGG, pause rebalancing): {D.pct(wr['B'], 1)} vs {D.pct(wr['A'], 1)} with normal "
-            f"quarterly rebalancing. No gain, so not adopted.",
-            "Committee keeps 2.65% with no recovery deadline. The action ladder's 'act' step (−20%) includes a spending review."])
-with t[1].container(border=True):
-    st.markdown("**No effective inflation hedge**")
-    st.markdown(f"XLE 3.0%, GLD 0.4%. A 2022-type shock costs {D.pct(worst['Rates and inflation 2022'], 1)}; "
-                f"severe stagflation {D.pct(worst['A Energy stagflation (Hormuz II) (severe)'], 1)}.")
-    tested([f"**Both inflation scenarios stay within the 25% stress limit**: 2022 replay {D.pct(worst['Rates and inflation 2022'], 1)}, "
-            f"severe stagflation {D.pct(worst['A Energy stagflation (Hormuz II) (severe)'], 1)}.",
-            f"**More gold:** at {D.pct(g_hi['w_GLD'], 0)} gold, the 2022 loss improves by only "
-            f"{abs(g_hi['stress_2022'] - g_o6['stress_2022']) * 100:.1f} pp, and P(drawdown > 25% in 5 y) rises to "
-            f"{D.pct(g_hi['P(DD>25%,5y) base cma'], 1)}, failing the {D.pct(p5, 0)} limit.",
-            "Gold kept at its CAPM return; the 0.4% gets no hedge credit. Inflation risk is monitored through the action ladder."])
-with t[2].container(border=True):
-    st.markdown("**Technology concentration**")
-    st.markdown(f"{tech} of the fund is technology through SPY and XLK (review trigger 20%). Tech crash with inflation, severe: "
-                f"{D.pct(ti['loss_severe'], 1)}.")
-    tested([f"**Tech crash with inflation (severe):** {D.pct(ti['loss_severe'], 1)} vs {D.pct(ti_pol['loss_severe'], 1)} for the policy "
-            f"benchmark, within the 25% limit. Simulated shock sizes: 99th percentile {D.pct(ti['mc_p99'], 1)}, "
-            f"P(loss > 25%) {D.pct(ti['mc_prob_above_limit'], 0)}.",
-            f"**Beyond severe (×1.5, tech −97.5%):** {D.pct(ti['loss_severe_equity_x1.5'], 1)}, a breach; the benchmark also breaches "
-            f"({D.pct(ti_pol['loss_severe_equity_x1.5'], 1)}).",
-            f"**Less tech (XLK moved to AGG):** severe loss {D.pct(wi.loc['XLK -> AGG', 'loss_TI_severe'], 1)}, but expected return falls to "
-            f"{D.pct(wi.loc['XLK -> AGG', 'expected_geo'], 2)} from {D.pct(wi.loc['O6', 'expected_geo'], 2)}. Not adopted.",
-            "Safeguard: committee review if look-through tech passes 20%, with a pre-agreed fallback (V4)."])
-st.caption("Sources: research_v2_recovery_target.csv, research_v2_withdrawal_rule.csv, research_v2_gold_return.csv, "
+def option_chart(rows, fmt=".0%", limit=None, limit_text="", height=None):
+    """Horizontal bars: one per option tested, coloured by outcome; optional limit line."""
+    df = pd.DataFrame(rows, columns=["option", "value", "kind", "note"])
+    df["option"] = df["option"] + "<br><sup>" + df["note"] + "</sup>"  # the cost or reason, under each option
+    fig = go.Figure()
+    for kind, g in df.groupby("kind", sort=False):
+        fig.add_bar(y=g["option"], x=g["value"], orientation="h", name=kind, marker_color=COLORS[kind],
+                    text=[f"{v:{fmt}}" for v in g["value"]], textposition="outside", customdata=g["note"],
+                    hovertemplate="%{y}: %{x:" + fmt + "}<br>%{customdata}<extra></extra>")
+    if limit is not None:
+        fig.add_vline(x=limit, line_dash="dash", line_color=ui.STATUS["breach"][0], annotation_text=limit_text,
+                      annotation_position="bottom right")
+    top = max(df["value"].max(), limit or 0) * 1.25
+    fig.update_layout(height=height or 70 * len(df) + 60, margin=dict(t=10, b=10, l=10, r=10), xaxis_tickformat=fmt,
+                      xaxis_range=[0, top], yaxis_autorange="reversed", barmode="overlay",
+                      showlegend=False)
+    return fig
+
+
+spend = float(sv["Spending the portfolio supports"])
+back = lambda k: rt.loc[k, "DD25% P(back <= 15y)"]
+s22, stag = worst["Rates and inflation 2022"], worst["A Energy stagflation (Hormuz II) (severe)"]
+tech_v = float(tech.rstrip("%")) / 100
+tech_trig = s["risk_limits"]["concentration_trigger"]["tech_lookthrough"]
+
+c = st.columns(3)
+cards = [("💸 Lower spending", f"{D.pct(spend, 2)} a year instead of 4%", "🟡 accepted cost",
+          f"≈ {D.usd(spend * D.NAV)} vs {D.usd(0.04 * D.NAV)} a year"),
+         ("🔥 No effective inflation hedge", f"XLE 3.0% · GLD 0.4%", "✅ within stress limit",
+          f"worst inflation case {D.pct(max(s22, stag), 1)} vs 25% limit"),
+         ("💻 Technology concentration", f"{tech} of the fund is technology", "✅ below review trigger",
+          f"severe tech crash with inflation {D.pct(ti['loss_severe'], 1)} vs 25% limit")]
+for col, (title, what, badge, key) in zip(c, cards):
+    with col.container(border=True):
+        st.markdown(f"**{title}**")
+        st.markdown(f"{what}  \n**{badge}**")
+        st.caption(key.replace("$", "\\$"))
+
+tab1, tab2, tab3 = st.tabs(["💸 Spending", "🔥 Inflation", "💻 Technology"])
+with tab1:
+    l, r = st.columns([1, 2])
+    l.metric("Spending supported", D.usd(spend * D.NAV), f"{D.pct(spend, 2)} of fund value", delta_color="off")
+    l.metric("4% would need", "35–47%", "drawdown tolerance vs 25% limit", delta_color="off")
+    l.metric("Real value back within 15 yrs", D.pct(back("A"), 0), "after a 25%+ fall, at 2.65%", delta_color="off")
+    r.markdown("**Ways to recover faster that we tested** · chance real value is back within 15 years after a 25%+ fall")
+    r.plotly_chart(option_chart([
+        ("O6 at 2.65% (chosen)", back("A"), "chosen", "smoothed spending, quarterly rebalancing"),
+        (f"Cut spending to {D.pct(rt.loc['B1', 'spending_rate'], 2)}", back("B1"), "not adopted",
+         f"costs about {D.usd((spend - rt.loc['B1', 'spending_rate']) * D.NAV)} a year"),
+        (f"Recovery mode ({D.pct(rt.loc['B2', 'recovery_low'], 0)} spending in a crisis)", back("B2"), "not adopted",
+         f"budget ~30% of normal for years in {D.pct(rt.loc['B2', 'paths ever in recovery mode'], 0)} of paths"),
+        ("Crisis spending buffer", wr["B"], "not adopted", "no gain over normal rebalancing"),
+    ]), width="stretch")
+    st.info("**Committee response:** keep 2.65% with no recovery deadline; the action ladder's 'act' step (−20%) includes a spending review.")
+with tab2:
+    l = r = st.container()
+    l.markdown("**Inflation losses vs the 25% stress limit**")
+    l.plotly_chart(option_chart([
+        ("2022 rates & inflation replay", s22, "chosen", "historical replay"),
+        ("Severe energy stagflation", stag, "chosen", "designed scenario"),
+        (f"2022 replay with {D.pct(g_hi['w_GLD'], 0)} gold", abs(g_hi["stress_2022"]), "not adopted",
+         f"only {abs(g_hi['stress_2022'] - g_o6['stress_2022']) * 100:.1f} pp better"),
+    ], fmt=".1%", limit=lim["stress_loss_max"], limit_text="limit 25%"), width="stretch")
+    r.markdown("**Would more gold help?** · chance of a >25% fall within 5 years")
+    r.plotly_chart(option_chart([
+        ("O6 (0.4% gold)", g_o6["P(DD>25%,5y) base cma"], "chosen", "passes"),
+        (f"{D.pct(g_hi['w_GLD'], 0)} gold", g_hi["P(DD>25%,5y) base cma"], "breach", "fails the 5% limit"),
+    ], fmt=".1%", limit=p5, limit_text="limit 5%"), width="stretch")
+    st.info("**Committee response:** gold stays at its CAPM return and gets no hedge credit; inflation risk is watched through the action ladder.")
+with tab3:
+    l, r = st.columns([1, 2])
+    l.metric("Technology share of fund", tech, f"review trigger {D.pct(tech_trig, 0)}", delta_color="off")
+    l.progress(min(tech_v / tech_trig, 1.0), text=f"{tech_v / tech_trig:.0%} of the review trigger")
+    l.metric("Chance of a loss > 25%", D.pct(ti["mc_prob_above_limit"], 0), f"simulated shocks; 99th pct {D.pct(ti['mc_p99'], 1)}", delta_color="off")
+    r.markdown("**Severe tech crash with inflation** · loss of the fund")
+    r.plotly_chart(option_chart([
+        ("O6 (chosen)", ti["loss_severe"], "chosen", "bonds and gold also fall"),
+        ("Policy 40/50/10 benchmark", ti_pol["loss_severe"], "benchmark", "for comparison"),
+        ("Less tech: XLK moved to AGG", wi.loc["XLK -> AGG", "loss_TI_severe"], "not adopted",
+         f"return falls to {D.pct(wi.loc['XLK -> AGG', 'expected_geo'], 2)} from {D.pct(wi.loc['O6', 'expected_geo'], 2)}"),
+        ("O6, shock ×1.5 (tech −97.5%)", ti["loss_severe_equity_x1.5"], "breach",
+         f"beyond severe; benchmark also breaches ({D.pct(ti_pol['loss_severe_equity_x1.5'], 1)})"),
+    ], fmt=".1%", limit=lim["stress_loss_max"], limit_text="limit 25%"), width="stretch")
+    st.info("**Committee response:** keep O6 and the 25% limit; review if look-through technology passes 20%, with a pre-agreed fallback (V4).")
+st.caption("Blue = chosen, gold = tested but not adopted, red = breaches a limit, grey = benchmark. Sources: "
+           "research_v2_recovery_target.csv, research_v2_withdrawal_rule.csv, research_v2_gold_return.csv, "
            "research_v2_ai_inflation.csv, research_v2_ai_inflation_whatif.csv, stress_results.csv.")
+
 
 # --- Monitoring ------------------------------------------------------------------------------------------------------
 st.subheader("Monitoring and action rules (no forced selling)")
