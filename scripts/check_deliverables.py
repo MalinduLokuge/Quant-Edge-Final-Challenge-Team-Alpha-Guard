@@ -85,8 +85,8 @@ def main() -> int:
                                        f(o6["T Tech-led crash (central)"]), f(o6["T Tech-led crash (severe)"]), tech,
                                        f"{eff[1]} effective risk contributors rather than {eff[0]}",
                                        f"{rec15} / {f(r0['DD20% P(real back within 15y)'], 0)} | {r0['DD25% median_years_real']:.1f}",
-                                       f"blend: {rb.exceptions} exceptions, Christoffersen p {rb.p_ind:.3f}, worst Basel window {rb.basel_worst_count:.0f} (red)",
-                                       f"GARCH-EVT: {rgv.exceptions}, p {rgv.p_ind:.2f}, {rgv.basel_worst_count:.0f} (yellow)",
+                                       f"blend: {rb.exceptions} exceptions, independence p {rb.p_ind:.3f}, worst Basel window {rb.basel_worst_count:.0f} (red)",
+                                       f"GARCH-EVT: {rgv.exceptions} exceptions against {rgv.expected:.1f} expected; Kupiec p {rgv.p_uc:.2f}, Christoffersen p {rgv.p_cc:.2f} (independence p {rgv.p_ind:.2f}); worst Basel window {rgv.basel_worst_count:.0f} (yellow)",
                                        f"{f(cv.meanVaR_regime_primary, 2)} against {f(cv.meanVaR_garch_evt, 2)} for GARCH-EVT", *sr_rep, f"Sharpe ratio is not statistically significant (Ledoit–Wolf {p_wf})", *gold, *ai_rep, *wi_rep],
     }
     gfc_rec = f"{st[st.portfolio == 'd26_selected'].set_index('scenario').loc['GFC 2007-09', 'recovery_days']:.0f} trading days"  # QA: historical vs simulated recovery

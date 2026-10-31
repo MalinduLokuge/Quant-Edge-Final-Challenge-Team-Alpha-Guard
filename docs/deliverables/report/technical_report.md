@@ -1,15 +1,15 @@
 # QuantEdge 1.0: Technical Report
 ## A conservative, tail-aware portfolio for the Serendib University Endowment Fund (USD 10 million)
 
-> **DRAFT for team review (2026-10-30).** Prepared from the pipeline outputs with AI assistance (see §11). The team must review, edit and take ownership of every judgement before submission (brief §8.7). Target length is 7–15 pages; tables and figures come from `outputs/`, and each section names its source files. Decisions are cited as D1–D33 (`docs/DECISIONS.md`).
+> **DRAFT for team review (2026-10-30).** Prepared from the pipeline outputs with AI assistance (see §11). The team must review, edit and take ownership of every judgement before submission (brief §8.7). Target length is 7–15 pages; tables and figures come from `outputs/`, and each section names its source files. Decisions are cited as D1–D44 (`docs/DECISIONS.md`).
 
 ---
 
 ## 1. Executive summary
 - **Recommendation:** invest the $10M in **AGG 61.05%, SPY 18.42%, XLK 10.00%, EFA 7.17%, XLE 2.97%, GLD 0.39%**, rebalance quarterly, and spend about **2.65% a year** (≈ $265k) through a smoothed rule. The portfolio is called O6 (D31 v2).
 - **Return:** expected 5.80% a year nominal, about 3.4% real.
-- **Downside:** worst historical drawdown 23.5% (limit 25%); P(drawdown > 25% within 5 years) 4.9% (limit 5%); worst stress loss 23.5% (2008 replay).
-- **Model trust:** the daily VaR model (GARCH-EVT) was selected on 2015–19 data and, on 2020–26, passed Kupiec and Christoffersen at 99% and 95%; its worst Basel window was yellow (7 breaches), never red. Out of sample, weights built on data to 2014 kept every D7 limit in 2015–26, but the walk-forward segment containing COVID reached a 1-day ES99 of 2.9% against the 2.5% full-cycle limit, as every portfolio did (§4.5). The 2015–26 data were seen during selection (§10).
+- **Downside (investment returns, the official D7 basis):** worst historical drawdown 23.5% (limit 25%); P(drawdown > 25% within 5 years) 4.9% (limit 5%); worst stress loss 23.5% (2008 replay); worst hypothetical scenario 22.8% (tech crash with inflation, T + I). After D24 spending and costs, the same two measures are 25.3% and 9.5% (D42, disclosed, not the D7 test).
+- **Model trust:** the daily VaR model (GARCH-EVT) was selected on 2015–19 data and, on 2020–26, passed Kupiec and Christoffersen at 99% and 95% for the portfolio built on data to 2014; its worst Basel window was yellow (7 breaches), never red. On the final O6 weights it also passed at 99% (24 exceptions, worst Basel window 8, yellow; §6). Out of sample, weights built on data to 2014 kept every D7 limit in 2015–26, but the walk-forward segment containing COVID reached a 1-day ES99 of 2.9% against the 2.5% full-cycle limit, as every portfolio did (§4.5). The 2015–26 data were seen during selection (§10).
 - **Why it is suitable:** it is the highest-expected-return mix we found that passes every risk limit derived from the committee's principle that "avoiding large losses is more important than maximizing gains". It was checked out of sample and by a walk-forward that rebuilds it every three years with only past data.
 - **Evidence standard: observed is not proven.**
   - The rule matched the policy benchmark's return with a smaller worst fall.
@@ -35,7 +35,7 @@
   - For the hypothetical stress: 10-year TIPS yield, Moody's Baa spread, Brent and WTI oil, broad USD index, VIX, 2-year yield.
 - **Context only** (not model inputs): IMF, World Bank, IEA, EIA and Federal Reserve publications.
 
-**Source compliance (brief §9.1: Yahoo Finance, FRED, World Bank / IMF).** Every series the models compute from is from Yahoo Finance or FRED. Three items fall outside the list. All are public and disclosed, and none is proprietary:
+**Source compliance (brief §9.1: Yahoo Finance, FRED, World Bank / IMF).** Every price and macro series is from Yahoo Finance or FRED, except one model input, the SPY technology share. Three items fall outside the list in total. All are public and disclosed, and none is proprietary:
 
 | Item | Used for | Source | Status |
 |---|---|---|---|
@@ -150,6 +150,7 @@ Academic papers are cited as method references, not data.
 **Walk-forward (T20.07):**
 - The rule was re-run at year ends 2008–2023 with only the data available then, and each portfolio was held for 3 years.
 - **The drawdown limit held in all six segments.**
+- **The 1-day ES99 limit was exceeded only in the 2017→2020 segment** (2.9% vs 2.5%), by every portfolio and the policy benchmark, because it contains COVID. ES99 is a full-cycle limit (D7); D23 treats such a breach as a review trigger (T4.25 §6, finding 1).
 - Chained 2009–2026 result: 7.3% a year, Sharpe 0.89, worst drawdown −16.4%, against 7.3%, 0.75 and −19.2% for the policy benchmark.
 - **Sharpe differences are not significant** (Ledoit–Wolf 2008 test, robust to fat tails and volatility clustering; `research_v2_sharpe_test.csv`):
   - walk-forward +0.14 (p = 0.15);
@@ -174,7 +175,7 @@ Academic papers are cited as method references, not data.
 | GARCH-EVT, today's / long-run volatility | — | — | 0.94% / 1.48% | — |
 
 **Reading the table:**
-- **The normal model understates the 99% tail by about 40%.**
+- **The normal model understates the 99% tail:** VaR by about 15% (1.18% vs 1.39% historical) and ES by about 39% (1.35% vs 2.20%).
 - **EVT confirms the historical tail** and extends it to 99.5%: VaR 1.85%, ES 2.79%.
 - **GARCH:** persistence 0.989 and a volatility half-life of 65 days. Today's calm regime gives a 99% VaR of 0.94%, against 1.48% in an average regime. This is why D7 is checked on full-cycle history.
 - **Attribution:** SPY carries 40% of the 99% ES, XLK 22%, EFA 16% and AGG 14%. Bonds are 61% of the capital but a small part of the tail risk.
@@ -206,6 +207,7 @@ Academic papers are cited as method references, not data.
 
 **Backtest portfolio (D26 rule on data to 2014), 99%, 2020–2026:**
 - **GARCH-EVT:** 20 exceptions against 17.1 expected; Kupiec p 0.49, Christoffersen p 0.62; worst Basel window 7 (yellow, never red).
+  - **At 95%:** 96 exceptions against 85.4 expected; Kupiec p 0.25, Christoffersen p 0.50 (`backtest_results_test.csv`).
   - **ES:** Acerbi–Székely Z2 = 0.26, below the approximate 5% critical value of 0.70 (Acerbi & Székely 2014), so the ES forecast is not rejected. Severity ratio 1.09. FZ0 joint VaR/ES score −4.12, the best of the 7 methods (historical −3.55, normal −3.10).
 - **Others:**
   - historical: 26 exceptions, red zone;
@@ -217,9 +219,9 @@ Academic papers are cited as method references, not data.
 - **Idea (Team Guide §8):** classify each day as calm or elevated volatility (20-day vs 252-day σ, data up to t−1). Weight historical 70% / EVT 30% when calm and 30 / 70 when elevated.
 - **Integrity:** the design, 12 variants and the adoption rule were committed before the first run, and the baseline reproduced exactly.
 - **O6 (final weights), 99%, 2020–26:**
-  - blend: 22 exceptions, Christoffersen p 0.002, worst Basel window 12 (red);
-  - GARCH-EVT: 24, p 0.35, 8 (yellow).
-  - The 2014-weights portfolio above and the policy benchmark give the same result.
+  - blend: 22 exceptions, independence p 0.002, worst Basel window 12 (red);
+  - GARCH-EVT: 24 exceptions against 17.1 expected; Kupiec p 0.11, Christoffersen p 0.18 (independence p 0.35); worst Basel window 8 (yellow). It passes.
+  - The blend is rejected for the 2014-weights portfolio and the policy benchmark too (`research_v2_regime_blend_summary.csv`).
 - **Why it fails:** the detector flagged COVID, 2022 and 2025 on day 0, but historical and EVT share one 1,000-day window.
   - A blend moves VaR by less than 15% on 95% of days.
   - In the COVID weeks its 99% VaR averaged 1.25% against 4.37% for GARCH-EVT.
@@ -305,15 +307,19 @@ Academic papers are cited as method references, not data.
 
 | Spending rule | P(back within 15 years) after ≥ 25% / ≥ 20% fall | Median years (≥ 25%) | Avg real spending, years 1–20 | P(real spending cut > 10%) |
 |---|---|---|---|---|
-| D24 at 2.65% (policy) | 46% / 64% | 17.8 | 2.9% of start value | 33% |
+| D24 at 2.65% (policy)² | 46% / 64% | 17.8 | 2.9% of start value | 33% |
 | D24 at 2.45% | 50% / 68% | 15.5 | 2.7% | 30% |
 | D24 at 2.25% | 54% / 71% | 13.5 | 2.5% | 27% |
 | D24 at 2.00% | 58% / 76% | 11.5 | 2.3% | 23% |
 | D24 capped at 2.65% of current value | 49% / 66% | 15.8 | 2.8% | 48% |
 
-- **After a severe fall, the price recovers in about 1–3 years, but purchasing power typically takes 15–20 years and returns within 15 years only about half the time.**
+² Daily rebalancing (constant weights). Under the approved quarterly rebalancing (D11) the first figure is about 42–45% (see the rebalancing bullet below).
+
+- **After a severe fall, the price recovers in about 1–3 years, but purchasing power typically takes 15–20 years and returns within 15 years less than half the time (about 42–46%).**
   - Historical: in 2008 O6's price was back at its pre-crisis level 254 trading days (about 1 year) after the trough (`stress_results.csv`; one crisis, −23.5%).
-  - Simulated: median 3.0 years (p90 5.3) for a 25% fall on the bootstrap paths, before spending and inflation. We give a range, not one year: the median moves by about 2 years between simulation seeds. Without a crisis, real value grows only about 0.6% a year after spending, so a 25% loss is slow to rebuild: the fund would need about 1.9% a year to do it in 15 years.
+  - Simulated: median 3.0 years (p90 5.3) for a 25% fall on the bootstrap paths, before spending and inflation.
+  - Purchasing power: we give a range, not one year. The median real recovery after a 25%+ fall is 17.8 years in the table (daily rebalancing, 8,000 paths). Under quarterly rebalancing it is 19.8 years on a second seed set (16,000 paths) and beyond 25 years on the first (`research_v2_withdrawal_rule.csv`), so about 18 to more than 20 years.
+  - Without a crisis, real value grows only about 0.5% a year after spending, so a 25% loss is slow to rebuild: the fund would need about 1.9% a year to do it in 15 years.
 - **Lowering spending helps only slowly.** At 2.0%, the chance rises by 12 pp, at a cost of about 0.6% of start value in average real spending a year. A crisis cap gains 3 pp but makes real spending cuts above 10% much more likely.
 - **The portfolio cannot close the gap.** O6 is already the highest-return portfolio within D7. The policy benchmark recovers a little faster after a severe fall (52%) but suffers one more often (845 vs 629 crisis paths).
 - **A stricter target was tested and rejected (research doc V2_recovery_target).** We tested a 60% chance of real recovery within 15 years after a 25%+ fall, under a rule fixed before the run and with every D6/D7/D27 and stress test applied:
