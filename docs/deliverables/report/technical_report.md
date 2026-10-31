@@ -371,11 +371,14 @@ These are summarised from `docs/ASSUMPTIONS_LIMITATIONS.md`, which is identical 
 - **Spending:** the brief sets no spending rate; 2.65% is the team's recommendation.
 
 ## 11. AI use and human validation
-- **AI tool:** Claude Code (Anthropic) was used for code scaffolding, research, documentation and drafting.
+- **AI tools:**
+  - Claude / Claude Code (Anthropic): mainly code generation, refactoring, debugging and tests; also research summaries and first drafts.
+  - Perplexity: background searches of public market information.
+  - ChatGPT (OpenAI): editorial and layout help for the tear sheet and the disclosure.
 - **Validation:**
-  - every module has unit tests (164 tests);
+  - every module has unit tests (179 tests);
   - every AI-assisted component is recorded in `tracking/validation/HUMAN_VALIDATION_LOG.md` for team sign-off;
-  - the brief's four disclosure columns, and a sign-off table each member signs, are in `docs/AI_DISCLOSURE.md`.
+  - the tools, their purpose, the material AI-assisted components and the human validation are disclosed in `docs/AI_DISCLOSURE.md`.
 - **Decisions:** all decisions (D1–D44 in `docs/DECISIONS.md`) were taken by the team.
 - **The audit of 2026-10-29** and an **independent human QA review on 2026-10-31** caught AI-introduced errors and overclaims; the corrections are in D42 and the commit history.
 
