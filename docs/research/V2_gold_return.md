@@ -35,7 +35,7 @@ All columns are in the CSV.
 4. **Under our base assumptions, large gold weights fail D7.** The 5-year drawdown probability is 5.3–6.3% against the 5% limit, and supportable spending falls to 2.58%. These portfolios meet D7 only if one believes the gold premium that produced them.
 5. **The 5–9% range (+0.5 to +1 pp) is a matter of judgment.** It changes expected return and risk by under 0.02 pp and 0.1 pp. That is consistent with T4_25: the O4 5% floor had no robust edge, and its 2020–26 gain came from one gold cycle.
 
-## Decisions on the wording (no portfolio change; D43, PROPOSED)
+## Decisions on the wording (no portfolio change; D43, APPROVED 2026-10-31)
 - **Tear sheet:** the 0.4% is described as a "residual weight from the optimiser; too small to hedge, no hedge credit taken" (was "crisis hedge").
 - **Research §7 (D3_D7):** marked as superseded for the final portfolio by the O4 test and this run.
 - **Report §4.5:** this result and the mixed literature. **Report §10 and Assumptions & Limitations:** O6 has no effective inflation hedge (XLE 3.0%, GLD 0.4%; −17.8% in 2022, −18.8% in severe stagflation). The committee accepts this risk through D7 and the D23 ladder.
