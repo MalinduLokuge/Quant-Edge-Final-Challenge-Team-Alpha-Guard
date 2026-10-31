@@ -33,7 +33,7 @@
 - **FRED:**
   - 3-month T-bill (risk-free rate); 10-year Treasury; 10-year and 5-year breakevens; CPI.
   - For the hypothetical stress: 10-year TIPS yield, Moody's Baa spread, Brent and WTI oil, broad USD index, VIX, 2-year yield.
-- **Context only** (not model inputs): IMF, World Bank, IEA, EIA and Federal Reserve publications.
+- **Context only** (not model inputs): IMF and World Bank publications (approved sources, §9.1); IEA, EIA and Federal Reserve publications (outside the list, disclosed in the table below).
 
 **Source compliance (brief §9.1: Yahoo Finance, FRED, World Bank / IMF).** Every price and macro series is from Yahoo Finance or FRED, except one model input, the SPY technology share. Three items fall outside the list in total. All are public and disclosed, and none is proprietary:
 
@@ -145,7 +145,7 @@ Academic papers are cited as method references, not data.
 | Stagflation severe × 1.5 equity | 25.6% | 24.9% | 23.0% | 25.1% | 20.3% | **24.8%** |
 
 *(Option table computed at 2.8% spending; O6 at the final 2.65% is in §1. Source: `docs/research/T4_25_final_selection_evaluation.md`.)*
-¹ Research run (4.97%). The pipeline's own run gives 4.94% (§1, tear sheet). Both are within the Monte Carlo error (±0.12 pp) of the 5% limit and move by 1–2 pp with block length, so "passes" means "at the limit", not "safely below it". Likewise O6's expected return is within 0.1 pp of O1, O2 and O4, inside the estimation error of the inputs.
+¹ Research run (4.97%). The pipeline's own run gives 4.94% (4.9% rounded in §1 and the tear sheet). Both are within the Monte Carlo error (±0.12 pp) of the 5% limit and move by 1–2 pp with block length, so "passes" means "at the limit", not "safely below it". Likewise O6's expected return is within 0.1 pp of O1, O2 and O4, inside the estimation error of the inputs.
 
 **Walk-forward (T20.07):**
 - The rule was re-run at year ends 2008–2023 with only the data available then, and each portfolio was held for 3 years.
@@ -199,7 +199,7 @@ Academic papers are cited as method references, not data.
 - Rolling 1,000-day window (D13), re-estimated daily on data up to t−1, for 7 methods × 6 portfolios.
 - Weights built with data to 2014.
 
-**Tests:** Kupiec, Christoffersen (independence and conditional coverage), Basel traffic light, ES severity and Acerbi–Szekely Z2, and the FZ0 joint score.
+**Tests:** Kupiec, Christoffersen (independence and conditional coverage), Basel traffic light, ES severity and Acerbi–Székely Z2, and the FZ0 joint score.
 
 **Model choice (D28):**
 - The rule was fixed before the test: pass Kupiec at 95% and 99% with no red Basel window, then rank by FZ0, using **2015–2019 only**.
@@ -208,7 +208,7 @@ Academic papers are cited as method references, not data.
 **Backtest portfolio (D26 rule on data to 2014), 99%, 2020–2026:**
 - **GARCH-EVT:** 20 exceptions against 17.1 expected; Kupiec p 0.49, Christoffersen p 0.62; worst Basel window 7 (yellow, never red).
   - **At 95%:** 96 exceptions against 85.4 expected; Kupiec p 0.25, Christoffersen p 0.50 (`backtest_results_test.csv`).
-  - **ES:** Acerbi–Székely Z2 = 0.26, below the approximate 5% critical value of 0.70 (Acerbi & Székely 2014), so the ES forecast is not rejected. Severity ratio 1.09. FZ0 joint VaR/ES score −4.12, the best of the 7 methods (historical −3.55, normal −3.10).
+  - **ES:** Acerbi–Székely Z2 = 0.26, below the approximate 5% critical value of 0.70 (Acerbi & Székely 2014; our Z2 has the opposite sign to the paper's, so positive means ES is too low and the paper's −0.70 becomes +0.70), so the ES forecast is not rejected. Severity ratio 1.09. FZ0 joint VaR/ES score −4.12, the best of the 7 methods (historical −3.55, normal −3.10).
 - **Others:**
   - historical: 26 exceptions, red zone;
   - normal: 30, red;
@@ -261,8 +261,9 @@ Academic papers are cited as method references, not data.
 | B AI unwind with recession (stocks −25 / −40%, credit +100 / +250 bp) | 8.8% | 14.2% |
 | C Term-premium shock (sensitivity) | 11.3% | — |
 | T Tech-led crash (D35; tech −40 / −65%, other stocks −10 / −25%) | 9.2% | 16.7% |
+| T + I Tech crash with inflation (D44; T plus the rates leg of A, so bonds and gold fall too) | 11.5% | 22.8% |
 
-**Tech-led crash (D35).** SPY already holds the large technology companies that make up XLK. Counting SPY's holdings, technology is 17.7% of the fund and 46% of its equities (SPY's own share is 38.4%, SSGA, 29 October 2026). Scenario T gives SPY the same loss as B but leads it with technology. Each equity ETF moves by the technology share of its holdings, and bonds and gold get no hedge credit. O6 loses 16.7% in the severe case, 2.6 pp more than in B. History cannot test this: 2004–26 has no tech-led crash, and XLK helped in 2008. Portfolios with less XLK were evaluated under a rule fixed in advance and not adopted. All of them deepen the 2008 drawdown, and none reaches O6's return within D7 (research doc V2). Instead, technology above 20% of the fund triggers a committee review (D37). Counting SPY and XLK as one source, O6 has 2.3 effective risk contributors rather than 3.9 (D36).
+**Tech-led crash (D35).** SPY already holds the large technology companies that make up XLK. Counting SPY's holdings, technology is 17.7% of the fund and 46% of its equities (SPY's own share is 38.4%, SSGA, 29 October 2026). Scenario T gives SPY the same loss as B but leads it with technology. Each equity ETF moves by the technology share of its holdings, and bonds and gold get no hedge credit. O6 loses 16.7% in the severe case, 2.5 pp more than in B. History cannot test this: 2004–26 has no tech-led crash, and XLK helped in 2008. Portfolios with less XLK were evaluated under a rule fixed in advance and not adopted. All of them deepen the 2008 drawdown, and none reaches O6's return within D7 (research doc V2). Instead, technology above 20% of the fund triggers a committee review (D37). Counting SPY and XLK as one source, O6 has 2.3 effective risk contributors rather than 3.9 (D36).
 
 **What the scenarios show:**
 - **The bond hedge fails in inflationary shocks.** In A severe, AGG contributes over a third of the loss; in a recession it rallies.
@@ -274,9 +275,9 @@ Academic papers are cited as method references, not data.
   - O6 loses 11.5% (central) and **22.8% (severe, $2.28M)**, against 20.5% for the policy benchmark. Bonds and gold add 6.1 pp of the severe loss instead of cushioning it.
   - That is the largest hypothetical loss, close to the 2008 replay (23.5%), but within the 25% limit.
   - Monte Carlo over shock sizes: 99th percentile 17.9%, with no draw above 25%.
-  - **At 1.5× it breaches the limit:** 31.2% for the equity leg (tech −97.5%, beyond the dot-com fall of about 78%) and 25.9% for the rates leg. T alone at 1.5× is 25.1%. The benchmark also breaches (27.8%).
+  - **At 1.5× it breaches the limit:** 31.2% for the equity leg (tech −97.5%, beyond the Nasdaq Composite's dot-com fall of about 78% in 2000–02) and 25.9% for the rates leg. T alone at 1.5× is 25.1%. The benchmark also breaches (27.8%).
   - Less XLK was tested and not adopted (D35), and more gold barely helps (D43). The limit is kept, and the D23 ladder and the D37 technology trigger are the response.
-- **Why the 61% bond allocation is right, even when bonds fail as a hedge** (`research_v2_ai_inflation_whatif.csv`; O6 changed by hand, everything else fixed):
+- **Why we keep a 61% bond allocation, even when bonds fail as a hedge** (`research_v2_ai_inflation_whatif.csv`; O6 changed by hand, everything else fixed):
   - In T + I, AGG falls 9.9% while O6's equities fall 43.4% on average. Bonds lose too, but four times less, which is what keeps the worst case inside the limit.
   - Moving only 5 pp from AGG to SPY breaks the 25% limit in a 2008 repeat (−25.2%) and raises P(DD > 25% in 5 years) to 7.9%. At 10 pp, T + I itself breaches (25.9%). 60/40 loses 28.2% in T + I and 35.0% in 2008.
   - The policy benchmark has the same expected return as O6 (5.79% vs 5.80%) but fails D7: −25.3% in 2008 and a 9.0% five-year probability. O6's mix earns the same return within the committee's limits.
@@ -347,6 +348,7 @@ Academic papers are cited as method references, not data.
 | Act | −20% | formal decision on risk and spending |
 | Limit | −25%, or Basel red | mandatory decision: accept / adjust risk limit / reject |
 | Annual | every year | refresh assumptions, rerun the rule, re-check D7 / D27 / D33 and spending |
+| Concentration (D37) | look-through technology above 20% of the fund, checked at each quarterly rebalance | committee review |
 
 On 2004–2026 history the watch trigger was active 7–10% of the time; the −20% level was reached only in 2008.
 
@@ -355,7 +357,7 @@ These are summarised from `docs/ASSUMPTIONS_LIMITATIONS.md`, which is identical 
 - **CAPM expected returns** with a 5% ERP. AGG's yield is assumed locked in when rates fall. Returns are lower if the T-bill falls (at a 2.5% T-bill and a 4% ERP, the supported spending is about 1.7%).
 - **History** contains one 2008-type crisis, so limits are targets, not guarantees. The bootstrap cannot create crises unlike the sample's.
 - **AI / tech crash:**
-  - The data start in 2004, so there is no dot-com-style crash: technology fell about 78% over 2.5 years then. The AI scenarios (B, T, T + I) are one-step shocks with linear betas.
+  - The data start in 2004, so there is no dot-com-style crash: the Nasdaq Composite fell about 78% from March 2000 to October 2002 (public index history, context only). The AI scenarios (B, T, T + I) are one-step shocks with linear betas.
   - The worst case, a tech crash with inflation (T + I, 22.8%), is within the limit but breaches it at 1.5× (§7).
 - **The 5-year drawdown test is sensitive to block length** (model uncertainty, reported). The 126-day block is a heuristic, conservative choice; 21/63/252 days are sensitivity analysis.
 - **Drawdown limits are measured on investment returns** (D42). After D24 spending and costs, O6's fund value fell 25.3% in 2008 and P(fall > 25% in 5 years) is 9.5%, above both limits. The committee should read the D7 limits as limits on investment performance.
@@ -365,7 +367,7 @@ These are summarised from `docs/ASSUMPTIONS_LIMITATIONS.md`, which is identical 
 - **Selection bias:** 2015–26 was examined during selection. The walk-forward and live monitoring are the defensible tests.
   - More than 20 portfolio variants were compared (6 P1 candidates, options O1–O6, two walk-forward rules, the V2 recovery-target and tech-concentration variants), so the best observed Sharpe ratio is biased upward.
   - A deflated Sharpe ratio (Bailey and López de Prado, 2014) would correct for the number of trials. It can only lower significance, and we already claim no Sharpe advantage (Ledoit–Wolf, §4.5), so no conclusion changes. O6 was chosen by the D26 rule (highest return within the D7 limits), not by Sharpe.
-- **No real inflation hedge.** O6 holds XLE 3.0% and GLD 0.4%. In a 2022-type shock or stagflation, bonds and stocks fall together (O6: −17.8% in 2022, −18.8% in the severe stagflation case). A larger gold weight would help by under 1 pp and fails D7 under our assumptions (§4.5), so the committee accepts this risk through D7 and the D23 ladder.
+- **No real inflation hedge.** O6 holds XLE 3.0% and GLD 0.4%. In a 2022-type shock or stagflation, bonds and stocks fall together (O6: −17.8% in 2022, −18.8% in the severe stagflation case). A larger gold weight would help by under 1 pp and fails D7 under our assumptions (§4.5), so we recommend that the committee accept this risk, managed through D7 and the D23 ladder (memo, approval 5).
 - **Spending:** the brief sets no spending rate; 2.65% is the team's recommendation.
 
 ## 11. AI use and human validation

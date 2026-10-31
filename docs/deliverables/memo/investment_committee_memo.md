@@ -45,3 +45,4 @@ SPY and XLK carry about 60% of the worst-day risk; counting SPY's holdings, tech
 
    Technology above 20% of the fund (counting SPY's holdings) also triggers a review.
 4. **An annual review** of assumptions, weights and spending.
+5. **Accepting the inflation risk.** The portfolio has no real inflation hedge: in an inflation shock bonds and stocks fall together (about 19–23% in our worst scenarios), within the 25% limit.
