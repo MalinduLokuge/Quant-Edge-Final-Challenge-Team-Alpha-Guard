@@ -242,6 +242,11 @@
 - **After a severe fall, the price recovers in about 3 years, but purchasing power typically takes 15–20 years and returns within 15 years only about half the time.** We give a range, not one year: the median moves by about 2 years between simulation seeds. Without a crisis, real value grows only about 0.6% a year after spending, so a 25% loss is slow to rebuild: the fund would need about 1.9% a year to do it in 15 years.
 - **Lowering spending helps only slowly.** At 2.0%, the chance rises by 12 pp, at a cost of about 0.6% of start value in average real spending a year. A crisis cap gains 3 pp but makes real spending cuts above 10% much more likely.
 - **The portfolio cannot close the gap.** O6 is already the highest-return portfolio within D7. The policy benchmark recovers a little faster after a severe fall (52%) but suffers one more often (845 vs 629 crisis paths).
+- **A stricter target was tested and rejected (research doc V2_recovery_target).** We tested a 60% chance of real recovery within 15 years after a 25%+ fall, under a rule fixed before the run and with every D6/D7/D27 and stress test applied:
+  - **It can be met only by cutting spending.** It needs either 1.8% permanent spending (61%, confirmed on new seeds) or a crisis-time cut to 1.0% of value (62%). The second means about 30% of the normal budget for about 8 years.
+  - **No portfolio solves it.** No allocation within the limits reaches 60% at 2.65%: the best is Risk Parity at 48%. Lower-risk portfolios crash less often but recover more slowly.
+  - **O6 stays best on the long-run measure.** It keeps the highest chance that real value is at least today's after 15 years (67%).
+  - **A stronger recovery target is not a better policy** if meeting it undermines the university's funding purpose.
 - **Decision (D39):** keep O6 and 2.65%, set no recovery deadline, and review spending at the D23 "act" step (−20%).
 
 ## 9. Recommendation and monitoring (`outputs/p3_decision/`)
