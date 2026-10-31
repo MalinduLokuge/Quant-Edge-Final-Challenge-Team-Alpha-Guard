@@ -94,18 +94,62 @@ st.caption("The claimed advantage is the smaller worst fall within the D7 limit,
 # --- Trade-offs ------------------------------------------------------------------------------------------------------
 st.subheader("Trade-offs the committee accepts")
 tech = sv["Technology look-through: share of fund / of equities"].split(" / ")[0]
+ai = D.table("research_v2_ai_inflation").set_index(["portfolio", "scenario"])
+ti = ai.loc[("O6", "T + I tech crash with inflation (bonds fall)")]
+ti_pol = ai.loc[("Policy 40/50/10", "T + I tech crash with inflation (bonds fall)")]
+rt = D.table("research_v2_recovery_target")
+rt = rt[rt.candidate == "O6"].set_index("experiment")
+wr = D.table("research_v2_withdrawal_rule")
+wr = wr[wr.paths == wr.paths.max()].set_index("arm")["DD25% P(back <= 15y)"]
+gold = D.table("research_v2_gold_return").set_index("case")
+g_hi = gold[gold["w_GLD"] >= 0.15].iloc[0]  # first case with substantial gold (18%)
+g_o6 = gold.loc["capm (pipeline)"]
+wi = D.table("research_v2_ai_inflation_whatif").set_index("portfolio")
+p5 = lim["max_prob_drawdown_breach_5y"]
+
+
+def tested(lines):
+    st.markdown("**What we tested**")
+    st.markdown("\n".join(f"- {x}" for x in lines))
+
+
 t = st.columns(3)
 with t[0].container(border=True):
     st.markdown("**Lower spending**")
     st.markdown(f"{D.pct(float(sv['Spending the portfolio supports']), 2)} instead of 4%. 4% would need a 35–47% drawdown tolerance, against the 25% limit (D7, D30).")
+    tested([f"**Real recovery after a 25%+ fall** (back within 15 years): {D.pct(rt.loc['A', 'DD25% P(back <= 15y)'], 0)} of simulated "
+            f"cases at 2.65%. Raising that to {D.pct(rt.loc['B1', 'DD25% P(back <= 15y)'], 0)} would need spending of "
+            f"{D.pct(rt.loc['B1', 'spending_rate'], 2)} (60% recovery-target study, D39).",
+            f"**Recovery mode** (after a 20% fall, spend {D.pct(rt.loc['B2', 'recovery_low'], 0)} of value until real value returns): "
+            f"{D.pct(rt.loc['B2', 'DD25% P(back <= 15y)'], 0)}, but in {D.pct(rt.loc['B2', 'paths ever in recovery mode'], 0)} of paths "
+            "the budget falls to about 30% of normal for years. Not adopted.",
+            f"**Crisis spending buffer** (pay from AGG, pause rebalancing): {D.pct(wr['B'], 1)} vs {D.pct(wr['A'], 1)} with normal "
+            f"quarterly rebalancing. No gain, so not adopted (D40).",
+            "Committee keeps 2.65% with no recovery deadline. The D23 'act' step (−20%) includes a spending review."])
 with t[1].container(border=True):
     st.markdown("**No effective inflation hedge**")
     st.markdown(f"XLE 3.0%, GLD 0.4%. A 2022-type shock costs {D.pct(worst['Rates and inflation 2022'], 1)}; "
                 f"severe stagflation {D.pct(worst['A Energy stagflation (Hormuz II) (severe)'], 1)} (D43).")
+    tested([f"**Both inflation scenarios stay within the 25% stress limit**: 2022 replay {D.pct(worst['Rates and inflation 2022'], 1)}, "
+            f"severe stagflation {D.pct(worst['A Energy stagflation (Hormuz II) (severe)'], 1)}.",
+            f"**More gold:** at {D.pct(g_hi['w_GLD'], 0)} gold, the 2022 loss improves by only "
+            f"{abs(g_hi['stress_2022'] - g_o6['stress_2022']) * 100:.1f} pp, and P(drawdown > 25% in 5 y) rises to "
+            f"{D.pct(g_hi['P(DD>25%,5y) base cma'], 1)}, failing the {D.pct(p5, 0)} limit (D43).",
+            "Gold kept at its CAPM return; the 0.4% gets no hedge credit. Inflation risk is monitored through the D23 ladder."])
 with t[2].container(border=True):
     st.markdown("**Technology concentration**")
     st.markdown(f"{tech} of the fund is technology through SPY and XLK (trigger 20%, D37). Tech crash with inflation, severe: "
-                f"{D.pct(D.table('research_v2_ai_inflation').set_index(['portfolio', 'scenario']).loc[('O6', 'T + I tech crash with inflation (bonds fall)'), 'loss_severe'], 1)} (D44).")
+                f"{D.pct(ti['loss_severe'], 1)} (D44).")
+    tested([f"**Tech crash with inflation (severe):** {D.pct(ti['loss_severe'], 1)} vs {D.pct(ti_pol['loss_severe'], 1)} for the policy "
+            f"benchmark, within the 25% limit. Simulated shock sizes: 99th percentile {D.pct(ti['mc_p99'], 1)}, "
+            f"P(loss > 25%) {D.pct(ti['mc_prob_above_limit'], 0)}.",
+            f"**Beyond severe (×1.5, tech −97.5%):** {D.pct(ti['loss_severe_equity_x1.5'], 1)}, a breach; the benchmark also breaches "
+            f"({D.pct(ti_pol['loss_severe_equity_x1.5'], 1)}).",
+            f"**Less tech (XLK moved to AGG):** severe loss {D.pct(wi.loc['XLK -> AGG', 'loss_TI_severe'], 1)}, but expected return falls to "
+            f"{D.pct(wi.loc['XLK -> AGG', 'expected_geo'], 2)} from {D.pct(wi.loc['O6', 'expected_geo'], 2)}. Not adopted (D35).",
+            "Safeguard: committee review if look-through tech passes 20%, with a pre-agreed fallback (V4, D37)."])
+st.caption("Sources: research_v2_recovery_target.csv, research_v2_withdrawal_rule.csv, research_v2_gold_return.csv, "
+           "research_v2_ai_inflation.csv, research_v2_ai_inflation_whatif.csv, stress_results.csv; decision log D35–D44.")
 
 # --- Monitoring ------------------------------------------------------------------------------------------------------
 st.subheader("Monitoring and action rules (D23, no forced selling)")
