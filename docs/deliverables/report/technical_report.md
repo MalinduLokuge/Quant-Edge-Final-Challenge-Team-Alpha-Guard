@@ -247,7 +247,13 @@
   - **No portfolio solves it.** No allocation within the limits reaches 60% at 2.65%: the best is Risk Parity at 48%. Lower-risk portfolios crash less often but recover more slowly.
   - **O6 stays best on the long-run measure.** It keeps the highest chance that real value is at least today's after 15 years (67%).
   - **A stronger recovery target is not a better policy** if meeting it undermines the university's funding purpose.
-- **Decision (D39):** keep O6 and 2.65%, set no recovery deadline, and review spending at the D23 "act" step (−20%).
+- **Rebalancing assumption.** The table assumes daily rebalancing (constant weights). Under the approved quarterly rebalancing (D11), the chance after a 25%+ fall is about 42–45%, so we quote "about 42–46%".
+- **A crisis spending buffer was tested and rejected (D40, research doc V2_withdrawal_rule).** A cash or T-bill reserve is outside the seven-ETF universe, so we tested rules within O6, with AGG as the buffer, on the same paths and crises (P back within 15 years after a 25%+ fall, 8k / new-seed 16k paths):
+  - **Quarterly rebalancing (D11):** 42.0% / 44.6%.
+  - **Spend from AGG only and pause rebalancing from a 15% fall:** 41.2% / 43.3%. Rebalancing already buys equities with AGG after a fall; pausing it slows recovery.
+  - **Withdraw from overweight holdings, rebalance beyond ±5 pp:** 43.2% / 45.4%. The gain is small and the drifted weights were not re-tested on D7.
+  - Real spending is the same in all three. We keep D11 and add no buffer.
+- **Decision (D39, D40):** keep O6, 2.65% and quarterly rebalancing, set no recovery deadline, and review spending at the D23 "act" step (−20%).
 
 ## 9. Recommendation and monitoring (`outputs/p3_decision/`)
 **Recommendation:** O6 as above; spending about 2.65% via D24; quarterly rebalancing.

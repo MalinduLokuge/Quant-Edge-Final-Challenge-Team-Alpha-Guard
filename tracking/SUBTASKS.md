@@ -358,6 +358,7 @@ Stage: decision · Owner: All members · Priority: Core · Target: Week 3
 | T20.09 | Endowment sustainability & recovery stress test: 15/20/25% falls, 1/3/5/7-year and lost-decade recoveries, D24 at 2.8%, costs, taxes, inflation; market view; bootstrap | sustainability_*.csv + research_t425_eval_sustainability_*.csv | Critical | All members | T20.10 | Done | User request 2026-10-29 |
 | T20.10 | Audit fix: 5-year drawdown test seed-tuned (4k paths) → 32k paths, block-length sensitivity; D30 2.8% propagated to hurdle and spending | Pipeline rerun, D26 re-selected | Critical | Malindu | — | Done | Audit 2026-10-29 |
 | T20.11 | Real recovery after a crisis (T20.09 view 4, D39): 25-year bootstrap, P(real value back within 10/15 years) after 20% / 25% falls, D24 at 2.00–2.65% and a crisis cap; memo/report wording (price vs real recovery) | sustainability_recovery.csv, report §8, memo, tear sheet | High | Malindu | T20.09 | Done | Team review 2026-10-31 |
+| T20.12 | Crisis spending buffer / withdrawal rule (D40): per-ETF simulation of D11 vs AGG-only spending with paused rebalancing vs band rebalancing; D39 daily vs quarterly rebalancing note; report §8, A&L, memo, tear sheet wording | research_v2_withdrawal_rule.csv, docs/research/V2_withdrawal_rule.md | Medium | Malindu | T20.11 | Done | Team review 2026-10-31 |
 
 ## T21 — Quality gates & compliance QA
 Stage: — · Owner: Malindu (coordinates) · Priority: Core · Target: Ongoing

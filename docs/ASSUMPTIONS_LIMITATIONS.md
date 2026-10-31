@@ -44,6 +44,7 @@ The Streamlit page and the report section are both built from this file, so they
 - **The estimate depends on the block length.** Longer blocks keep bear markets intact and raise P. The test now uses **126-day blocks (D32)**, because the data's own volatility clustering lasts about 120–160 days (Politis–White). The final portfolio scores 4.94% (limit 5%); an independent re-run with other random seeds gave 4.58%. It sits close to the limit by design (D26 picks the highest-return portfolio that passes).
 - In falling-rate scenarios, AGG keeps its current yield (bonds held over the horizon lock it in). New money would earn less, so low-rate results flatter bond-heavy portfolios slightly.
 - **Spending at about 2.65% (D30) leaves only about 0.5% a year of expected real growth.** After any large fall the fund regains its *nominal* value within a few years, but its *real* value can take much longer (`sustainability_*.csv`). Recovery paths are stylised scenarios, not forecasts.
+- **The real-recovery figures assume daily rebalancing.** With the approved quarterly rebalancing (D11), the chance of regaining real value within 15 years after a 25%+ fall is about 42–45%, not 46% (D39 note, D40). A crisis buffer that pays spending from AGG and pauses rebalancing does not improve this (D40).
 
 ## Models
 - **Daily losses are far from normal.** Excess kurtosis is about 25, and Jarque–Bera and Ljung–Box tests reject normality and independence (`p2_diagnostics.csv`).
