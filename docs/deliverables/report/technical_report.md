@@ -9,14 +9,14 @@
 - **Recommendation:** invest the $10M in **AGG 61.1%, SPY 18.4%, XLK 10.0%, EFA 7.2%, XLE 3.0%, GLD 0.4%**, rebalance quarterly, and spend about **2.65% a year** (≈ $265k) through a smoothed rule. The portfolio is called O6 (D31 v2).
 - **Return:** expected 5.80% a year nominal, about 3.4% real.
 - **Downside:** worst historical drawdown 23.5% (limit 25%); P(drawdown > 25% within 5 years) 4.9% (limit 5%); worst stress loss 23.5% (2008 replay).
-- **Model trust:** the daily VaR model (GARCH-EVT) was selected on 2015–19 data and passed every backtest on 2020–26.
-- **Why it is suitable:** it is the highest-return mix that passes every risk limit derived from the committee's principle that "avoiding large losses is more important than maximizing gains". It was checked out of sample and by a walk-forward that rebuilds it every three years with only past data.
+- **Model trust:** the daily VaR model (GARCH-EVT) was selected on 2015–19 data and, on 2020–26, passed Kupiec and Christoffersen at 99% and 95%; its worst Basel window was yellow (7 breaches), never red. Out of sample, weights built on data to 2014 kept every D7 limit in 2015–26, but the walk-forward segment containing COVID reached a 1-day ES99 of 2.9% against the 2.5% full-cycle limit, as every portfolio did (§4.5). The 2015–26 data were seen during selection (§10).
+- **Why it is suitable:** it is the highest-expected-return mix we found that passes every risk limit derived from the committee's principle that "avoiding large losses is more important than maximizing gains". It was checked out of sample and by a walk-forward that rebuilds it every three years with only past data.
 - **Evidence standard: observed is not proven.**
   - The rule matched the policy benchmark's return with a smaller worst fall.
   - Its higher Sharpe ratio is not statistically significant (Ledoit–Wolf p = 0.15), so we do not claim better risk-adjusted returns (§4.5).
   - The same standard led us to reject a regime-switching VaR model that looked plausible but failed the tests (D41, §6).
   - **Gold** (D43, §4.5): O6's 0.4% follows from CAPM's 4.6% for gold, and it is given no hedge credit. Raising gold's assumed return moves its weight up to the 20% cap. Even then, the 2022 and stagflation losses improve by under 1 pp, and the portfolio fails the D7 5-year test on our base assumptions. The gap is disclosed: O6 has no effective inflation hedge (§10).
-- **The main trade-off is spending.** A 4% payout needs about 7.2% a year, which no portfolio delivers without accepting falls of 35–47%. We therefore recommend about 2.65% and state it openly. The brief sets no spending rate.
+- **The main trade-off is spending.** A 4% payout needs about 7.2% a year (given the team's 0.5% real-growth and 0.2% cost inputs, D12 / D30). No portfolio within the D6 weight limits reaches it at any risk level; without D6 it would need a 47% drawdown tolerance (the 6.66% minimum tier needs 35%; §4.4). We therefore recommend about 2.65% and state it openly. The brief sets no spending rate.
 
 ## 2. Client, horizon and return objective
 - **Client:** a conservative endowment that values capital preservation, income and sustainable real growth, with resilience in stress (brief p.3). It is a long-term pool supporting scholarships, research, faculty and capital projects. The brief does not say it is the university's only income.
@@ -36,7 +36,7 @@
 - **Context only** (not model inputs): IMF, World Bank, IEA, EIA and Federal Reserve publications.
 
 **Sample:**
-- **Common sample:** 2004-11-18 (GLD inception) to 2026-10-19 (D1): 5,513 trading days.
+- **Common sample:** 2004-11-18 (GLD inception) to 2026-10-19 (D1): 5,513 trading days of prices, giving 5,512 daily returns (the split below counts returns).
 - **Chronological split (D5):**
   - **Train:** to 2014-12-31 (2,546 days).
   - **Validation:** 2015–2019 (1,258 days).
@@ -131,10 +131,11 @@
 |---|---|---|---|---|---|---|
 | Expected return | 5.89% | 5.81% | 5.73% | 5.90% | 5.54% | **5.80%** |
 | Spending supported | 2.74% | 2.67% | 2.58% | 2.75% | 2.40% | **2.65%** |
-| P(DD > 25%), 126-day, 2026 / 2014 inputs | 6.5 / 6.2% | 5.2 / 5.0% | 4.8 / 6.2% | 6.7 / 6.3% | 4.5 / 7.3% | **5.0 / 4.9%** |
+| P(DD > 25%), 126-day, 2026 / 2014 inputs | 6.5 / 6.2% | 5.2 / 5.0% | 4.8 / 6.2% | 6.7 / 6.3% | 4.5 / 7.3% | **5.0 / 4.9%**¹ |
 | Stagflation severe × 1.5 equity | 25.6% | 24.9% | 23.0% | 25.1% | 20.3% | **24.8%** |
 
 *(Option table computed at 2.8% spending; O6 at the final 2.65% is in §1. Source: `docs/research/T4_25_final_selection_evaluation.md`.)*
+¹ Research run (4.97%). The pipeline's own run gives 4.94% (§1, tear sheet). Both are within the Monte Carlo error (±0.12 pp) of the 5% limit and move by 1–2 pp with block length, so "passes" means "at the limit", not "safely below it". Likewise O6's expected return is within 0.1 pp of O1, O2 and O4, inside the estimation error of the inputs.
 
 **Walk-forward (T20.07):**
 - The rule was re-run at year ends 2008–2023 with only the data available then, and each portfolio was held for 3 years.

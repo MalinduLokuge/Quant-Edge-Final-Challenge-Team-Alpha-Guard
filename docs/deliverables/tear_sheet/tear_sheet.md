@@ -11,7 +11,7 @@
 | XLK technology | 10.0% | $1,000,000 | growth tilt (capped at 10%) |
 | EFA developed international | 7.2% | $717,200 | international diversification |
 | XLE energy | 3.0% | $296,838 | inflation / oil hedge |
-| GLD gold | 0.4% | $38,551 | residual weight from the optimiser; too small to hedge, no hedge credit taken |
+| GLD gold | 0.4% | $38,551 | optimiser residual; no hedge credit |
 
 **Return, spending and risk** (risk measured over 2004–2026, a full cycle)
 
@@ -19,8 +19,8 @@
 |---|---|---|
 | Expected return, compound nominal / real (volatility 8.2%) | 5.80% / about 3.4% a year | — |
 | Spending it supports (D12) | 2.65% ≈ $264,883 a year | — |
-| Worst drawdown (incl. 2008) / P(drawdown > 25% within 5 years), **investment returns: official D7** | 23.5% / 4.9% | 25% / 5% |
-| Same, fund value after D24 spending and costs (disclosure, not the limit) | 25.3% / 9.5% | — |
+| Worst drawdown incl. 2008 / P(drawdown > 25% in 5 years), **investment returns: official D7** | 23.5% / 4.9% (at the limit within ±0.1 pp simulation error) | 25% / 5% |
+| Same, fund value after spending and costs (disclosure) | 25.3% / 9.5% | — |
 | 1-day VaR / ES 99% ($139k / $220k); 95% | 1.39% / 2.20%; 0.71% / 1.20% | 1.7% / 2.5%; 0.9% / 1.45% |
 | Largest single-fund share of tail risk | SPY 40% (90% interval 36.8%–43.7%) | 40% |
 | Diversification benefit, 99% VaR / ES (vs sum of holdings' own risks) | 28.8% / 24.5% lower | — |
@@ -43,11 +43,11 @@
 | 2020–2026 | 5.0% / 0.30 / −19.6% | 7.2% / 0.49 / −19.2% |
 | Walk-forward 2009–2026 (rebuilt every 3 years) | 7.3% / 0.89 / −16.4% | 7.3% / 0.75 / −19.2% |
 
-No Sharpe difference is statistically significant (Ledoit–Wolf test, p 0.10–0.21); the consistent edge is the smaller worst fall.
+No Sharpe difference is statistically significant (Ledoit–Wolf test, p 0.10–0.21); the consistent edge is the smaller worst fall. 2015–2026 was seen while choosing the rule; in the walk-forward segment containing COVID the 1-day ES99 reached 2.9% (limit 2.5%), as for every portfolio.
 
-**Model trust.** GARCH-EVT, selected on 2015–19 and tested once on 2020–26: 20 breaches vs 17.1 expected; passed Kupiec (p 0.49) and Christoffersen (p 0.62); Basel zone never red.
+**Model trust.** GARCH-EVT, selected on 2015–19 and tested once on 2020–26: 20 breaches vs 17.1 expected; passed Kupiec (p 0.49) and Christoffersen (p 0.62); worst Basel window yellow, never red.
 
-**Key risks.** **Inflation shocks:** bonds and stocks fall together, as in 2022. **Concentration:** SPY and XLK carry about 60% of the tail risk; counting SPY's holdings, technology is 17.7% of the fund. **Rates:** returns are lower if rates fall. **Slow real recovery:** in 2008 the price recovered 254 trading days (about 1 year) after the trough, and simulated 25% falls take a median 3.0 years to recover in price; purchasing power (spending still paid) typically takes 15–20 years (about 42–46% chance within 15). **Limited history:** only one 2008-type crisis is in the data.
+**Key risks.** **Inflation shocks:** bonds and stocks fall together, as in 2022. **Concentration:** SPY and XLK carry about 60% of the tail risk; counting SPY's holdings, technology is 17.7% of the fund. **Rates:** returns are lower if rates fall. **Slow real recovery:** price recovered 254 trading days after the 2008 trough (simulated median 3.0 years for a 25% fall); purchasing power, with spending paid, typically takes 15–20 years (42–46% chance within 15). **Limited history:** only one 2008-type crisis is in the data.
 
 **Monitoring (no forced selling).**
 

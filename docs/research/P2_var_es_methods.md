@@ -3,6 +3,8 @@
 **Reproduce:** `python run_all.py --only risk` → `outputs/tables/p2_var_es.csv`, `p2_diagnostics.csv`.
 **Setup:** 1-day loss on constant target weights (P1-final), full sample 2004-11 → 2026-10 (full cycle, D7). VaR and ES at 90/95/99% with 95% intervals (bootstrap; Monte Carlo batch standard error). NAV $10M.
 
+> **Superseded figures (note 2026-10-31).** §§1–5 use the D26 portfolio *before* the D27 cap and the D32 re-selection (AGG 55 / SPY 36 / XLK 7 / GLD 2), as the note at the end of §6a says. The final portfolio is O6 (AGG 61.1 / SPY 18.4 / XLK 10.0 / EFA 7.2 / XLE 3.0 / GLD 0.4); its current figures are in `p2_var_es.csv`, `p2_evt.csv` and the technical report §5. The methods and conclusions here still hold.
+
 ## 1. D26 selected portfolio (AGG 55 / SPY 36 / XLK 7 / GLD 2) [E]
 | Method | 95% VaR | 95% ES | **99% VaR** (95% interval) | **99% ES** (95% interval) | 99% in USD |
 |---|---|---|---|---|---|
@@ -11,7 +13,7 @@
 | Student-t (unconditional, ν = 2.2) | 0.75% | 1.53% | 1.77% (1.46–1.83) | 3.35% (2.32–3.52) | $177k / $335k |
 | Monte Carlo (t-copula, empirical marginals, ν = 5) | 0.78% | 1.27% | 1.54% (±0.03) | 2.16% (±0.05) | $154k / $216k |
 
-**D7 check:** historical VaR99 1.56% ≤ 1.7% and ES99 2.34% ≤ 2.5% ✅. But the 95% interval of VaR99 (1.33–1.72%) **reaches the limit**, so we cannot be fully confident the limit holds. This answers the brief's "how confident are you" (p.5).
+**D7 check:** historical VaR99 1.56% ≤ 1.7% and ES99 2.34% ≤ 2.5% ✅. But the 95% interval of VaR99 (1.33–1.72%) **reaches the limit**, so we cannot be fully confident the limit holds. This answers the brief's "how confident are you" (p.5). The same applies to the drawdown limit: the 5-year probability (final O6 4.94%) has ±0.12 pp Monte Carlo error and moves by 1–2 pp with block length (D32), so it is at the 5% limit, not safely below it.
 
 All portfolios (99% VaR, ES in brackets, % NAV):
 
@@ -53,6 +55,7 @@ Bond-heavy portfolios (Min-Variance) have positive skew and the most extreme kur
 **EVT threshold (chosen on 2004–2019 only, D5/D8):**
 - **Rule:** among thresholds with at least 150 exceedances and below the 95th percentile (so EVT applies at the 95/99% reporting levels), take the lowest one whose tail shape ξ is stable at all higher thresholds.
 - **Result:** q = 90% for every portfolio (381 exceedances).
+- **Which threshold is current (note 2026-10-31):** q = 90% (ξ ≈ 0.18–0.24) is the result for the pre-D27 portfolios above, and it is the fixed value the rolling backtest uses (`validation.evt_threshold_q`). The risk stage re-runs the same rule on each portfolio's own 2004–2019 losses (`risk.run_evt_garch`); for the final O6 it selects q = 92%, and the full-sample fit gives ξ = 0.28 (441 exceedances; `p2_evt.csv`). That is what the technical report §5 and the Assumptions & Limitations quote. Different portfolios, same rule: not a conflict.
 - **Evidence (figure):** ξ ≈ 0.18–0.24 from the 90th to the 96th percentile; above 96% it is noise (115 exceedances or fewer, very wide intervals).
 - **Raw-loss tail:** ξ = 0.18–0.32, a genuinely fat (power-law) tail. After GARCH filtering, ξ ≈ 0.00–0.11, an almost exponential tail. Most of the fat tail comes from volatility clustering (the McNeil–Frey result).
 

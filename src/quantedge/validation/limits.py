@@ -4,7 +4,7 @@ The limits constrain portfolios built on train data (P1-train, weights from data
 whether those portfolios still respect the same limits in the later, unseen periods. Per period, on the
 quarterly-rebalanced return path (D11) sliced from the full-sample path:
     max drawdown (from the period's own start), 1-day historical VaR/ES at 95 and 99%, and the worst rolling
-    250-day ES99 with its share of days above the D23 watch (2.0%) and act (2.5%) levels.
+    250-day ES99 with its share of days above the D23 watch and act levels (both 2.5% since T20.08).
 A period passes a limit when its realised value is within it. Rolling ES is a monitoring signal (D23), not a
 construction limit: the D7 ES limit is defined on full-cycle history.
 """
