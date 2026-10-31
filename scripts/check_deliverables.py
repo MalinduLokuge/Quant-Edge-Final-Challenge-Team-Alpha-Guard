@@ -37,6 +37,11 @@ def main() -> int:
     rb, rgv = rg.loc["regime_primary"], rg.loc["garch_evt"]
     cv = pd.read_csv(T / "research_v2_regime_blend_stress.csv")
     cv = cv[(cv.portfolio == "O6") & (cv.alpha == 0.99) & (cv.window == "COVID 2020")].iloc[0]
+    sr = pd.read_csv(T / "research_v2_sharpe_test.csv").set_index("comparison")                 # Ledoit–Wolf
+    oos = sr[sr.kind != "in-sample"]["p_hac"]
+    p_wf = f"p = {sr.loc['Walk-forward 2009-26 (R126 rule -> O6)', 'p_hac']:.2f}"
+    p_rng = f"p {oos.min():.2f}–{oos.max():.2f}"
+    sr_rep = [f"{sr.loc[c, 'diff']:+.2f} (p = {sr.loc[c, 'p_hac']:.2f}".replace("-", "−") for c in sr.index]
     checks = {
         "tear_sheet/tear_sheet.md": [f(summ["Expected return (nominal, compound)"], 2), f(summ["Spending the portfolio supports"], 2),
                                      f"${float(summ['Spending in USD (year 1)']):,.0f}", f(-float(summ["Max drawdown incl. 2008 replay (limit 25%)"])),
@@ -46,8 +51,9 @@ def main() -> int:
                                      f(k.loc[("d26_selected", "validation"), "CAGR"]), f(k.loc[("d26_selected", "test"), "CAGR"]),
                                      f"${port.loc['AGG', 'usd']:,.0f}", f"${port.loc['SPY', 'usd']:,.0f}",
                                      f(dv["VaR_benefit"]), f(dv["ES_benefit"]),
-                                     f(o6["T Tech-led crash (severe)"]), f(pol["T Tech-led crash (severe)"]), tech, rec15],
-        "memo/investment_committee_memo.md": ["2.65%", "$265,000", "5.8%", "1.4%", "2.2%", f(o6["T Tech-led crash (severe)"], 0), rec15, rec15_low],
+                                     f(o6["T Tech-led crash (severe)"]), f(pol["T Tech-led crash (severe)"]), tech, rec15, p_rng],
+        "memo/investment_committee_memo.md": ["2.65%", "$265,000", "5.8%", "1.4%", "2.2%", f(o6["T Tech-led crash (severe)"], 0), rec15, rec15_low,
+                                              p_wf],
         "report/technical_report.md": [f(summ["Expected return (nominal, compound)"], 2), f(o6["GFC 2007-09"]), f(o6["Taper tantrum 2013"]),
                                        f(o6["A Energy stagflation (Hormuz II) (central)"]), f(o6["A Energy stagflation (Hormuz II) (severe)"]),
                                        f(o6["B AI unwind with recession (central)"]), f(o6["B AI unwind with recession (severe)"]),
@@ -58,7 +64,7 @@ def main() -> int:
                                        f"{rec15} / {f(r0['DD20% P(real back within 15y)'], 0)} | {r0['DD25% median_years_real']:.1f}",
                                        f"blend: {rb.exceptions} exceptions, Christoffersen p {rb.p_ind:.3f}, worst Basel window {rb.basel_worst_count:.0f} (red)",
                                        f"GARCH-EVT: {rgv.exceptions}, p {rgv.p_ind:.2f}, {rgv.basel_worst_count:.0f} (yellow)",
-                                       f"{f(cv.meanVaR_regime_primary, 2)} against {f(cv.meanVaR_garch_evt, 2)} for GARCH-EVT"],
+                                       f"{f(cv.meanVaR_regime_primary, 2)} against {f(cv.meanVaR_garch_evt, 2)} for GARCH-EVT", *sr_rep],
     }
     bad = 0
     for doc, values in checks.items():

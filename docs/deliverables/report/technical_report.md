@@ -118,6 +118,12 @@
 - The rule was re-run at year ends 2008–2023 with only the data available then, and each portfolio was held for 3 years.
 - **The drawdown limit held in all six segments.**
 - Chained 2009–2026 result: 7.3% a year, Sharpe 0.89, worst drawdown −16.4%, against 7.3%, 0.75 and −19.2% for the policy benchmark.
+- **Sharpe differences are not significant** (Ledoit–Wolf 2008 test, robust to fat tails and volatility clustering; `research_v2_sharpe_test.csv`):
+  - walk-forward +0.14 (p = 0.15);
+  - 2015–19 +0.19 (p = 0.21);
+  - 2020–26 −0.19 (p = 0.10);
+  - O6 full sample +0.02 (p = 0.67, in-sample).
+  - The two portfolios hold the same ETFs (return correlation 0.91–0.96), so six to eighteen years cannot separate their Sharpe ratios. Our claim is the smaller drawdown within the D7 limit, not a better Sharpe ratio. The policy benchmark breaches that limit (−25.3% in 2008).
 - At the 2008 and 2011 origins, D27 could not be met together with D7, so the rule fell back to capped minimum variance (now written down as D33).
 
 ## 5. Risk measurement (P2; `p2_*.csv`)

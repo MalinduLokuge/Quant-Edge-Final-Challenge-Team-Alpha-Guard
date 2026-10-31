@@ -42,6 +42,8 @@
 | 2020–2026 | 5.0% / 0.30 / −19.6% | 7.2% / 0.49 / −19.2% |
 | Walk-forward 2009–2026 (rebuilt every 3 years) | 7.3% / 0.89 / −16.4% | 7.3% / 0.75 / −19.2% |
 
+No Sharpe difference is statistically significant (Ledoit–Wolf test, p 0.10–0.21); the consistent edge is the smaller worst fall.
+
 **Model trust.** GARCH-EVT, selected on 2015–19 and tested once on 2020–26: 20 breaches vs 17.1 expected; passed Kupiec (p 0.49) and Christoffersen (p 0.62); Basel zone never red.
 
 **Key risks.** **Inflation shocks:** bonds and stocks fall together, as in 2022. **Concentration:** SPY and XLK carry about 60% of the tail risk; counting SPY's holdings, technology is 17.7% of the fund. **Rates:** returns are lower if rates fall. **Slow real recovery:** after a fall of 25% or more, the price recovers in about 3 years, but purchasing power (spending still paid) typically takes 15–20 years (about 42–46% chance within 15). **Limited history:** only one 2008-type crisis is in the data.
