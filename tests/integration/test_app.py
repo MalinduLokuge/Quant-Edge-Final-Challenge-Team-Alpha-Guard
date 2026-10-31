@@ -10,6 +10,12 @@ APP = Path(__file__).resolve().parents[2] / "app"
 PAGES = [APP / "Home.py"] + sorted((APP / "pages").glob("*.py"))
 
 
+@pytest.mark.parametrize("page", PAGES + sorted((APP / "components").glob("*.py")), ids=lambda p: p.stem)
+def test_page_compiles(page):
+    """AppTest does not report a SyntaxError as an exception, so compile every file explicitly."""
+    compile(page.read_text(encoding="utf8"), str(page), "exec")
+
+
 @pytest.mark.parametrize("page", PAGES, ids=lambda p: p.stem)
 def test_page_runs_without_exception(page):
     at = st_testing.AppTest.from_file(str(page), default_timeout=120)

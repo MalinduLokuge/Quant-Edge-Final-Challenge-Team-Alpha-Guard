@@ -20,8 +20,7 @@ st.warning("**Limits are targets, not guarantees.** The data contain one 2008-ty
 sections = ui.md_sections(SRC)
 NOT = "Not captured"
 st.subheader("What the model does not capture")
-st.markdown("
-".join(f"- {x}" for x in sections[NOT]))
+st.markdown("\n".join(f"- {x}" for x in sections[NOT]))
 
 st.subheader("Key inputs")
 key = pd.DataFrame([
