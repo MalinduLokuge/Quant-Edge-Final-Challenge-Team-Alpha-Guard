@@ -61,8 +61,6 @@ The sidebar sets the confidence level (90 / 95 / 99%), the VaR method and the ba
 | Stress | 2008, 2013, COVID and 2022 replays; designed scenarios (stagflation, AI unwind, tech-led crash); 12-month paths; your own scenario |
 | Sustainability | Spending vs drawdown trade-off; what-if sliders; recovery after 15–25% falls |
 | Decision | Recommendation, pass/fail against every limit, validation summary, monitoring triggers, downloads |
-| Assumptions & Limitations | Same text as `docs/ASSUMPTIONS_LIMITATIONS.md` |
-| Disclosure | AI use, data sources, decision log |
 
 ## Methodology
 
