@@ -49,7 +49,7 @@ pip install -r requirements.txt
 - **Windows:** keep the repository in a short path, such as `C:\qe`. Some packages exceed the default 260-character path limit.
 - **No internet needed:** prices and FRED series are dated snapshots in `data/raw` and `data/external`. `--refresh-data` downloads fresh data and will therefore change the results.
 
-## The app (9 pages)
+## The app (8 pages)
 The sidebar sets the confidence level (90 / 95 / 99%), the VaR method and the backtest date range for every page. The app reads `outputs/` only and never re-estimates a model.
 
 | Page | What it shows |
@@ -81,14 +81,14 @@ All conventions (loss sign, simple vs log returns, annualisation, 1-day horizon)
 
 ## Repository structure
 ```
-app/                     Streamlit app (Home + 8 pages); reads outputs/ only
+app/                     Streamlit app (Home + 7 pages); reads outputs/ only
 config/settings.yaml     every assumption and approved parameter (single source of truth)
 data/raw, data/external  dated price and FRED snapshots (inputs)
 data/processed           cleaned returns, rates, flags (data-stage outputs)
 src/quantedge/           pipeline: data, portfolio, risk, validation, decision (+ risk/extensions/regime.py, research only)
 run_all.py               one command for the whole pipeline
 outputs/                 committed results snapshot: tables/, figures/, reports/, p3_decision/
-tests/                   unit and integration tests (164), incl. no-look-ahead, data-stage reference and app-page tests
+tests/                   unit and integration tests (179), incl. no-look-ahead, data-stage reference and app-page tests
 scripts/                 research scripts behind each decision, check_deliverables.py, qa/qa_recompute.py
 notebooks/               the team's original data notebook (provenance of the data stage)
 docs/deliverables/       report, memo, tear sheet
@@ -120,7 +120,7 @@ tracking/                task tracker, compliance matrix, innovation log, human-
 - **Concentration:** look-through technology is 17.7% of the fund, and SPY's 40% share of tail risk sits at the D27 cap.
 - **Benchmark comparison:** Sharpe differences against the policy benchmark are not statistically significant (Ledoit–Wolf). The documented edge is the smaller drawdown.
 - **Selection bias:** 2015–26 was examined during selection. The walk-forward and live monitoring are the defensible tests.
-- **Research evidence without a writer script:** three research tables cited in T4_25 (`research_t425_eval_o6.csv`, `research_t425_eval_train_blocks.csv`, `research_t425_option_weights_o6.csv`) came from an interactive re-run during the O6 re-evaluation. No script in the repository writes them. Their figures are corroborated by the pipeline's own O6 outputs (`p1_final_*`, `p3_summary.csv`).
+- **Research evidence without a writer script:** two research tables cited in T4_25 (`research_t425_eval_train_blocks.csv`, `research_t425_option_weights_o6.csv`) came from an interactive re-run during the O6 re-evaluation. No script in the repository writes them. Their figures are corroborated by the pipeline's own O6 outputs (`p1_final_*`, `p3_summary.csv`).
 
 ## AI use
 AI assistance (Claude Code) is disclosed in `docs/AI_DISCLOSURE.md` under the brief's four headings: tool, purpose, human validation and material AI-generated components. Each AI-assisted component has a human check recorded in `tracking/validation/HUMAN_VALIDATION_LOG.md`, where team members sign it off. The agent roles used during development are in `docs/AGENTS.md` and `.claude/agents/`.

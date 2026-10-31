@@ -2,7 +2,7 @@
 
 > **DRAFT for team review (2026-10-30).** Data to 2026-10-19 · USD 10,000,000 · quarterly rebalancing · sources: `outputs/p3_decision/`, `outputs/tables/`
 
-**Recommendation: ACCEPT the mandate as proposed** (D34), risk limits unchanged: preserve and grow real capital while paying the university about **2.65% a year** (smoothed rule), within a **25% maximum drawdown**. 5-year horizon, annual review.
+**Recommendation: ACCEPT the mandate as proposed** (D34), risk limits unchanged: preserve and grow real capital while paying the university about **2.65% a year** (smoothed rule), within a **25% maximum drawdown** over a 5-year horizon.
 
 | Holding | Weight | USD | Role |
 |---|---|---|---|
@@ -44,9 +44,9 @@
 | 2020–2026 | 5.0% / 0.30 / −19.6% | 7.2% / 0.49 / −19.2% |
 | Walk-forward 2009–26 (rebuilt every 3 years) | 7.3% / 0.89 / −16.4% | 7.3% / 0.75 / −19.2% |
 
-No Sharpe difference is significant (Ledoit–Wolf, p 0.10–0.21); the edge is the smaller worst fall. 2015–26 was seen while choosing the rule; the COVID walk-forward segment hit a 1-day ES99 of 2.9% (limit 2.5%), as all portfolios did. **Model trust:** GARCH-EVT (chosen on 2015–19, tested once on 2020–26): 20 breaches vs 17.1 expected; Kupiec p 0.49, Christoffersen p 0.62; worst Basel window yellow, never red.
+No Sharpe difference is significant (Ledoit–Wolf, p 0.10–0.21); the edge is the smaller worst fall. 2015–26 was seen during selection; the COVID walk-forward segment hit a 1-day ES99 of 2.9% (limit 2.5%), as all portfolios did. **Model trust:** GARCH-EVT, tested once on 2020–26: 20 breaches vs 17.1 expected; Kupiec p 0.49, Christoffersen p 0.62; Basel yellow, never red.
 
-**Key risks.** **Inflation:** bonds and stocks fall together (2022), but bonds fall ~10% vs 43% for stocks in our worst case. **Concentration:** SPY + XLK carry about 60% of tail risk; look-through technology is 17.7% of the fund. **Rates:** lower returns if rates fall. **Slow real recovery:** price came back 254 trading days after the 2008 trough (simulated median 3.0 years); purchasing power, with spending paid, typically 15–20 years (42–46% chance within 15). One 2008-type crisis in the data.
+**Key risks.** **Inflation:** bonds and stocks fall together, but bonds fall ~10% vs 43% for stocks in our worst case. **Concentration:** SPY + XLK carry about 60% of tail risk; look-through technology is 17.7% of the fund. **Rates:** lower returns if rates fall. **Slow real recovery:** price back 254 trading days after the 2008 trough; purchasing power, with spending paid, typically 15–20 years (42–46% chance within 15).
 
 **Monitoring (no forced selling)**
 
