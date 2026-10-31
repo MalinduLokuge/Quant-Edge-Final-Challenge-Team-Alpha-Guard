@@ -18,12 +18,12 @@ t = D.p3("p3_tradeoff")
 t["label"] = np.where(t["point"].astype(str).str.startswith("O6"), "O6 (final)", "frontier")
 fig = px.scatter(t, x=-t["max_drawdown"], y="spending_usd", color="pass_D7", symbol="label", size=[14 if l == "O6 (final)" else 8 for l in t["label"]],
                  hover_data={"expected_geo": ":.2%", "P(DD>limit, 5y)": ":.1%"},
-                 labels={"x": "worst historical drawdown", "spending_usd": "spending the portfolio supports ($/yr)", "pass_D7": "passes D7"})
-fig.add_vline(x=s["risk_limits"]["max_drawdown"], line_dash="dash", annotation_text="D7 limit 25%")
+                 labels={"x": "worst historical drawdown", "spending_usd": "spending the portfolio supports ($/yr)", "pass_D7": "passes risk limits"})
+fig.add_vline(x=s["risk_limits"]["max_drawdown"], line_dash="dash", annotation_text="drawdown limit 25%")
 fig.update_layout(height=380, xaxis_tickformat=".0%", yaxis_tickprefix="$", margin=dict(t=10, b=10))
 st.plotly_chart(fig, width="stretch")
-st.caption("Points along the efficient frontier (D6 + D7 constraints). Each step to the right adds about $12k a year of spending "
-           "and about 1 pp of drawdown. The last points fail the 5-year drawdown test (D32).")
+st.caption("Points along the efficient frontier (weight limits + risk limits). Each step to the right adds about $12k a year of spending "
+           "and about 1 pp of drawdown. The last points fail the 5-year drawdown test.")
 
 st.subheader("What-if: the spending rate and the return it needs")
 c = st.columns(5)
@@ -45,10 +45,10 @@ k = st.columns(3)
 k[0].metric("Return needed", f"{need:.2%}")
 k[1].metric("Recommended portfolio expects", f"{exp:.2%}", f"{exp - need:+.2%} vs need")
 k[2].metric("Spending it supports", f"{supp:.2%}", f"≈ ${supp * D.NAV:,.0f} a year", delta_color="off")
-st.caption("Required return = (1 + inflation)(1 + spending)(1 + growth)(1 + costs) − 1 (D12). Expected return: CAPM with your "
-           "ERP, AGG = its yield (D25), minus half the variance.")
+st.caption("Required return = (1 + inflation)(1 + spending)(1 + growth)(1 + costs) − 1. Expected return: CAPM with your "
+           "ERP, AGG = its yield, minus half the variance.")
 
-st.subheader("Recovery after a crash, while paying the university (D24 at the D30 rate)")
+st.subheader("Recovery after a crash, while paying the university (smoothed spending rule at 2.65%)")
 g = D.table("sustainability_grid")
 g = g[(g.portfolio == D.FINAL)]
 c = st.columns(3)
@@ -83,4 +83,4 @@ k[2].metric("P(real spending cut > 10%)", f"{mc['P(real spending ever cut > 10%)
 k[3].metric("Price recovery from a 25% fall", f"{mc['DD25% median_years_to_recover']:.1f} yrs", "median, before spending", delta_color="off")
 st.caption("Simulated recovery (resampled history) is not the same as the historical recovery of the 2008 replay. Real-value "
            "recovery while paying the university is slower: back within 15 years in about 42–45% of simulated 25%+ falls with "
-           "quarterly rebalancing (D39/D40).")
+           "quarterly rebalancing.")

@@ -43,7 +43,7 @@ def ladder_status() -> None:
     L = D.ladder_status()
     name = L["step"].title() if L["step"] else "Normal"
     st.markdown(f"#### {D.LADDER_ICON[L['step']]} Monitoring status: **{name}** (as of {L['date']})")
-    st.caption(f"Action: {L['action']}. D23 steps: watch −10%, review −15%, act −20%, limit −25% drawdown (no forced selling).")
+    st.caption(f"Action: {plain(L['action'])}. Ladder steps: watch −10%, review −15%, act −20%, limit −25% drawdown (no forced selling).")
     c = st.columns(4)
     nxt = next((k for k, v in L["levels"].items() if L["drawdown"] < v), None)
     c[0].metric("Drawdown from peak", D.pct(L["drawdown"], 1),
@@ -51,11 +51,33 @@ def ladder_status() -> None:
     c[1].metric("Rolling 250-day ES99", D.pct(L["rolling_es99"], 2), f"trigger {D.pct(L['es_trigger'], 1)}", delta_color="off")
     c[2].metric("GARCH-EVT VaR99, next day", D.pct(L["garch_var99"], 2), f"limit {D.pct(L['var99_limit'], 1)}",
                 delta_color="off", help="Today's volatility regime, final weights (risk stage), at the data snapshot end. "
-                                        "Reacts within days; rolling ES averages a year. Shown for information, not a D23 trigger.")
+                                        "Reacts within days; rolling ES averages a year. Shown for information, not a ladder trigger.")
     c[3].metric("Model check: Basel zone", f"{D.LADDER_ICON[{'green': None, 'yellow': 'review', 'red': 'limit'}[L['basel']]]} {L['basel']}"
                 if L["basel"] else "n/a", "yellow → review, red → limit", delta_color="off",
                 help="GARCH-EVT 99% backtest, last 250 days, on weights built with data to 2014 (no look-ahead). "
                      "Tests whether the risk model is reliable, not the final portfolio's own losses.")
+
+
+# Short plain names for the team's decision IDs (docs/DECISIONS.md), so screens never show a bare "D24".
+DECISIONS = {"D3": "benchmark choice", "D4": "5-year horizon", "D5": "data split", "D6": "weight limits", "D7": "risk limits",
+             "D8": "EVT threshold rule", "D9": "stress scenario design", "D10": "ETF universe", "D11": "quarterly rebalancing",
+             "D12": "return objective", "D13": "1,000-day forecast window", "D14": "memo wording", "D18": "confidence level",
+             "D22": "optimiser", "D23": "action ladder", "D24": "smoothed spending", "D25": "AGG yield as return",
+             "D26": "selection rule", "D27": "40% risk-share cap", "D28": "risk-model choice", "D29": "stress scenario design",
+             "D30": "2.65% spending", "D31": "final portfolio", "D32": "5-year drawdown test", "D33": "concentration limits",
+             "D34": "memo verdict", "D35": "tech-crash test", "D36": "risk contributors", "D37": "tech review trigger",
+             "D39": "real-recovery study", "D40": "spending-buffer test", "D41": "regime-model test", "D42": "drawdown basis",
+             "D43": "gold test", "D44": "AI / tech-crash test"}
+_DEC = re.compile(r"\bD(\d{1,2})(?: v\d)?\b")
+
+
+def plain(text):
+    """Replace decision IDs (D7, D9 v2) with their short plain names; non-strings pass through."""
+    if not isinstance(text, str):
+        return text
+    out = _DEC.sub(lambda m: DECISIONS.get(f"D{m.group(1)}", "team decision"), text)
+    out = re.sub(r"\b(\w+) \1\b", r"\1", out)                    # "selection rule rule" → "selection rule"
+    return re.sub(r"([\w ,%/-]+?)(, \1)+(?=[),;]|$)", r"\1", out)  # "design, design" → "design"
 
 
 def status(value: float, limit: float, floor: bool = False) -> str:
@@ -131,11 +153,11 @@ def sidebar() -> dict:
     sb = st.sidebar
     sb.header("Settings")
     conf = sb.radio("Confidence level", [0.90, 0.95, 0.99], index=2, format_func=lambda x: f"{x:.0%}",
-                    key="conf", horizontal=True, help="Applies to VaR, ES and EVT on every page (D18).")
+                    key="conf", horizontal=True, help="Applies to VaR, ES and EVT on every page.")
     default_method = [k for k, v in METHODS.items() if v == s["validation"]["selected_model"]][0]
     method = sb.selectbox("VaR method", list(METHODS), index=list(METHODS).index(default_method), key="method",
                           help="Highlighted on the risk page; used on the backtest page. GARCH-EVT is the model chosen "
-                               "on 2015–19 data (D28).")
+                               "on 2015–19 data.")
     lo, hi = dt.date(2015, 1, 2), dt.date.fromisoformat(s["data"]["end"])
     rng = sb.date_input("Backtest date range", value=(lo, hi), min_value=lo, max_value=hi, key="bt_range",
                         help="Out-of-sample forecasts exist from 2015 (validation) and 2020 (test).")

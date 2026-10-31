@@ -17,7 +17,7 @@ lim = s["risk_limits"]
 st.warning("**Limits are targets, not guarantees.** The data contain one 2008-type crisis, one pandemic crash and one inflation "
            "shock; every limit, tail estimate and stress loss is calibrated on that short list.")
 
-sections = ui.md_sections(SRC)
+sections = {ui.plain(k): [ui.plain(x) for x in v] for k, v in ui.md_sections(SRC).items()}
 NOT = "Not captured"
 st.subheader("What the model does not capture")
 st.markdown("\n".join(f"- {x}" for x in sections[NOT]))
@@ -40,6 +40,7 @@ key = pd.DataFrame([
     ("Rebalancing / trading cost", "quarterly / 10 bp", "per trade", "Team decision", "D11"),
     ("Tax", "exempt (base)", "withholding as sensitivity", "Assumption", "—"),
 ], columns=["Input", "Value", "Unit", "Basis", "Decision"])
+key["Decision"] = key["Decision"].map(lambda x: ", ".join(ui.plain(d.strip()) for d in x.split(",")))
 st.dataframe(key, hide_index=True, width="stretch", height=35 * (len(key) + 1) + 3)
 
 st.subheader("Assumptions and limitations by topic")
@@ -48,7 +49,7 @@ rest = {k: v for k, v in sections.items() if k != NOT}
 tabs = st.tabs(list(rest))
 for tab, (name, items) in zip(tabs, rest.items()):
     with tab:
-        st.dataframe(pd.DataFrame({"Point": [ui.first_sentence(x) for x in items], "Refs": [ui.refs(x) for x in items]}),
+        st.dataframe(pd.DataFrame({"Point": [ui.first_sentence(x) for x in items], "Source": [ui.refs(x) for x in items]}),
                      hide_index=True, width="stretch")
         with st.expander("Full text"):
             st.markdown("\n".join(f"- {x}" for x in items))

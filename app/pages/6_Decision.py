@@ -6,7 +6,7 @@ import streamlit as st
 from components import data as D
 from components import ui
 
-ui.page("Decision", "Final recommendation (D31 v2, approved 2026-10-30): the verdict, the evidence behind it, and how it is monitored")
+ui.page("Decision", "Final recommendation (approved 2026-10-30): the verdict, the evidence behind it, and how it is monitored")
 summ = D.p3("p3_summary")
 sv = summ.set_index("item")["value"]
 port = D.p3("p3_portfolio")
@@ -17,25 +17,25 @@ st_res = D.table("stress_results")
 worst = st_res[st_res.portfolio == D.FINAL].set_index("scenario")["loss"]
 
 # --- Verdict ---------------------------------------------------------------------------------------------------------
-st.success(f"**Verdict: ACCEPT** (D34). Invest the $10M in the recommended portfolio **O6**, rebalance quarterly (D11), and spend "
-           f"about **{D.pct(float(sv['Policy spending rate (D24 / D30)']), 2)} of fund value** a year through the smoothed D24 rule.")
+st.success(f"**Verdict: ACCEPT.** Invest the $10M in the recommended portfolio **O6**, rebalance quarterly, and spend "
+           f"about **{D.pct(float(sv['Policy spending rate (D24 / D30)']), 2)} of fund value** a year through the smoothed spending rule.")
 c = st.columns(4)
 c[0].metric("Expected return", D.pct(float(sv["Expected return (nominal, compound)"]), 2), "nominal, a year, 5-year horizon", delta_color="off")
-c[1].metric("Required return", D.pct(float(sv["Required return at the D30 spending rate"]), 2), "at 2.65% spending (D12)", delta_color="off")
+c[1].metric("Required return", D.pct(float(sv["Required return at the D30 spending rate"]), 2), "at 2.65% spending", delta_color="off")
 c[2].metric("Spending supported", D.usd(float(sv["Spending in USD (year 1)"])), "year 1", delta_color="off")
 c[3].metric("Volatility", D.pct(float(sv["Volatility"]), 1), "a year, shrunk covariance", delta_color="off")
 
 # --- Limits ----------------------------------------------------------------------------------------------------------
 st.subheader("Is it within every client limit?")
 agg = float(port.set_index("etf").loc["AGG", "weight"])
-checks = [("Max drawdown incl. 2008", -d["max_drawdown"], lim["max_drawdown"], False, "D7, investment returns (D42)"),
-          ("P(drawdown > 25% in 5 years)", d["P(DD>limit, 5y)"], lim["max_prob_drawdown_breach_5y"], False, "D7 / D32, 126-day blocks"),
-          ("1-day ES 99%", d["ES99_1d"], lim["es99_1d_max"], False, "D7, binding"),
-          ("1-day VaR 99%", d["VaR99_1d"], lim["var99_1d_max"], False, "D7, binding"),
-          ("1-day ES 95%", d["ES95_1d"], lim["es95_1d_max"], False, "D7, reported"),
-          ("1-day VaR 95%", d["VaR95_1d"], lim["var95_1d_max"], False, "D7, reported"),
+checks = [("Max drawdown incl. 2008", -d["max_drawdown"], lim["max_drawdown"], False, "investment returns (official basis)"),
+          ("P(drawdown > 25% in 5 years)", d["P(DD>limit, 5y)"], lim["max_prob_drawdown_breach_5y"], False, "block bootstrap, 126-day blocks"),
+          ("1-day ES 99%", d["ES99_1d"], lim["es99_1d_max"], False, "binding"),
+          ("1-day VaR 99%", d["VaR99_1d"], lim["var99_1d_max"], False, "binding"),
+          ("1-day ES 95%", d["ES95_1d"], lim["es95_1d_max"], False, "reported"),
+          ("1-day VaR 95%", d["VaR95_1d"], lim["var95_1d_max"], False, "reported"),
           ("Worst stress loss", worst.max(), lim["stress_loss_max"], False, f"{worst.idxmax()}"),
-          ("Largest ETF share of 99% ES", d["max_ES99_share"], s["constraints"]["component_es_max"], False, "D27 cap"),
+          ("Largest ETF share of 99% ES", d["max_ES99_share"], s["constraints"]["component_es_max"], False, "risk-concentration cap"),
           ("AGG weight (liquidity floor)", agg, lim["min_agg_weight_liquidity"], True, "minimum, liquidity for spending")]
 rows = pd.DataFrame(checks, columns=["name", "value", "limit", "floor", "basis"])
 rows["status"] = [ui.status(v, l, f) for v, l, f in zip(rows["value"], rows["limit"], rows["floor"])]
@@ -46,10 +46,10 @@ for col, key in zip(c, ("pass", "near", "breach")):
 st.plotly_chart(ui.limit_chart(rows), width="stretch")
 st.caption(f"Bars show how much of each limit is used; the AGG floor is inverted (a lower weight uses more of it). "
            f"'Near' = less than {ui.NEAR:.0%} of the limit left: {', '.join(rows.loc[rows.status == 'near', 'name'])}. "
-           f"This is by design: D26 picks the highest-return portfolio that still passes every limit. Max drawdown and worst "
+           f"This is by design: the selection rule picks the highest-return portfolio that still passes every limit. Max drawdown and worst "
            f"stress loss are the same 2008 replay. SPY's 40.0% ES share has a 90% interval of "
-           f"{sv['SPY share of 99% ES: estimate / 90% bootstrap interval / tail days (D27 cap 40%)'].split(' / ')[1]}, so the true share may exceed the cap (D27).")
-with st.expander("Limit table and the second drawdown basis (D42)"):
+           f"{sv['SPY share of 99% ES: estimate / 90% bootstrap interval / tail days (D27 cap 40%)'].split(' / ')[1]}, so the true share may exceed the cap.")
+with st.expander("Limit table and drawdown after spending"):
     st.dataframe(rows.assign(Status=rows["status"].map(lambda x: ui.STATUS[x][1]), Headroom=rows.apply(
         lambda r: (r["value"] - r["limit"]) if r["floor"] else (r["limit"] - r["value"]), axis=1))
                  [["name", "value", "limit", "Headroom", "Status", "basis"]]
@@ -57,8 +57,8 @@ with st.expander("Limit table and the second drawdown basis (D42)"):
                  .style.format({"Portfolio": "{:.2%}", "Limit value": "{:.2%}", "Headroom": "{:.2%}"}), hide_index=True, width="stretch")
     fv = D.table("d7_fund_value")
     fv = fv[fv.portfolio == D.FINAL].set_index("basis")
-    st.markdown("**Drawdown on two bases.** The limits use investment returns, the official D7 basis. The fund's own value "
-                "after D24 spending and costs is shown for disclosure only; on that basis both drawdown figures are above the limits.")
+    st.markdown("**Drawdown on two bases.** The limits use investment returns, the official basis. The fund's own value "
+                "after spending and costs is shown for disclosure only; on that basis both drawdown figures are above the limits.")
     st.dataframe(pd.DataFrame({"Max drawdown incl. 2008": -fv["max_drawdown_hist"], "P(drawdown > 25% in 5 years)": fv["P(DD>limit, 5y)"]})
                  .rename_axis("Basis").style.format("{:.1%}"), width="stretch")
 
@@ -84,12 +84,12 @@ ev = pd.DataFrame([
      "kpis.csv (test)"),
     ("Risk model GARCH-EVT, chosen on 2015–19, tested once on 2020–26", "✅",
      f"{bt[0]} misses vs {bt[1]} expected at 99%, Kupiec p = {bt[2]}, worst 250-day window {bt[3]} misses "
-     f"({D.coverage.basel_zone(int(bt[3]))} zone; green 0–4, yellow 5–9, red ≥ 10)", "D28, Backtest page"),
+     f"({D.coverage.basel_zone(int(bt[3]))} zone; green 0–4, yellow 5–9, red ≥ 10)", "Backtest page"),
     ("Alternatives tested and rejected", "✅",
-     "Regime-switching VaR blend failed the backtests (D41); GARCH-EVT kept. More gold does not fix the inflation exposure (D43)", "D41, D43"),
+     "Regime-switching VaR blend failed the backtests; GARCH-EVT kept. More gold does not fix the inflation exposure", "research tests"),
 ], columns=["Test", "", "Result", "Source"])
 st.dataframe(ev, hide_index=True, width="stretch")
-st.caption("The claimed advantage is the smaller worst fall within the D7 limit, not better risk-adjusted return.")
+st.caption("The claimed advantage is the smaller worst fall within the drawdown limit, not better risk-adjusted return.")
 
 # --- Trade-offs ------------------------------------------------------------------------------------------------------
 st.subheader("Trade-offs the committee accepts")
@@ -116,47 +116,48 @@ def tested(lines):
 t = st.columns(3)
 with t[0].container(border=True):
     st.markdown("**Lower spending**")
-    st.markdown(f"{D.pct(float(sv['Spending the portfolio supports']), 2)} instead of 4%. 4% would need a 35–47% drawdown tolerance, against the 25% limit (D7, D30).")
+    st.markdown(f"{D.pct(float(sv['Spending the portfolio supports']), 2)} instead of 4%. 4% would need a 35–47% drawdown tolerance, against the 25% drawdown limit.")
     tested([f"**Real recovery after a 25%+ fall** (back within 15 years): {D.pct(rt.loc['A', 'DD25% P(back <= 15y)'], 0)} of simulated "
             f"cases at 2.65%. Raising that to {D.pct(rt.loc['B1', 'DD25% P(back <= 15y)'], 0)} would need spending of "
-            f"{D.pct(rt.loc['B1', 'spending_rate'], 2)} (60% recovery-target study, D39).",
+            f"{D.pct(rt.loc['B1', 'spending_rate'], 2)} (60% recovery-target study).",
             f"**Recovery mode** (after a 20% fall, spend {D.pct(rt.loc['B2', 'recovery_low'], 0)} of value until real value returns): "
             f"{D.pct(rt.loc['B2', 'DD25% P(back <= 15y)'], 0)}, but in {D.pct(rt.loc['B2', 'paths ever in recovery mode'], 0)} of paths "
             "the budget falls to about 30% of normal for years. Not adopted.",
             f"**Crisis spending buffer** (pay from AGG, pause rebalancing): {D.pct(wr['B'], 1)} vs {D.pct(wr['A'], 1)} with normal "
-            f"quarterly rebalancing. No gain, so not adopted (D40).",
-            "Committee keeps 2.65% with no recovery deadline. The D23 'act' step (−20%) includes a spending review."])
+            f"quarterly rebalancing. No gain, so not adopted.",
+            "Committee keeps 2.65% with no recovery deadline. The action ladder's 'act' step (−20%) includes a spending review."])
 with t[1].container(border=True):
     st.markdown("**No effective inflation hedge**")
     st.markdown(f"XLE 3.0%, GLD 0.4%. A 2022-type shock costs {D.pct(worst['Rates and inflation 2022'], 1)}; "
-                f"severe stagflation {D.pct(worst['A Energy stagflation (Hormuz II) (severe)'], 1)} (D43).")
+                f"severe stagflation {D.pct(worst['A Energy stagflation (Hormuz II) (severe)'], 1)}.")
     tested([f"**Both inflation scenarios stay within the 25% stress limit**: 2022 replay {D.pct(worst['Rates and inflation 2022'], 1)}, "
             f"severe stagflation {D.pct(worst['A Energy stagflation (Hormuz II) (severe)'], 1)}.",
             f"**More gold:** at {D.pct(g_hi['w_GLD'], 0)} gold, the 2022 loss improves by only "
             f"{abs(g_hi['stress_2022'] - g_o6['stress_2022']) * 100:.1f} pp, and P(drawdown > 25% in 5 y) rises to "
-            f"{D.pct(g_hi['P(DD>25%,5y) base cma'], 1)}, failing the {D.pct(p5, 0)} limit (D43).",
-            "Gold kept at its CAPM return; the 0.4% gets no hedge credit. Inflation risk is monitored through the D23 ladder."])
+            f"{D.pct(g_hi['P(DD>25%,5y) base cma'], 1)}, failing the {D.pct(p5, 0)} limit.",
+            "Gold kept at its CAPM return; the 0.4% gets no hedge credit. Inflation risk is monitored through the action ladder."])
 with t[2].container(border=True):
     st.markdown("**Technology concentration**")
-    st.markdown(f"{tech} of the fund is technology through SPY and XLK (trigger 20%, D37). Tech crash with inflation, severe: "
-                f"{D.pct(ti['loss_severe'], 1)} (D44).")
+    st.markdown(f"{tech} of the fund is technology through SPY and XLK (review trigger 20%). Tech crash with inflation, severe: "
+                f"{D.pct(ti['loss_severe'], 1)}.")
     tested([f"**Tech crash with inflation (severe):** {D.pct(ti['loss_severe'], 1)} vs {D.pct(ti_pol['loss_severe'], 1)} for the policy "
             f"benchmark, within the 25% limit. Simulated shock sizes: 99th percentile {D.pct(ti['mc_p99'], 1)}, "
             f"P(loss > 25%) {D.pct(ti['mc_prob_above_limit'], 0)}.",
             f"**Beyond severe (×1.5, tech −97.5%):** {D.pct(ti['loss_severe_equity_x1.5'], 1)}, a breach; the benchmark also breaches "
             f"({D.pct(ti_pol['loss_severe_equity_x1.5'], 1)}).",
             f"**Less tech (XLK moved to AGG):** severe loss {D.pct(wi.loc['XLK -> AGG', 'loss_TI_severe'], 1)}, but expected return falls to "
-            f"{D.pct(wi.loc['XLK -> AGG', 'expected_geo'], 2)} from {D.pct(wi.loc['O6', 'expected_geo'], 2)}. Not adopted (D35).",
-            "Safeguard: committee review if look-through tech passes 20%, with a pre-agreed fallback (V4, D37)."])
+            f"{D.pct(wi.loc['XLK -> AGG', 'expected_geo'], 2)} from {D.pct(wi.loc['O6', 'expected_geo'], 2)}. Not adopted.",
+            "Safeguard: committee review if look-through tech passes 20%, with a pre-agreed fallback (V4)."])
 st.caption("Sources: research_v2_recovery_target.csv, research_v2_withdrawal_rule.csv, research_v2_gold_return.csv, "
-           "research_v2_ai_inflation.csv, research_v2_ai_inflation_whatif.csv, stress_results.csv; decision log D35–D44.")
+           "research_v2_ai_inflation.csv, research_v2_ai_inflation_whatif.csv, stress_results.csv.")
 
 # --- Monitoring ------------------------------------------------------------------------------------------------------
-st.subheader("Monitoring and action rules (D23, no forced selling)")
+st.subheader("Monitoring and action rules (no forced selling)")
 ui.ladder_status()
 trig = D.p3("p3_triggers").fillna("")
 for col in ("drawdown", "rolling_es99", "tech_lookthrough"):
     trig[col] = trig[col].apply(lambda x: f"{float(x):.1%}" if x != "" else "")
+trig["action"] = trig["action"].map(ui.plain)
 trig = trig[[col for col in trig.columns if col != "action"] + ["action"]]
 st.dataframe(trig.rename(columns={"level": "Step", "drawdown": "Drawdown from peak", "rolling_es99": "Rolling 250-day ES99",
                                   "basel_zone": "Backtest zone", "tech_lookthrough": "Tech share of fund (look-through)",
@@ -180,9 +181,9 @@ def fmt(r):
 
 
 with st.expander("Full decision summary (every figure, with its source)"):
-    st.dataframe(summ.assign(value=summ.apply(fmt, axis=1))[["item", "value", "source"]].rename(columns=str.title),
+    st.dataframe(summ.assign(value=summ.apply(fmt, axis=1).map(ui.plain), item=summ["item"].map(ui.plain), source=summ["source"].map(ui.plain))[["item", "value", "source"]].rename(columns=str.title),
                  hide_index=True, width="stretch")
-    st.markdown("The memo verdict uses the brief's wording: accept / adjust the risk limit / reject (D14). An internal audit "
+    st.markdown("The memo verdict uses the brief's wording: accept / adjust the risk limit / reject. An internal audit "
                 "(2026-10-29) found a seed-tuned drawdown test and unapplied spending; both were fixed and the selection redone (T4.25).")
 
 st.subheader("Downloads")
