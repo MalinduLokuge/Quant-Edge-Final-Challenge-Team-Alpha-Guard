@@ -9,14 +9,14 @@
 - **Recommendation:** invest the $10M in **AGG 61.1%, SPY 18.4%, XLK 10.0%, EFA 7.2%, XLE 3.0%, GLD 0.4%**, rebalance quarterly, and spend about **2.65% a year** (≈ $265k) through a smoothed rule. The portfolio is called O6 (D31 v2).
 - **Return:** expected 5.80% a year nominal, about 3.4% real.
 - **Downside:** worst historical drawdown 23.5% (limit 25%); P(drawdown > 25% within 5 years) 4.9% (limit 5%); worst stress loss 23.5% (2008 replay).
-- **Model trust:** the daily VaR model (GARCH-EVT) was selected on 2015–19 data and passed every backtest on 2020–26.
-- **Why it is suitable:** it is the highest-return mix that passes every risk limit derived from the committee's principle that "avoiding large losses is more important than maximizing gains". It was checked out of sample and by a walk-forward that rebuilds it every three years with only past data.
+- **Model trust:** the daily VaR model (GARCH-EVT) was selected on 2015–19 data and, on 2020–26, passed Kupiec and Christoffersen at 99% and 95%; its worst Basel window was yellow (7 breaches), never red. Out of sample, weights built on data to 2014 kept every D7 limit in 2015–26, but the walk-forward segment containing COVID reached a 1-day ES99 of 2.9% against the 2.5% full-cycle limit, as every portfolio did (§4.5). The 2015–26 data were seen during selection (§10).
+- **Why it is suitable:** it is the highest-expected-return mix we found that passes every risk limit derived from the committee's principle that "avoiding large losses is more important than maximizing gains". It was checked out of sample and by a walk-forward that rebuilds it every three years with only past data.
 - **Evidence standard: observed is not proven.**
   - The rule matched the policy benchmark's return with a smaller worst fall.
   - Its higher Sharpe ratio is not statistically significant (Ledoit–Wolf p = 0.15), so we do not claim better risk-adjusted returns (§4.5).
   - The same standard led us to reject a regime-switching VaR model that looked plausible but failed the tests (D41, §6).
   - **Gold** (D43, §4.5): O6's 0.4% follows from CAPM's 4.6% for gold, and it is given no hedge credit. Raising gold's assumed return moves its weight up to the 20% cap. Even then, the 2022 and stagflation losses improve by under 1 pp, and the portfolio fails the D7 5-year test on our base assumptions. The gap is disclosed: O6 has no effective inflation hedge (§10).
-- **The main trade-off is spending.** A 4% payout needs about 7.2% a year, which no portfolio delivers without accepting falls of 35–47%. We therefore recommend about 2.65% and state it openly. The brief sets no spending rate.
+- **The main trade-off is spending.** A 4% payout needs about 7.2% a year (given the team's 0.5% real-growth and 0.2% cost inputs, D12 / D30). No portfolio within the D6 weight limits reaches it at any risk level; without D6 it would need a 47% drawdown tolerance (the 6.66% minimum tier needs 35%; §4.4). We therefore recommend about 2.65% and state it openly. The brief sets no spending rate.
 
 ## 2. Client, horizon and return objective
 - **Client:** a conservative endowment that values capital preservation, income and sustainable real growth, with resilience in stress (brief p.3). It is a long-term pool supporting scholarships, research, faculty and capital projects. The brief does not say it is the university's only income.
@@ -35,8 +35,18 @@
   - For the hypothetical stress: 10-year TIPS yield, Moody's Baa spread, Brent and WTI oil, broad USD index, VIX, 2-year yield.
 - **Context only** (not model inputs): IMF, World Bank, IEA, EIA and Federal Reserve publications.
 
+**Source compliance (brief §9.1: Yahoo Finance, FRED, World Bank / IMF).** Every series the models compute from is from Yahoo Finance or FRED. Three items fall outside the list. All are public and disclosed, and none is proprietary:
+
+| Item | Used for | Source | Status |
+|---|---|---|---|
+| SPY technology share (38.4%) | D35 / D37 / D44 look-through: tech-crash stress and the 20% trigger | SSGA fund page, 29 Oct 2026 (EFA, EEM approximate) | Model input outside §9.1. Cross-check from Yahoo Finance (`yahoo_fund_sectors_*.csv`): SPY 40.4%, EFA 12.0%, EEM 44.2% (Morningstar sectors, broader than GICS IT), giving look-through 18.3% instead of 17.7%, still below the 20% trigger |
+| IEA, EIA, Federal Reserve publications | Narrative and plausibility of the hypothetical scenarios (T11) | Public reports, dated and cited | Context only; shock sizes are team judgements calibrated on FRED / Yahoo history (T11 design doc) |
+| NACUBO peer-endowment losses | Context for the 25% drawdown tolerance (D7) | NACUBO study | Context for a team judgement, not a model input |
+
+Academic papers are cited as method references, not data.
+
 **Sample:**
-- **Common sample:** 2004-11-18 (GLD inception) to 2026-10-19 (D1): 5,513 trading days.
+- **Common sample:** 2004-11-18 (GLD inception) to 2026-10-19 (D1): 5,513 trading days of prices, giving 5,512 daily returns (the split below counts returns).
 - **Chronological split (D5):**
   - **Train:** to 2014-12-31 (2,546 days).
   - **Validation:** 2015–2019 (1,258 days).
@@ -131,10 +141,11 @@
 |---|---|---|---|---|---|---|
 | Expected return | 5.89% | 5.81% | 5.73% | 5.90% | 5.54% | **5.80%** |
 | Spending supported | 2.74% | 2.67% | 2.58% | 2.75% | 2.40% | **2.65%** |
-| P(DD > 25%), 126-day, 2026 / 2014 inputs | 6.5 / 6.2% | 5.2 / 5.0% | 4.8 / 6.2% | 6.7 / 6.3% | 4.5 / 7.3% | **5.0 / 4.9%** |
+| P(DD > 25%), 126-day, 2026 / 2014 inputs | 6.5 / 6.2% | 5.2 / 5.0% | 4.8 / 6.2% | 6.7 / 6.3% | 4.5 / 7.3% | **5.0 / 4.9%**¹ |
 | Stagflation severe × 1.5 equity | 25.6% | 24.9% | 23.0% | 25.1% | 20.3% | **24.8%** |
 
 *(Option table computed at 2.8% spending; O6 at the final 2.65% is in §1. Source: `docs/research/T4_25_final_selection_evaluation.md`.)*
+¹ Research run (4.97%). The pipeline's own run gives 4.94% (§1, tear sheet). Both are within the Monte Carlo error (±0.12 pp) of the 5% limit and move by 1–2 pp with block length, so "passes" means "at the limit", not "safely below it". Likewise O6's expected return is within 0.1 pp of O1, O2 and O4, inside the estimation error of the inputs.
 
 **Walk-forward (T20.07):**
 - The rule was re-run at year ends 2008–2023 with only the data available then, and each portfolio was held for 3 years.
@@ -254,8 +265,24 @@
 **What the scenarios show:**
 - **The bond hedge fails in inflationary shocks.** In A severe, AGG contributes over a third of the loss; in a recession it rallies.
 - **Robustness:**
-  - Monte Carlo over shock and beta uncertainty: 99th percentile 15.5%.
+  - Monte Carlo over shock and beta uncertainty: 99th percentile 15.5% (A) and 14.6% (B).
   - **The equity shock decides the outcome:** at 1.5× the severe equity fall, losses are 24.8% (A) and 22.1% (B), still within the limit.
+- **An AI unwind is survivable over a year.** On the 12-month path of B severe, the worst fall is 15.5% and the 12-month result is −11.9%. Next year's spending dips only from $265,000 to $257,432 under the smoothed rule.
+- **The worst AI case is a tech crash while inflation keeps rates up (T + I, D44; `research_v2_ai_inflation.csv`).** Scenario T was run again with the rates leg of A at the same severity (real yield +40 / +100 bp, breakeven +20 / +50 bp, Baa +50 / +150 bp) applied to AGG and gold.
+  - O6 loses 11.5% (central) and **22.8% (severe, $2.28M)**, against 20.5% for the policy benchmark. Bonds and gold add 6.1 pp of the severe loss instead of cushioning it.
+  - That is the largest hypothetical loss, close to the 2008 replay (23.5%), but within the 25% limit.
+  - Monte Carlo over shock sizes: 99th percentile 17.9%, with no draw above 25%.
+  - **At 1.5× it breaches the limit:** 31.2% for the equity leg (tech −97.5%, beyond the dot-com fall of about 78%) and 25.9% for the rates leg. T alone at 1.5× is 25.1%. The benchmark also breaches (27.8%).
+  - Less XLK was tested and not adopted (D35), and more gold barely helps (D43). The limit is kept, and the D23 ladder and the D37 technology trigger are the response.
+- **Why the 61% bond allocation is right, even when bonds fail as a hedge** (`research_v2_ai_inflation_whatif.csv`; O6 changed by hand, everything else fixed):
+  - In T + I, AGG falls 9.9% while O6's equities fall 43.4% on average. Bonds lose too, but four times less, which is what keeps the worst case inside the limit.
+  - Moving only 5 pp from AGG to SPY breaks the 25% limit in a 2008 repeat (−25.2%) and raises P(DD > 25% in 5 years) to 7.9%. At 10 pp, T + I itself breaches (25.9%). 60/40 loses 28.2% in T + I and 35.0% in 2008.
+  - The policy benchmark has the same expected return as O6 (5.79% vs 5.80%) but fails D7: −25.3% in 2008 and a 9.0% five-year probability. O6's mix earns the same return within the committee's limits.
+- **The 10% tech tilt is a deliberate cost:**
+  - It is why O6 loses 2.3 pp more than the benchmark in T + I.
+  - SPY is already at the 40% cap on its share of 99% ES (D27). Moving XLK into SPY would put SPY at 62% of tail risk.
+  - Moving XLK into AGG cuts the T + I loss to 17.3%, but costs 0.45 pp of expected return a year (about $45,000 of spending).
+  - We keep the tilt within its 10% cap, and the D37 trigger reviews it if look-through technology passes 20% of the fund.
 - **Scenario losses vs the 1-day ES limit:** a multi-month scenario loss is not comparable to the 1-day ES limit. Scaling GARCH-EVT VaR by stressed volatility gives 2.3–2.8% in the severe cases, above the 1.7% VaR limit, so the D23 review would trigger.
 
 ## 8. Spending sustainability and recovery (T20.09; `sustainability_*.csv`)
@@ -321,6 +348,9 @@ On 2004–2026 history the watch trigger was active 7–10% of the time; the −
 These are summarised from `docs/ASSUMPTIONS_LIMITATIONS.md`, which is identical to the app page:
 - **CAPM expected returns** with a 5% ERP. AGG's yield is assumed locked in when rates fall. Returns are lower if the T-bill falls (at a 2.5% T-bill and a 4% ERP, the supported spending is about 1.7%).
 - **History** contains one 2008-type crisis, so limits are targets, not guarantees. The bootstrap cannot create crises unlike the sample's.
+- **AI / tech crash:**
+  - The data start in 2004, so there is no dot-com-style crash: technology fell about 78% over 2.5 years then. The AI scenarios (B, T, T + I) are one-step shocks with linear betas.
+  - The worst case, a tech crash with inflation (T + I, 22.8%), is within the limit but breaches it at 1.5× (§7).
 - **The 5-year drawdown test is sensitive to block length** (model uncertainty, reported). The 126-day block is a heuristic, conservative choice; 21/63/252 days are sensitivity analysis.
 - **Drawdown limits are measured on investment returns** (D42). After D24 spending and costs, O6's fund value fell 25.3% in 2008 and P(fall > 25% in 5 years) is 9.5%, above both limits. The committee should read the D7 limits as limits on investment performance.
 - **Component ES is estimated from 56 tail days.** SPY's 40.0% share has a 90% interval of 36.8%–43.7%.
@@ -335,11 +365,11 @@ These are summarised from `docs/ASSUMPTIONS_LIMITATIONS.md`, which is identical 
 ## 11. AI use and human validation
 - **AI tool:** Claude Code (Anthropic) was used for code scaffolding, research, documentation and drafting.
 - **Validation:**
-  - every module has unit tests (133 tests);
+  - every module has unit tests (164 tests);
   - every AI-assisted component is recorded in `tracking/validation/HUMAN_VALIDATION_LOG.md` for team sign-off;
-  - the brief's four disclosure columns are in `docs/AI_DISCLOSURE.md`.
-- **Decisions:** all decisions D1–D33 were taken by the team.
-- **The audit of 2026-10-29** shows the review process catching AI-introduced errors.
+  - the brief's four disclosure columns, and a sign-off table each member signs, are in `docs/AI_DISCLOSURE.md`.
+- **Decisions:** all decisions (D1–D44 in `docs/DECISIONS.md`) were taken by the team.
+- **The audit of 2026-10-29** and an **independent human QA review on 2026-10-31** caught AI-introduced errors and overclaims; the corrections are in D42 and the commit history.
 
 ## Appendix: reproducibility
 - **One command:** `python run_all.py` reruns all stages from the committed data snapshots. `python run_all.py --app` also opens the Streamlit app.

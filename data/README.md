@@ -18,6 +18,8 @@
 | external/fred_T10YIE_2026-10-28.csv, external/fred_T5YIE_2026-10-28.csv | FRED | 10y / 5y breakeven inflation, daily | 2026-10-28 | none | expected inflation for D12 |
 | external/fred_{DFII10,BAA10Y,DCOILBRENTEU,DCOILWTICO,DTWEXBGS,VIXCLS,DGS2}_2026-10-29.csv | FRED | 10y real yield, Baa−10y spread, Brent, WTI, broad USD, VIX, 2y yield (daily) | 2026-10-29 | none | hypothetical stress factors (D9 v2) → `processed/stress_factors_monthly.csv` (month-end as of the ETF data end) |
 | external/fred_{BAMLH0A0HYM2,BAMLC0A0CM,FEDFUNDS,UNRATE,NFCI,T10Y2Y}_2026-10-29.csv | FRED | HY/IG OAS (3-year history only), fed funds, unemployment, NFCI, 10y−2y | 2026-10-29 | none | context for the stress research (not model inputs) |
+| raw/yahoo_fund_sectors_2026-10-31.csv | Yahoo Finance (`yf.Ticker(t).funds_data.sector_weightings`) | SPY XLK EFA EEM XLE | 2026-10-31 | none | approved-source cross-check of the D35/D37 look-through technology shares (Morningstar sectors; SPY 40.4%); the model still uses the SSGA GICS value in config (38.4%) |
+| (config `lookthrough.source`) | SSGA SPY fund page (not on the brief's §9.1 list; public, disclosed) | SPY Information Technology 38.40% | 2026-10-29 | none | D35/D37 input; EFA, EEM approximate |
 
 ## Regenerate
 `python run_all.py --only data` rebuilds `processed/` and `outputs/tables/adf_results.csv` from the snapshot.
