@@ -1,5 +1,4 @@
 # Innovation Log
-Innovation is worth 15% of the score (brief p.10). Its examples are regime-conditioned risk, risk overlays and alternative EVT threshold rules. Log each extension when you start it. Keep it only if it is validated and changes a decision.
 
 ## Done or in use
 | ID | Date | Innovation | Why it matters for the decision | Evidence | Status |

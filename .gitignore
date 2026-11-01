@@ -11,11 +11,10 @@ outputs/logs/**
 !outputs/**/.gitkeep
 data/interim/**
 !data/interim/.gitkeep
-# third-party teaching decks: kept locally, not published (T17.06)
-docs/references/presentations/*.pptx
+docs/references/
 
 # local tooling and OS / editor clutter (submission cleanup)
-.claude/launch.json
+.claude/
 .claude/settings.local.json
 .streamlit/secrets.toml
 *.egg-info/

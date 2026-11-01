@@ -33,7 +33,6 @@ This is a Python and Streamlit system that recommends how to invest a conservati
 | Tear sheet (1 page) | `docs/deliverables/tear_sheet/tear_sheet.md` |
 | Streamlit application | `app/` (see below) |
 | AI-use disclosure | `docs/AI_DISCLOSURE.md` |
-| Pitch deck | `docs/deliverables/pitch/` (finalists only) |
 
 ## Run it
 
@@ -103,9 +102,8 @@ scripts/                 research scripts behind each decision, check_deliverabl
 notebooks/               the team's original data notebook (provenance of the data stage)
 docs/deliverables/       report, memo, tear sheet
 docs/research/           evidence for every decision, incl. tested-and-rejected alternatives
-docs/                    DECISIONS, ASSUMPTIONS_LIMITATIONS, CALCULATION_DICTIONARY, MODEL_DESIGN, AI_DISCLOSURE
-docs/references/         official competition brief
-tracking/                task tracker, compliance matrix, innovation log, human-validation log, reproducibility record
+docs/                    DECISIONS, ASSUMPTIONS_LIMITATIONS, CALCULATION_DICTIONARY, AI_DISCLOSURE
+tracking/                task tracker, innovation log, human-validation log, reproducibility record, app audit
 ```
 
 ## Validation evidence
@@ -120,7 +118,6 @@ tracking/                task tracker, compliance matrix, innovation log, human-
 | Independent QA audit and recomputation | `docs/research/QA_AUDIT_2026-10-30.md`, `scripts/qa/qa_recompute.py` |
 | Human validation of each AI-assisted component | `tracking/validation/HUMAN_VALIDATION_LOG.md` |
 | Reproducibility record | `tracking/validation/REPRODUCIBILITY.md` |
-| Compliance with the brief | `tracking/compliance/COMPLIANCE_MATRIX.md` |
 
 ## Known limitations (full list: `docs/ASSUMPTIONS_LIMITATIONS.md`)
 - **Expected returns:** they are the least certain input. CAPM uses a 5% equity premium, and the data's own 95% range is 3.5–15.8%.
@@ -133,4 +130,4 @@ tracking/                task tracker, compliance matrix, innovation log, human-
 - **Research evidence without a writer script:** two research tables cited in T4_25 (`research_t425_eval_train_blocks.csv`, `research_t425_option_weights_o6.csv`) came from an interactive re-run during the O6 re-evaluation. No script in the repository writes them. Their figures are corroborated by the pipeline's own O6 outputs (`p1_final_*`, `p3_summary.csv`).
 
 ## AI use
-AI use is disclosed in `docs/AI_DISCLOSURE.md`: tools (Claude / Claude Code, Perplexity, ChatGPT), purpose and material AI-assisted components, and human review and validation. The team is responsible for the methodology and the recommendation. Each AI-assisted component has a human check recorded in `tracking/validation/HUMAN_VALIDATION_LOG.md`, where team members sign it off. The agent roles used during development are in `docs/AGENTS.md` and `.claude/agents/`.
+AI use is disclosed in `docs/AI_DISCLOSURE.md`: tools (Claude / Claude Code, Perplexity, ChatGPT), purpose and material AI-assisted components, and human review and validation. The team is responsible for the methodology and the recommendation. Each AI-assisted component has a human check recorded in `tracking/validation/HUMAN_VALIDATION_LOG.md`, where team members sign it off.
